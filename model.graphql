@@ -1,0 +1,19 @@
+extend type Mutation {
+  seenNotification(id: ID!): Notification
+  seenNotifications(
+    principal: String!
+    channel: String
+    reference: String
+    referenceID: String
+  ): Boolean!
+}
+
+type Notification @entity {
+  message: String! @column(type: "text")
+  seen: Boolean! @column
+  channel: String @column
+  principal: String @column
+  reference: String @column
+  referenceID: String @column
+  date: Time! @column
+}

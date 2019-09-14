@@ -1,0 +1,20 @@
+@startuml
+
+participant EventStore
+participant EventStoreAggregator
+participant "Handler\n(custom implementation)" as Handler
+participant NotificationStore
+actor User
+
+hnote over EventStore: Create change
+EventStore -> Handler : Change event
+Handler --> EventStoreAggregator : Fetch aggregated data
+EventStoreAggregator --> Handler : Return aggregated data
+hnote over Handler: Create notification payload
+Handler -> NotificationStore : Store notification payload \n(to relevant principals)
+NotificationStore --> User : Notify user (optional)
+User -> NotificationStore : Get notifications\n(filtered by channel)
+NotificationStore -> User : Return notifications
+User -> NotificationStore : Confirm seen notification\n(optionally provide channel)
+
+@enduml

@@ -1,0 +1,36 @@
+# Generated with graphql-orm
+
+schema:
+  - schema.graphql
+exec:
+  filename: generated.go
+  package: gen
+model:
+  filename: models_gen.go
+  package: gen
+resolver:
+  filename: resolver.go
+  type: Resolver
+  package: gen
+
+models:
+  
+  Notification:
+    model: github.com/graphql-services/notifications/gen.Notification
+    fields:
+  NotificationResultType:
+    model: github.com/graphql-services/notifications/gen.NotificationResultType
+    fields:
+      count:
+        resolver: true
+      items:
+        resolver: true
+  NotificationCreateInput:
+    model: "map[string]interface{}"
+  NotificationUpdateInput:
+    model: "map[string]interface{}"
+  
+  
+  
+  _Any:
+    model: github.com/graphql-services/notifications/gen._Any
