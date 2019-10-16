@@ -51,28 +51,43 @@ func (qf *NotificationQueryFilter) applyQueryWithFields(dialect gorm.Dialect, fi
 	}
 
 	if _, ok := fieldsMap["message"]; ok {
-		*ors = append(*ors, fmt.Sprintf("%[1]s"+dialect.Quote("message")+" LIKE ? OR %[1]s"+dialect.Quote("message")+" LIKE ?", dialect.Quote(alias)+"."))
-		*values = append(*values, fmt.Sprintf("%s%%", query), fmt.Sprintf("%% %s%%", query))
+
+		column := dialect.Quote(alias) + "." + dialect.Quote("message")
+
+		*ors = append(*ors, fmt.Sprintf("%[1]s LIKE ? OR %[1]s LIKE ?", column))
+		*values = append(*values, query+"%", "% "+query+"%")
 	}
 
 	if _, ok := fieldsMap["channel"]; ok {
-		*ors = append(*ors, fmt.Sprintf("%[1]s"+dialect.Quote("channel")+" LIKE ? OR %[1]s"+dialect.Quote("channel")+" LIKE ?", dialect.Quote(alias)+"."))
-		*values = append(*values, fmt.Sprintf("%s%%", query), fmt.Sprintf("%% %s%%", query))
+
+		column := dialect.Quote(alias) + "." + dialect.Quote("channel")
+
+		*ors = append(*ors, fmt.Sprintf("%[1]s LIKE ? OR %[1]s LIKE ?", column))
+		*values = append(*values, query+"%", "% "+query+"%")
 	}
 
 	if _, ok := fieldsMap["principal"]; ok {
-		*ors = append(*ors, fmt.Sprintf("%[1]s"+dialect.Quote("principal")+" LIKE ? OR %[1]s"+dialect.Quote("principal")+" LIKE ?", dialect.Quote(alias)+"."))
-		*values = append(*values, fmt.Sprintf("%s%%", query), fmt.Sprintf("%% %s%%", query))
+
+		column := dialect.Quote(alias) + "." + dialect.Quote("principal")
+
+		*ors = append(*ors, fmt.Sprintf("%[1]s LIKE ? OR %[1]s LIKE ?", column))
+		*values = append(*values, query+"%", "% "+query+"%")
 	}
 
 	if _, ok := fieldsMap["reference"]; ok {
-		*ors = append(*ors, fmt.Sprintf("%[1]s"+dialect.Quote("reference")+" LIKE ? OR %[1]s"+dialect.Quote("reference")+" LIKE ?", dialect.Quote(alias)+"."))
-		*values = append(*values, fmt.Sprintf("%s%%", query), fmt.Sprintf("%% %s%%", query))
+
+		column := dialect.Quote(alias) + "." + dialect.Quote("reference")
+
+		*ors = append(*ors, fmt.Sprintf("%[1]s LIKE ? OR %[1]s LIKE ?", column))
+		*values = append(*values, query+"%", "% "+query+"%")
 	}
 
 	if _, ok := fieldsMap["referenceID"]; ok {
-		*ors = append(*ors, fmt.Sprintf("%[1]s"+dialect.Quote("referenceID")+" LIKE ? OR %[1]s"+dialect.Quote("referenceID")+" LIKE ?", dialect.Quote(alias)+"."))
-		*values = append(*values, fmt.Sprintf("%s%%", query), fmt.Sprintf("%% %s%%", query))
+
+		column := dialect.Quote(alias) + "." + dialect.Quote("referenceID")
+
+		*ors = append(*ors, fmt.Sprintf("%[1]s LIKE ? OR %[1]s LIKE ?", column))
+		*values = append(*values, query+"%", "% "+query+"%")
 	}
 
 	return nil

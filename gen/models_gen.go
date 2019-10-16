@@ -113,91 +113,62 @@ type NotificationFilterType struct {
 	CreatedByIn       []string                  `json:"createdBy_in"`
 }
 
+type NotificationSortType struct {
+	ID          *ObjectSortType `json:"id"`
+	Message     *ObjectSortType `json:"message"`
+	Seen        *ObjectSortType `json:"seen"`
+	Channel     *ObjectSortType `json:"channel"`
+	Principal   *ObjectSortType `json:"principal"`
+	Reference   *ObjectSortType `json:"reference"`
+	ReferenceID *ObjectSortType `json:"referenceID"`
+	Date        *ObjectSortType `json:"date"`
+	UpdatedAt   *ObjectSortType `json:"updatedAt"`
+	CreatedAt   *ObjectSortType `json:"createdAt"`
+	UpdatedBy   *ObjectSortType `json:"updatedBy"`
+	CreatedBy   *ObjectSortType `json:"createdBy"`
+}
+
 type _Service struct {
 	Sdl *string `json:"sdl"`
 }
 
-type NotificationSortType string
+type ObjectSortType string
 
 const (
-	NotificationSortTypeIDAsc           NotificationSortType = "ID_ASC"
-	NotificationSortTypeIDDesc          NotificationSortType = "ID_DESC"
-	NotificationSortTypeMessageAsc      NotificationSortType = "MESSAGE_ASC"
-	NotificationSortTypeMessageDesc     NotificationSortType = "MESSAGE_DESC"
-	NotificationSortTypeSeenAsc         NotificationSortType = "SEEN_ASC"
-	NotificationSortTypeSeenDesc        NotificationSortType = "SEEN_DESC"
-	NotificationSortTypeChannelAsc      NotificationSortType = "CHANNEL_ASC"
-	NotificationSortTypeChannelDesc     NotificationSortType = "CHANNEL_DESC"
-	NotificationSortTypePrincipalAsc    NotificationSortType = "PRINCIPAL_ASC"
-	NotificationSortTypePrincipalDesc   NotificationSortType = "PRINCIPAL_DESC"
-	NotificationSortTypeReferenceAsc    NotificationSortType = "REFERENCE_ASC"
-	NotificationSortTypeReferenceDesc   NotificationSortType = "REFERENCE_DESC"
-	NotificationSortTypeReferenceIDAsc  NotificationSortType = "REFERENCE_ID_ASC"
-	NotificationSortTypeReferenceIDDesc NotificationSortType = "REFERENCE_ID_DESC"
-	NotificationSortTypeDateAsc         NotificationSortType = "DATE_ASC"
-	NotificationSortTypeDateDesc        NotificationSortType = "DATE_DESC"
-	NotificationSortTypeUpdatedAtAsc    NotificationSortType = "UPDATED_AT_ASC"
-	NotificationSortTypeUpdatedAtDesc   NotificationSortType = "UPDATED_AT_DESC"
-	NotificationSortTypeCreatedAtAsc    NotificationSortType = "CREATED_AT_ASC"
-	NotificationSortTypeCreatedAtDesc   NotificationSortType = "CREATED_AT_DESC"
-	NotificationSortTypeUpdatedByAsc    NotificationSortType = "UPDATED_BY_ASC"
-	NotificationSortTypeUpdatedByDesc   NotificationSortType = "UPDATED_BY_DESC"
-	NotificationSortTypeCreatedByAsc    NotificationSortType = "CREATED_BY_ASC"
-	NotificationSortTypeCreatedByDesc   NotificationSortType = "CREATED_BY_DESC"
+	ObjectSortTypeAsc  ObjectSortType = "ASC"
+	ObjectSortTypeDesc ObjectSortType = "DESC"
 )
 
-var AllNotificationSortType = []NotificationSortType{
-	NotificationSortTypeIDAsc,
-	NotificationSortTypeIDDesc,
-	NotificationSortTypeMessageAsc,
-	NotificationSortTypeMessageDesc,
-	NotificationSortTypeSeenAsc,
-	NotificationSortTypeSeenDesc,
-	NotificationSortTypeChannelAsc,
-	NotificationSortTypeChannelDesc,
-	NotificationSortTypePrincipalAsc,
-	NotificationSortTypePrincipalDesc,
-	NotificationSortTypeReferenceAsc,
-	NotificationSortTypeReferenceDesc,
-	NotificationSortTypeReferenceIDAsc,
-	NotificationSortTypeReferenceIDDesc,
-	NotificationSortTypeDateAsc,
-	NotificationSortTypeDateDesc,
-	NotificationSortTypeUpdatedAtAsc,
-	NotificationSortTypeUpdatedAtDesc,
-	NotificationSortTypeCreatedAtAsc,
-	NotificationSortTypeCreatedAtDesc,
-	NotificationSortTypeUpdatedByAsc,
-	NotificationSortTypeUpdatedByDesc,
-	NotificationSortTypeCreatedByAsc,
-	NotificationSortTypeCreatedByDesc,
+var AllObjectSortType = []ObjectSortType{
+	ObjectSortTypeAsc,
+	ObjectSortTypeDesc,
 }
 
-func (e NotificationSortType) IsValid() bool {
+func (e ObjectSortType) IsValid() bool {
 	switch e {
-	case NotificationSortTypeIDAsc, NotificationSortTypeIDDesc, NotificationSortTypeMessageAsc, NotificationSortTypeMessageDesc, NotificationSortTypeSeenAsc, NotificationSortTypeSeenDesc, NotificationSortTypeChannelAsc, NotificationSortTypeChannelDesc, NotificationSortTypePrincipalAsc, NotificationSortTypePrincipalDesc, NotificationSortTypeReferenceAsc, NotificationSortTypeReferenceDesc, NotificationSortTypeReferenceIDAsc, NotificationSortTypeReferenceIDDesc, NotificationSortTypeDateAsc, NotificationSortTypeDateDesc, NotificationSortTypeUpdatedAtAsc, NotificationSortTypeUpdatedAtDesc, NotificationSortTypeCreatedAtAsc, NotificationSortTypeCreatedAtDesc, NotificationSortTypeUpdatedByAsc, NotificationSortTypeUpdatedByDesc, NotificationSortTypeCreatedByAsc, NotificationSortTypeCreatedByDesc:
+	case ObjectSortTypeAsc, ObjectSortTypeDesc:
 		return true
 	}
 	return false
 }
 
-func (e NotificationSortType) String() string {
+func (e ObjectSortType) String() string {
 	return string(e)
 }
 
-func (e *NotificationSortType) UnmarshalGQL(v interface{}) error {
+func (e *ObjectSortType) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
 	}
 
-	*e = NotificationSortType(str)
+	*e = ObjectSortType(str)
 	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid NotificationSortType", str)
+		return fmt.Errorf("%s is not a valid ObjectSortType", str)
 	}
 	return nil
 }
 
-func (e NotificationSortType) MarshalGQL(w io.Writer) {
+func (e ObjectSortType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/novacloudcz/graphql-orm/resolvers"
 	"github.com/vektah/gqlparser/ast"
 )
 
@@ -29,7 +28,7 @@ func QueryNotificationHandler(ctx context.Context, r *GeneratedResolver, opts Qu
 	offset := 0
 	limit := 1
 	rt := &NotificationResultType{
-		EntityResultType: resolvers.EntityResultType{
+		EntityResultType: EntityResultType{
 			Offset: &offset,
 			Limit:  &limit,
 			Query:  &query,
@@ -42,7 +41,11 @@ func QueryNotificationHandler(ctx context.Context, r *GeneratedResolver, opts Qu
 	}
 
 	var items []*Notification
-	err := rt.GetItems(ctx, qb, TableName("notifications"), &items)
+	giOpts := GetItemsOptions{
+		Alias:      TableName("notifications"),
+		Preloaders: []string{},
+	}
+	err := rt.GetItems(ctx, qb, giOpts, &items)
 	if err != nil {
 		return nil, err
 	}
@@ -56,11 +59,11 @@ type QueryNotificationsHandlerOptions struct {
 	Offset *int
 	Limit  *int
 	Q      *string
-	Sort   []NotificationSortType
+	Sort   []*NotificationSortType
 	Filter *NotificationFilterType
 }
 
-func (r *GeneratedQueryResolver) Notifications(ctx context.Context, offset *int, limit *int, q *string, sort []NotificationSortType, filter *NotificationFilterType) (*NotificationResultType, error) {
+func (r *GeneratedQueryResolver) Notifications(ctx context.Context, offset *int, limit *int, q *string, sort []*NotificationSortType, filter *NotificationFilterType) (*NotificationResultType, error) {
 	opts := QueryNotificationsHandlerOptions{
 		Offset: offset,
 		Limit:  limit,
@@ -71,10 +74,6 @@ func (r *GeneratedQueryResolver) Notifications(ctx context.Context, offset *int,
 	return r.Handlers.QueryNotifications(ctx, r.GeneratedResolver, opts)
 }
 func QueryNotificationsHandler(ctx context.Context, r *GeneratedResolver, opts QueryNotificationsHandlerOptions) (*NotificationResultType, error) {
-	_sort := []resolvers.EntitySort{}
-	for _, s := range opts.Sort {
-		_sort = append(_sort, s)
-	}
 	query := NotificationQueryFilter{opts.Q}
 
 	var selectionSet *ast.SelectionSet
@@ -84,8 +83,13 @@ func QueryNotificationsHandler(ctx context.Context, r *GeneratedResolver, opts Q
 		}
 	}
 
+	_sort := []EntitySort{}
+	for _, sort := range opts.Sort {
+		_sort = append(_sort, sort)
+	}
+
 	return &NotificationResultType{
-		EntityResultType: resolvers.EntityResultType{
+		EntityResultType: EntityResultType{
 			Offset:       opts.Offset,
 			Limit:        opts.Limit,
 			Query:        &query,
@@ -99,7 +103,12 @@ func QueryNotificationsHandler(ctx context.Context, r *GeneratedResolver, opts Q
 type GeneratedNotificationResultTypeResolver struct{ *GeneratedResolver }
 
 func (r *GeneratedNotificationResultTypeResolver) Items(ctx context.Context, obj *NotificationResultType) (items []*Notification, err error) {
-	err = obj.GetItems(ctx, r.DB.db, TableName("notifications"), &items)
+	giOpts := GetItemsOptions{
+		Alias:      TableName("notifications"),
+		Preloaders: []string{},
+	}
+	err = obj.GetItems(ctx, r.DB.db, giOpts, &items)
+
 	return
 }
 

@@ -75,7 +75,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		Notification  func(childComplexity int, id *string, q *string, filter *NotificationFilterType) int
-		Notifications func(childComplexity int, offset *int, limit *int, q *string, sort []NotificationSortType, filter *NotificationFilterType) int
+		Notifications func(childComplexity int, offset *int, limit *int, q *string, sort []*NotificationSortType, filter *NotificationFilterType) int
 		_service      func(childComplexity int) int
 	}
 
@@ -99,7 +99,7 @@ type NotificationResultTypeResolver interface {
 type QueryResolver interface {
 	_service(ctx context.Context) (*_Service, error)
 	Notification(ctx context.Context, id *string, q *string, filter *NotificationFilterType) (*Notification, error)
-	Notifications(ctx context.Context, offset *int, limit *int, q *string, sort []NotificationSortType, filter *NotificationFilterType) (*NotificationResultType, error)
+	Notifications(ctx context.Context, offset *int, limit *int, q *string, sort []*NotificationSortType, filter *NotificationFilterType) (*NotificationResultType, error)
 }
 
 type executableSchema struct {
@@ -304,7 +304,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Notifications(childComplexity, args["offset"].(*int), args["limit"].(*int), args["q"].(*string), args["sort"].([]NotificationSortType), args["filter"].(*NotificationFilterType)), true
+		return e.complexity.Query.Notifications(childComplexity, args["offset"].(*int), args["limit"].(*int), args["q"].(*string), args["sort"].([]*NotificationSortType), args["filter"].(*NotificationFilterType)), true
 
 	case "Query._service":
 		if e.complexity.Query._service == nil {
@@ -406,6 +406,11 @@ type Mutation {
   deleteAllNotifications: Boolean!
 }
 
+enum ObjectSortType {
+  ASC
+  DESC
+}
+
 extend type Mutation {
   seenNotification(id: ID!): Notification
   seenNotifications(principal: String!, channel: String, reference: String, referenceID: String): Boolean!
@@ -447,31 +452,19 @@ input NotificationUpdateInput {
   date: Time
 }
 
-enum NotificationSortType {
-  ID_ASC
-  ID_DESC
-  MESSAGE_ASC
-  MESSAGE_DESC
-  SEEN_ASC
-  SEEN_DESC
-  CHANNEL_ASC
-  CHANNEL_DESC
-  PRINCIPAL_ASC
-  PRINCIPAL_DESC
-  REFERENCE_ASC
-  REFERENCE_DESC
-  REFERENCE_ID_ASC
-  REFERENCE_ID_DESC
-  DATE_ASC
-  DATE_DESC
-  UPDATED_AT_ASC
-  UPDATED_AT_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  UPDATED_BY_ASC
-  UPDATED_BY_DESC
-  CREATED_BY_ASC
-  CREATED_BY_DESC
+input NotificationSortType {
+  id: ObjectSortType
+  message: ObjectSortType
+  seen: ObjectSortType
+  channel: ObjectSortType
+  principal: ObjectSortType
+  reference: ObjectSortType
+  referenceID: ObjectSortType
+  date: ObjectSortType
+  updatedAt: ObjectSortType
+  createdAt: ObjectSortType
+  updatedBy: ObjectSortType
+  createdBy: ObjectSortType
 }
 
 input NotificationFilterType {
@@ -766,9 +759,9 @@ func (ec *executionContext) field_Query_notifications_args(ctx context.Context, 
 		}
 	}
 	args["q"] = arg2
-	var arg3 []NotificationSortType
+	var arg3 []*NotificationSortType
 	if tmp, ok := rawArgs["sort"]; ok {
-		arg3, err = ec.unmarshalONotificationSortType2ᚕgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx, tmp)
+		arg3, err = ec.unmarshalONotificationSortType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1676,7 +1669,7 @@ func (ec *executionContext) _Query_notifications(ctx context.Context, field grap
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Notifications(rctx, args["offset"].(*int), args["limit"].(*int), args["q"].(*string), args["sort"].([]NotificationSortType), args["filter"].(*NotificationFilterType))
+		return ec.resolvers.Query().Notifications(rctx, args["offset"].(*int), args["limit"].(*int), args["q"].(*string), args["sort"].([]*NotificationSortType), args["filter"].(*NotificationFilterType))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3569,6 +3562,90 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Context, obj interface{}) (NotificationSortType, error) {
+	var it NotificationSortType
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "message":
+			var err error
+			it.Message, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seen":
+			var err error
+			it.Seen, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channel":
+			var err error
+			it.Channel, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principal":
+			var err error
+			it.Principal, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "reference":
+			var err error
+			it.Reference, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceID":
+			var err error
+			it.ReferenceID, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "date":
+			var err error
+			it.Date, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAt":
+			var err error
+			it.UpdatedAt, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAt":
+			var err error
+			it.CreatedAt, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedBy":
+			var err error
+			it.UpdatedBy, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdBy":
+			var err error
+			it.CreatedBy, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -4189,12 +4266,15 @@ func (ec *executionContext) unmarshalNNotificationFilterType2ᚖgithubᚗcomᚋg
 }
 
 func (ec *executionContext) unmarshalNNotificationSortType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx context.Context, v interface{}) (NotificationSortType, error) {
-	var res NotificationSortType
-	return res, res.UnmarshalGQL(v)
+	return ec.unmarshalInputNotificationSortType(ctx, v)
 }
 
-func (ec *executionContext) marshalNNotificationSortType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx context.Context, sel ast.SelectionSet, v NotificationSortType) graphql.Marshaler {
-	return v
+func (ec *executionContext) unmarshalNNotificationSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx context.Context, v interface{}) (*NotificationSortType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalNNotificationSortType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx, v)
+	return &res, err
 }
 
 func (ec *executionContext) unmarshalNNotificationUpdateInput2map(ctx context.Context, v interface{}) (map[string]interface{}, error) {
@@ -4677,7 +4757,7 @@ func (ec *executionContext) marshalONotificationResultType2ᚖgithubᚗcomᚋgra
 	return ec._NotificationResultType(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalONotificationSortType2ᚕgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx context.Context, v interface{}) ([]NotificationSortType, error) {
+func (ec *executionContext) unmarshalONotificationSortType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx context.Context, v interface{}) ([]*NotificationSortType, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -4687,9 +4767,9 @@ func (ec *executionContext) unmarshalONotificationSortType2ᚕgithubᚗcomᚋgra
 		}
 	}
 	var err error
-	res := make([]NotificationSortType, len(vSlice))
+	res := make([]*NotificationSortType, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalNNotificationSortType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNNotificationSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -4697,44 +4777,28 @@ func (ec *executionContext) unmarshalONotificationSortType2ᚕgithubᚗcomᚋgra
 	return res, nil
 }
 
-func (ec *executionContext) marshalONotificationSortType2ᚕgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx context.Context, sel ast.SelectionSet, v []NotificationSortType) graphql.Marshaler {
+func (ec *executionContext) unmarshalOObjectSortType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx context.Context, v interface{}) (ObjectSortType, error) {
+	var res ObjectSortType
+	return res, res.UnmarshalGQL(v)
+}
+
+func (ec *executionContext) marshalOObjectSortType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx context.Context, sel ast.SelectionSet, v ObjectSortType) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx context.Context, v interface{}) (*ObjectSortType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOObjectSortType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) marshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx context.Context, sel ast.SelectionSet, v *ObjectSortType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		rctx := &graphql.ResolverContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithResolverContext(ctx, rctx)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNNotificationSortType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
+	return v
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {

@@ -12,7 +12,7 @@ require (
 	github.com/machinebox/graphql v0.2.2
 	github.com/matryer/is v1.2.0 // indirect
 	github.com/mitchellh/mapstructure v0.0.0-20180203102830-a4e142e9c047
-	github.com/novacloudcz/graphql-orm v0.0.0-20190912114504-1f558d910934
+	github.com/novacloudcz/graphql-orm v0.1.0
 	github.com/rs/cors v1.6.0
 	github.com/urfave/cli v1.21.0
 	github.com/vektah/gqlparser v1.1.2

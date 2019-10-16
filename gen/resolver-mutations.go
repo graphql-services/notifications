@@ -6,7 +6,6 @@ import (
 
 	"github.com/gofrs/uuid"
 	"github.com/novacloudcz/graphql-orm/events"
-	"github.com/novacloudcz/graphql-orm/resolvers"
 )
 
 type GeneratedMutationResolver struct{ *GeneratedResolver }
@@ -115,7 +114,7 @@ func UpdateNotificationHandler(ctx context.Context, r *GeneratedResolver, id str
 		return
 	}
 
-	err = resolvers.GetItem(ctx, tx, item, &id)
+	err = GetItem(ctx, tx, item, &id)
 	if err != nil {
 		return
 	}
@@ -193,7 +192,7 @@ func DeleteNotificationHandler(ctx context.Context, r *GeneratedResolver, id str
 	now := time.Now()
 	tx := r.DB.db.Begin()
 
-	err = resolvers.GetItem(ctx, tx, item, &id)
+	err = GetItem(ctx, tx, item, &id)
 	if err != nil {
 		return
 	}

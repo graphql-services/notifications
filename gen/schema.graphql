@@ -22,6 +22,11 @@ type Mutation {
   deleteAllNotifications: Boolean!
 }
 
+enum ObjectSortType {
+  ASC
+  DESC
+}
+
 extend type Mutation {
   seenNotification(id: ID!): Notification
   seenNotifications(principal: String!, channel: String, reference: String, referenceID: String): Boolean!
@@ -63,31 +68,19 @@ input NotificationUpdateInput {
   date: Time
 }
 
-enum NotificationSortType {
-  ID_ASC
-  ID_DESC
-  MESSAGE_ASC
-  MESSAGE_DESC
-  SEEN_ASC
-  SEEN_DESC
-  CHANNEL_ASC
-  CHANNEL_DESC
-  PRINCIPAL_ASC
-  PRINCIPAL_DESC
-  REFERENCE_ASC
-  REFERENCE_DESC
-  REFERENCE_ID_ASC
-  REFERENCE_ID_DESC
-  DATE_ASC
-  DATE_DESC
-  UPDATED_AT_ASC
-  UPDATED_AT_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  UPDATED_BY_ASC
-  UPDATED_BY_DESC
-  CREATED_BY_ASC
-  CREATED_BY_DESC
+input NotificationSortType {
+  id: ObjectSortType
+  message: ObjectSortType
+  seen: ObjectSortType
+  channel: ObjectSortType
+  principal: ObjectSortType
+  reference: ObjectSortType
+  referenceID: ObjectSortType
+  date: ObjectSortType
+  updatedAt: ObjectSortType
+  createdAt: ObjectSortType
+  updatedBy: ObjectSortType
+  createdBy: ObjectSortType
 }
 
 input NotificationFilterType {
