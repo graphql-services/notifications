@@ -12,8 +12,8 @@ type Notification @entity {
   message: String! @column(type: "text")
   seen: Boolean! @column
   channel: String @column
-  principal: String @column
+  principal: String @column(index: "basic_fetch")
   reference: String @column
   referenceID: String @column
-  date: Time! @column
+  date: Time! @column(index: "basic_fetch")
 }

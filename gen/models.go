@@ -26,10 +26,10 @@ type Notification struct {
 	Message     string     `json:"message" gorm:"column:message;type:text"`
 	Seen        bool       `json:"seen" gorm:"column:seen"`
 	Channel     *string    `json:"channel" gorm:"column:channel"`
-	Principal   *string    `json:"principal" gorm:"column:principal"`
+	Principal   *string    `json:"principal" gorm:"column:principal;index:basic_fetch"`
 	Reference   *string    `json:"reference" gorm:"column:reference"`
 	ReferenceID *string    `json:"referenceID" gorm:"column:referenceID"`
-	Date        time.Time  `json:"date" gorm:"column:date"`
+	Date        time.Time  `json:"date" gorm:"column:date;index:basic_fetch"`
 	UpdatedAt   *time.Time `json:"updatedAt" gorm:"column:updatedAt"`
 	CreatedAt   time.Time  `json:"createdAt" gorm:"column:createdAt"`
 	UpdatedBy   *string    `json:"updatedBy" gorm:"column:updatedBy"`

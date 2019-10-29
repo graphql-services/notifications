@@ -19,6 +19,7 @@ type NotificationFilterType struct {
 	IDGte             *string                   `json:"id_gte"`
 	IDLte             *string                   `json:"id_lte"`
 	IDIn              []string                  `json:"id_in"`
+	IDNull            *bool                     `json:"id_null"`
 	Message           *string                   `json:"message"`
 	MessageNe         *string                   `json:"message_ne"`
 	MessageGt         *string                   `json:"message_gt"`
@@ -29,6 +30,7 @@ type NotificationFilterType struct {
 	MessageLike       *string                   `json:"message_like"`
 	MessagePrefix     *string                   `json:"message_prefix"`
 	MessageSuffix     *string                   `json:"message_suffix"`
+	MessageNull       *bool                     `json:"message_null"`
 	Seen              *bool                     `json:"seen"`
 	SeenNe            *bool                     `json:"seen_ne"`
 	SeenGt            *bool                     `json:"seen_gt"`
@@ -36,6 +38,7 @@ type NotificationFilterType struct {
 	SeenGte           *bool                     `json:"seen_gte"`
 	SeenLte           *bool                     `json:"seen_lte"`
 	SeenIn            []bool                    `json:"seen_in"`
+	SeenNull          *bool                     `json:"seen_null"`
 	Channel           *string                   `json:"channel"`
 	ChannelNe         *string                   `json:"channel_ne"`
 	ChannelGt         *string                   `json:"channel_gt"`
@@ -46,6 +49,7 @@ type NotificationFilterType struct {
 	ChannelLike       *string                   `json:"channel_like"`
 	ChannelPrefix     *string                   `json:"channel_prefix"`
 	ChannelSuffix     *string                   `json:"channel_suffix"`
+	ChannelNull       *bool                     `json:"channel_null"`
 	Principal         *string                   `json:"principal"`
 	PrincipalNe       *string                   `json:"principal_ne"`
 	PrincipalGt       *string                   `json:"principal_gt"`
@@ -56,6 +60,7 @@ type NotificationFilterType struct {
 	PrincipalLike     *string                   `json:"principal_like"`
 	PrincipalPrefix   *string                   `json:"principal_prefix"`
 	PrincipalSuffix   *string                   `json:"principal_suffix"`
+	PrincipalNull     *bool                     `json:"principal_null"`
 	Reference         *string                   `json:"reference"`
 	ReferenceNe       *string                   `json:"reference_ne"`
 	ReferenceGt       *string                   `json:"reference_gt"`
@@ -66,6 +71,7 @@ type NotificationFilterType struct {
 	ReferenceLike     *string                   `json:"reference_like"`
 	ReferencePrefix   *string                   `json:"reference_prefix"`
 	ReferenceSuffix   *string                   `json:"reference_suffix"`
+	ReferenceNull     *bool                     `json:"reference_null"`
 	ReferenceID       *string                   `json:"referenceID"`
 	ReferenceIDNe     *string                   `json:"referenceID_ne"`
 	ReferenceIDGt     *string                   `json:"referenceID_gt"`
@@ -76,6 +82,7 @@ type NotificationFilterType struct {
 	ReferenceIDLike   *string                   `json:"referenceID_like"`
 	ReferenceIDPrefix *string                   `json:"referenceID_prefix"`
 	ReferenceIDSuffix *string                   `json:"referenceID_suffix"`
+	ReferenceIDNull   *bool                     `json:"referenceID_null"`
 	Date              *time.Time                `json:"date"`
 	DateNe            *time.Time                `json:"date_ne"`
 	DateGt            *time.Time                `json:"date_gt"`
@@ -83,6 +90,7 @@ type NotificationFilterType struct {
 	DateGte           *time.Time                `json:"date_gte"`
 	DateLte           *time.Time                `json:"date_lte"`
 	DateIn            []*time.Time              `json:"date_in"`
+	DateNull          *bool                     `json:"date_null"`
 	UpdatedAt         *time.Time                `json:"updatedAt"`
 	UpdatedAtNe       *time.Time                `json:"updatedAt_ne"`
 	UpdatedAtGt       *time.Time                `json:"updatedAt_gt"`
@@ -90,6 +98,7 @@ type NotificationFilterType struct {
 	UpdatedAtGte      *time.Time                `json:"updatedAt_gte"`
 	UpdatedAtLte      *time.Time                `json:"updatedAt_lte"`
 	UpdatedAtIn       []*time.Time              `json:"updatedAt_in"`
+	UpdatedAtNull     *bool                     `json:"updatedAt_null"`
 	CreatedAt         *time.Time                `json:"createdAt"`
 	CreatedAtNe       *time.Time                `json:"createdAt_ne"`
 	CreatedAtGt       *time.Time                `json:"createdAt_gt"`
@@ -97,6 +106,7 @@ type NotificationFilterType struct {
 	CreatedAtGte      *time.Time                `json:"createdAt_gte"`
 	CreatedAtLte      *time.Time                `json:"createdAt_lte"`
 	CreatedAtIn       []*time.Time              `json:"createdAt_in"`
+	CreatedAtNull     *bool                     `json:"createdAt_null"`
 	UpdatedBy         *string                   `json:"updatedBy"`
 	UpdatedByNe       *string                   `json:"updatedBy_ne"`
 	UpdatedByGt       *string                   `json:"updatedBy_gt"`
@@ -104,6 +114,7 @@ type NotificationFilterType struct {
 	UpdatedByGte      *string                   `json:"updatedBy_gte"`
 	UpdatedByLte      *string                   `json:"updatedBy_lte"`
 	UpdatedByIn       []string                  `json:"updatedBy_in"`
+	UpdatedByNull     *bool                     `json:"updatedBy_null"`
 	CreatedBy         *string                   `json:"createdBy"`
 	CreatedByNe       *string                   `json:"createdBy_ne"`
 	CreatedByGt       *string                   `json:"createdBy_gt"`
@@ -111,6 +122,7 @@ type NotificationFilterType struct {
 	CreatedByGte      *string                   `json:"createdBy_gte"`
 	CreatedByLte      *string                   `json:"createdBy_lte"`
 	CreatedByIn       []string                  `json:"createdBy_in"`
+	CreatedByNull     *bool                     `json:"createdBy_null"`
 }
 
 type NotificationSortType struct {

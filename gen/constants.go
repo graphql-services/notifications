@@ -92,6 +92,7 @@ input NotificationFilterType {
   id_gte: ID
   id_lte: ID
   id_in: [ID!]
+  id_null: Boolean
   message: String
   message_ne: String
   message_gt: String
@@ -102,6 +103,7 @@ input NotificationFilterType {
   message_like: String
   message_prefix: String
   message_suffix: String
+  message_null: Boolean
   seen: Boolean
   seen_ne: Boolean
   seen_gt: Boolean
@@ -109,6 +111,7 @@ input NotificationFilterType {
   seen_gte: Boolean
   seen_lte: Boolean
   seen_in: [Boolean!]
+  seen_null: Boolean
   channel: String
   channel_ne: String
   channel_gt: String
@@ -119,6 +122,7 @@ input NotificationFilterType {
   channel_like: String
   channel_prefix: String
   channel_suffix: String
+  channel_null: Boolean
   principal: String
   principal_ne: String
   principal_gt: String
@@ -129,6 +133,7 @@ input NotificationFilterType {
   principal_like: String
   principal_prefix: String
   principal_suffix: String
+  principal_null: Boolean
   reference: String
   reference_ne: String
   reference_gt: String
@@ -139,6 +144,7 @@ input NotificationFilterType {
   reference_like: String
   reference_prefix: String
   reference_suffix: String
+  reference_null: Boolean
   referenceID: String
   referenceID_ne: String
   referenceID_gt: String
@@ -149,6 +155,7 @@ input NotificationFilterType {
   referenceID_like: String
   referenceID_prefix: String
   referenceID_suffix: String
+  referenceID_null: Boolean
   date: Time
   date_ne: Time
   date_gt: Time
@@ -156,6 +163,7 @@ input NotificationFilterType {
   date_gte: Time
   date_lte: Time
   date_in: [Time!]
+  date_null: Boolean
   updatedAt: Time
   updatedAt_ne: Time
   updatedAt_gt: Time
@@ -163,6 +171,7 @@ input NotificationFilterType {
   updatedAt_gte: Time
   updatedAt_lte: Time
   updatedAt_in: [Time!]
+  updatedAt_null: Boolean
   createdAt: Time
   createdAt_ne: Time
   createdAt_gt: Time
@@ -170,6 +179,7 @@ input NotificationFilterType {
   createdAt_gte: Time
   createdAt_lte: Time
   createdAt_in: [Time!]
+  createdAt_null: Boolean
   updatedBy: ID
   updatedBy_ne: ID
   updatedBy_gt: ID
@@ -177,6 +187,7 @@ input NotificationFilterType {
   updatedBy_gte: ID
   updatedBy_lte: ID
   updatedBy_in: [ID!]
+  updatedBy_null: Boolean
   createdBy: ID
   createdBy_ne: ID
   createdBy_gt: ID
@@ -184,6 +195,7 @@ input NotificationFilterType {
   createdBy_gte: ID
   createdBy_lte: ID
   createdBy_in: [ID!]
+  createdBy_null: Boolean
 }
 
 type NotificationResultType {
