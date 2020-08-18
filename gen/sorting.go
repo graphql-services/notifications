@@ -27,6 +27,21 @@ func (s NotificationSortType) ApplyWithAlias(ctx context.Context, dialect gorm.D
 		*sorts = append(*sorts, sort)
 	}
 
+	if s.GroupID != nil {
+		sort := SortInfo{Field: aliasPrefix + dialect.Quote("groupID"), Direction: s.GroupID.String()}
+		*sorts = append(*sorts, sort)
+	}
+
+	if s.GroupIDMin != nil {
+		sort := SortInfo{Field: "Min(" + aliasPrefix + dialect.Quote("groupID") + ")", Direction: s.GroupIDMin.String(), IsAggregation: true}
+		*sorts = append(*sorts, sort)
+	}
+
+	if s.GroupIDMax != nil {
+		sort := SortInfo{Field: "Max(" + aliasPrefix + dialect.Quote("groupID") + ")", Direction: s.GroupIDMax.String(), IsAggregation: true}
+		*sorts = append(*sorts, sort)
+	}
+
 	if s.Message != nil {
 		sort := SortInfo{Field: aliasPrefix + dialect.Quote("message"), Direction: s.Message.String()}
 		*sorts = append(*sorts, sort)
@@ -69,6 +84,21 @@ func (s NotificationSortType) ApplyWithAlias(ctx context.Context, dialect gorm.D
 
 	if s.ChannelMax != nil {
 		sort := SortInfo{Field: "Max(" + aliasPrefix + dialect.Quote("channel") + ")", Direction: s.ChannelMax.String(), IsAggregation: true}
+		*sorts = append(*sorts, sort)
+	}
+
+	if s.Recipient != nil {
+		sort := SortInfo{Field: aliasPrefix + dialect.Quote("recipient"), Direction: s.Recipient.String()}
+		*sorts = append(*sorts, sort)
+	}
+
+	if s.RecipientMin != nil {
+		sort := SortInfo{Field: "Min(" + aliasPrefix + dialect.Quote("recipient") + ")", Direction: s.RecipientMin.String(), IsAggregation: true}
+		*sorts = append(*sorts, sort)
+	}
+
+	if s.RecipientMax != nil {
+		sort := SortInfo{Field: "Max(" + aliasPrefix + dialect.Quote("recipient") + ")", Direction: s.RecipientMax.String(), IsAggregation: true}
 		*sorts = append(*sorts, sort)
 	}
 

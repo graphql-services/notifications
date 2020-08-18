@@ -35,9 +35,11 @@ extend type Mutation {
 
 type Notification {
   id: ID!
+  groupID: ID
   message: String!
   seen: Boolean!
   channel: String
+  recipient: String
   principal: String
   reference: String
   referenceID: String
@@ -50,9 +52,11 @@ type Notification {
 
 input NotificationCreateInput {
   id: ID
+  groupID: ID
   message: String!
   seen: Boolean!
   channel: String
+  recipient: String
   principal: String
   reference: String
   referenceID: String
@@ -60,9 +64,11 @@ input NotificationCreateInput {
 }
 
 input NotificationUpdateInput {
+  groupID: ID
   message: String
   seen: Boolean
   channel: String
+  recipient: String
   principal: String
   reference: String
   referenceID: String
@@ -73,6 +79,9 @@ input NotificationSortType {
   id: ObjectSortType
   idMin: ObjectSortType
   idMax: ObjectSortType
+  groupID: ObjectSortType
+  groupIDMin: ObjectSortType
+  groupIDMax: ObjectSortType
   message: ObjectSortType
   messageMin: ObjectSortType
   messageMax: ObjectSortType
@@ -82,6 +91,9 @@ input NotificationSortType {
   channel: ObjectSortType
   channelMin: ObjectSortType
   channelMax: ObjectSortType
+  recipient: ObjectSortType
+  recipientMin: ObjectSortType
+  recipientMax: ObjectSortType
   principal: ObjectSortType
   principalMin: ObjectSortType
   principalMax: ObjectSortType
@@ -133,6 +145,28 @@ input NotificationFilterType {
   idMin_in: [ID!]
   idMax_in: [ID!]
   id_null: Boolean
+  groupID: ID
+  groupIDMin: ID
+  groupIDMax: ID
+  groupID_ne: ID
+  groupIDMin_ne: ID
+  groupIDMax_ne: ID
+  groupID_gt: ID
+  groupIDMin_gt: ID
+  groupIDMax_gt: ID
+  groupID_lt: ID
+  groupIDMin_lt: ID
+  groupIDMax_lt: ID
+  groupID_gte: ID
+  groupIDMin_gte: ID
+  groupIDMax_gte: ID
+  groupID_lte: ID
+  groupIDMin_lte: ID
+  groupIDMax_lte: ID
+  groupID_in: [ID!]
+  groupIDMin_in: [ID!]
+  groupIDMax_in: [ID!]
+  groupID_null: Boolean
   message: String
   messageMin: String
   messageMax: String
@@ -217,6 +251,37 @@ input NotificationFilterType {
   channelMin_suffix: String
   channelMax_suffix: String
   channel_null: Boolean
+  recipient: String
+  recipientMin: String
+  recipientMax: String
+  recipient_ne: String
+  recipientMin_ne: String
+  recipientMax_ne: String
+  recipient_gt: String
+  recipientMin_gt: String
+  recipientMax_gt: String
+  recipient_lt: String
+  recipientMin_lt: String
+  recipientMax_lt: String
+  recipient_gte: String
+  recipientMin_gte: String
+  recipientMax_gte: String
+  recipient_lte: String
+  recipientMin_lte: String
+  recipientMax_lte: String
+  recipient_in: [String!]
+  recipientMin_in: [String!]
+  recipientMax_in: [String!]
+  recipient_like: String
+  recipientMin_like: String
+  recipientMax_like: String
+  recipient_prefix: String
+  recipientMin_prefix: String
+  recipientMax_prefix: String
+  recipient_suffix: String
+  recipientMin_suffix: String
+  recipientMax_suffix: String
+  recipient_null: Boolean
   principal: String
   principalMin: String
   principalMax: String

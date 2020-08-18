@@ -90,6 +90,12 @@ func CreateNotificationHandler(ctx context.Context, r *GeneratedResolver, input 
 		event.AddNewValue("id", changes.ID)
 	}
 
+	if _, ok := input["groupID"]; ok && (item.GroupID != changes.GroupID) && (item.GroupID == nil || changes.GroupID == nil || *item.GroupID != *changes.GroupID) {
+		item.GroupID = changes.GroupID
+
+		event.AddNewValue("groupID", changes.GroupID)
+	}
+
 	if _, ok := input["message"]; ok && (item.Message != changes.Message) {
 		item.Message = changes.Message
 
@@ -106,6 +112,12 @@ func CreateNotificationHandler(ctx context.Context, r *GeneratedResolver, input 
 		item.Channel = changes.Channel
 
 		event.AddNewValue("channel", changes.Channel)
+	}
+
+	if _, ok := input["recipient"]; ok && (item.Recipient != changes.Recipient) && (item.Recipient == nil || changes.Recipient == nil || *item.Recipient != *changes.Recipient) {
+		item.Recipient = changes.Recipient
+
+		event.AddNewValue("recipient", changes.Recipient)
 	}
 
 	if _, ok := input["principal"]; ok && (item.Principal != changes.Principal) && (item.Principal == nil || changes.Principal == nil || *item.Principal != *changes.Principal) {
@@ -181,6 +193,12 @@ func UpdateNotificationHandler(ctx context.Context, r *GeneratedResolver, id str
 
 	item.UpdatedBy = principalID
 
+	if _, ok := input["groupID"]; ok && (item.GroupID != changes.GroupID) && (item.GroupID == nil || changes.GroupID == nil || *item.GroupID != *changes.GroupID) {
+		event.AddOldValue("groupID", item.GroupID)
+		event.AddNewValue("groupID", changes.GroupID)
+		item.GroupID = changes.GroupID
+	}
+
 	if _, ok := input["message"]; ok && (item.Message != changes.Message) {
 		event.AddOldValue("message", item.Message)
 		event.AddNewValue("message", changes.Message)
@@ -197,6 +215,12 @@ func UpdateNotificationHandler(ctx context.Context, r *GeneratedResolver, id str
 		event.AddOldValue("channel", item.Channel)
 		event.AddNewValue("channel", changes.Channel)
 		item.Channel = changes.Channel
+	}
+
+	if _, ok := input["recipient"]; ok && (item.Recipient != changes.Recipient) && (item.Recipient == nil || changes.Recipient == nil || *item.Recipient != *changes.Recipient) {
+		event.AddOldValue("recipient", item.Recipient)
+		event.AddNewValue("recipient", changes.Recipient)
+		item.Recipient = changes.Recipient
 	}
 
 	if _, ok := input["principal"]; ok && (item.Principal != changes.Principal) && (item.Principal == nil || changes.Principal == nil || *item.Principal != *changes.Principal) {

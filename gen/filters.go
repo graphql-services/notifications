@@ -139,6 +139,49 @@ func (f *NotificationFilterType) WhereContent(dialect gorm.Dialect, aliasPrefix 
 		}
 	}
 
+	if f.GroupID != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("groupID")+" = ?")
+		values = append(values, f.GroupID)
+	}
+
+	if f.GroupIDNe != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("groupID")+" != ?")
+		values = append(values, f.GroupIDNe)
+	}
+
+	if f.GroupIDGt != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("groupID")+" > ?")
+		values = append(values, f.GroupIDGt)
+	}
+
+	if f.GroupIDLt != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("groupID")+" < ?")
+		values = append(values, f.GroupIDLt)
+	}
+
+	if f.GroupIDGte != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("groupID")+" >= ?")
+		values = append(values, f.GroupIDGte)
+	}
+
+	if f.GroupIDLte != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("groupID")+" <= ?")
+		values = append(values, f.GroupIDLte)
+	}
+
+	if f.GroupIDIn != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("groupID")+" IN (?)")
+		values = append(values, f.GroupIDIn)
+	}
+
+	if f.GroupIDNull != nil {
+		if *f.GroupIDNull {
+			conditions = append(conditions, aliasPrefix+dialect.Quote("groupID")+" IS NULL")
+		} else {
+			conditions = append(conditions, aliasPrefix+dialect.Quote("groupID")+" IS NOT NULL")
+		}
+	}
+
 	if f.Message != nil {
 		conditions = append(conditions, aliasPrefix+dialect.Quote("message")+" = ?")
 		values = append(values, f.Message)
@@ -295,6 +338,64 @@ func (f *NotificationFilterType) WhereContent(dialect gorm.Dialect, aliasPrefix 
 			conditions = append(conditions, aliasPrefix+dialect.Quote("channel")+" IS NULL")
 		} else {
 			conditions = append(conditions, aliasPrefix+dialect.Quote("channel")+" IS NOT NULL")
+		}
+	}
+
+	if f.Recipient != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" = ?")
+		values = append(values, f.Recipient)
+	}
+
+	if f.RecipientNe != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" != ?")
+		values = append(values, f.RecipientNe)
+	}
+
+	if f.RecipientGt != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" > ?")
+		values = append(values, f.RecipientGt)
+	}
+
+	if f.RecipientLt != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" < ?")
+		values = append(values, f.RecipientLt)
+	}
+
+	if f.RecipientGte != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" >= ?")
+		values = append(values, f.RecipientGte)
+	}
+
+	if f.RecipientLte != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" <= ?")
+		values = append(values, f.RecipientLte)
+	}
+
+	if f.RecipientIn != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" IN (?)")
+		values = append(values, f.RecipientIn)
+	}
+
+	if f.RecipientLike != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.RecipientLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.RecipientPrefix != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.RecipientPrefix))
+	}
+
+	if f.RecipientSuffix != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.RecipientSuffix))
+	}
+
+	if f.RecipientNull != nil {
+		if *f.RecipientNull {
+			conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" IS NULL")
+		} else {
+			conditions = append(conditions, aliasPrefix+dialect.Quote("recipient")+" IS NOT NULL")
 		}
 	}
 
@@ -763,6 +864,76 @@ func (f *NotificationFilterType) HavingContent(dialect gorm.Dialect, aliasPrefix
 		values = append(values, f.IDMaxIn)
 	}
 
+	if f.GroupIDMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("groupID")+") = ?")
+		values = append(values, f.GroupIDMin)
+	}
+
+	if f.GroupIDMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("groupID")+") = ?")
+		values = append(values, f.GroupIDMax)
+	}
+
+	if f.GroupIDMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("groupID")+") != ?")
+		values = append(values, f.GroupIDMinNe)
+	}
+
+	if f.GroupIDMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("groupID")+") != ?")
+		values = append(values, f.GroupIDMaxNe)
+	}
+
+	if f.GroupIDMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("groupID")+") > ?")
+		values = append(values, f.GroupIDMinGt)
+	}
+
+	if f.GroupIDMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("groupID")+") > ?")
+		values = append(values, f.GroupIDMaxGt)
+	}
+
+	if f.GroupIDMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("groupID")+") < ?")
+		values = append(values, f.GroupIDMinLt)
+	}
+
+	if f.GroupIDMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("groupID")+") < ?")
+		values = append(values, f.GroupIDMaxLt)
+	}
+
+	if f.GroupIDMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("groupID")+") >= ?")
+		values = append(values, f.GroupIDMinGte)
+	}
+
+	if f.GroupIDMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("groupID")+") >= ?")
+		values = append(values, f.GroupIDMaxGte)
+	}
+
+	if f.GroupIDMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("groupID")+") <= ?")
+		values = append(values, f.GroupIDMinLte)
+	}
+
+	if f.GroupIDMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("groupID")+") <= ?")
+		values = append(values, f.GroupIDMaxLte)
+	}
+
+	if f.GroupIDMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("groupID")+") IN (?)")
+		values = append(values, f.GroupIDMinIn)
+	}
+
+	if f.GroupIDMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("groupID")+") IN (?)")
+		values = append(values, f.GroupIDMaxIn)
+	}
+
 	if f.MessageMin != nil {
 		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("message")+") = ?")
 		values = append(values, f.MessageMin)
@@ -1031,6 +1202,106 @@ func (f *NotificationFilterType) HavingContent(dialect gorm.Dialect, aliasPrefix
 	if f.ChannelMaxSuffix != nil {
 		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("channel")+") LIKE ?")
 		values = append(values, fmt.Sprintf("%%%s", *f.ChannelMaxSuffix))
+	}
+
+	if f.RecipientMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("recipient")+") = ?")
+		values = append(values, f.RecipientMin)
+	}
+
+	if f.RecipientMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("recipient")+") = ?")
+		values = append(values, f.RecipientMax)
+	}
+
+	if f.RecipientMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("recipient")+") != ?")
+		values = append(values, f.RecipientMinNe)
+	}
+
+	if f.RecipientMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("recipient")+") != ?")
+		values = append(values, f.RecipientMaxNe)
+	}
+
+	if f.RecipientMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("recipient")+") > ?")
+		values = append(values, f.RecipientMinGt)
+	}
+
+	if f.RecipientMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("recipient")+") > ?")
+		values = append(values, f.RecipientMaxGt)
+	}
+
+	if f.RecipientMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("recipient")+") < ?")
+		values = append(values, f.RecipientMinLt)
+	}
+
+	if f.RecipientMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("recipient")+") < ?")
+		values = append(values, f.RecipientMaxLt)
+	}
+
+	if f.RecipientMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("recipient")+") >= ?")
+		values = append(values, f.RecipientMinGte)
+	}
+
+	if f.RecipientMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("recipient")+") >= ?")
+		values = append(values, f.RecipientMaxGte)
+	}
+
+	if f.RecipientMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("recipient")+") <= ?")
+		values = append(values, f.RecipientMinLte)
+	}
+
+	if f.RecipientMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("recipient")+") <= ?")
+		values = append(values, f.RecipientMaxLte)
+	}
+
+	if f.RecipientMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("recipient")+") IN (?)")
+		values = append(values, f.RecipientMinIn)
+	}
+
+	if f.RecipientMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("recipient")+") IN (?)")
+		values = append(values, f.RecipientMaxIn)
+	}
+
+	if f.RecipientMinLike != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("recipient")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.RecipientMinLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.RecipientMaxLike != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("recipient")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.RecipientMaxLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.RecipientMinPrefix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("recipient")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.RecipientMinPrefix))
+	}
+
+	if f.RecipientMaxPrefix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("recipient")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.RecipientMaxPrefix))
+	}
+
+	if f.RecipientMinSuffix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("recipient")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.RecipientMinSuffix))
+	}
+
+	if f.RecipientMaxSuffix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("recipient")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.RecipientMaxSuffix))
 	}
 
 	if f.PrincipalMin != nil {

@@ -58,9 +58,11 @@ type ComplexityRoot struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
 		Date        func(childComplexity int) int
+		GroupID     func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Message     func(childComplexity int) int
 		Principal   func(childComplexity int) int
+		Recipient   func(childComplexity int) int
 		Reference   func(childComplexity int) int
 		ReferenceID func(childComplexity int) int
 		Seen        func(childComplexity int) int
@@ -212,6 +214,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Notification.Date(childComplexity), true
 
+	case "Notification.groupID":
+		if e.complexity.Notification.GroupID == nil {
+			break
+		}
+
+		return e.complexity.Notification.GroupID(childComplexity), true
+
 	case "Notification.id":
 		if e.complexity.Notification.ID == nil {
 			break
@@ -232,6 +241,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Notification.Principal(childComplexity), true
+
+	case "Notification.recipient":
+		if e.complexity.Notification.Recipient == nil {
+			break
+		}
+
+		return e.complexity.Notification.Recipient(childComplexity), true
 
 	case "Notification.reference":
 		if e.complexity.Notification.Reference == nil {
@@ -418,9 +434,11 @@ extend type Mutation {
 
 type Notification {
   id: ID!
+  groupID: ID
   message: String!
   seen: Boolean!
   channel: String
+  recipient: String
   principal: String
   reference: String
   referenceID: String
@@ -433,9 +451,11 @@ type Notification {
 
 input NotificationCreateInput {
   id: ID
+  groupID: ID
   message: String!
   seen: Boolean!
   channel: String
+  recipient: String
   principal: String
   reference: String
   referenceID: String
@@ -443,9 +463,11 @@ input NotificationCreateInput {
 }
 
 input NotificationUpdateInput {
+  groupID: ID
   message: String
   seen: Boolean
   channel: String
+  recipient: String
   principal: String
   reference: String
   referenceID: String
@@ -456,6 +478,9 @@ input NotificationSortType {
   id: ObjectSortType
   idMin: ObjectSortType
   idMax: ObjectSortType
+  groupID: ObjectSortType
+  groupIDMin: ObjectSortType
+  groupIDMax: ObjectSortType
   message: ObjectSortType
   messageMin: ObjectSortType
   messageMax: ObjectSortType
@@ -465,6 +490,9 @@ input NotificationSortType {
   channel: ObjectSortType
   channelMin: ObjectSortType
   channelMax: ObjectSortType
+  recipient: ObjectSortType
+  recipientMin: ObjectSortType
+  recipientMax: ObjectSortType
   principal: ObjectSortType
   principalMin: ObjectSortType
   principalMax: ObjectSortType
@@ -516,6 +544,28 @@ input NotificationFilterType {
   idMin_in: [ID!]
   idMax_in: [ID!]
   id_null: Boolean
+  groupID: ID
+  groupIDMin: ID
+  groupIDMax: ID
+  groupID_ne: ID
+  groupIDMin_ne: ID
+  groupIDMax_ne: ID
+  groupID_gt: ID
+  groupIDMin_gt: ID
+  groupIDMax_gt: ID
+  groupID_lt: ID
+  groupIDMin_lt: ID
+  groupIDMax_lt: ID
+  groupID_gte: ID
+  groupIDMin_gte: ID
+  groupIDMax_gte: ID
+  groupID_lte: ID
+  groupIDMin_lte: ID
+  groupIDMax_lte: ID
+  groupID_in: [ID!]
+  groupIDMin_in: [ID!]
+  groupIDMax_in: [ID!]
+  groupID_null: Boolean
   message: String
   messageMin: String
   messageMax: String
@@ -600,6 +650,37 @@ input NotificationFilterType {
   channelMin_suffix: String
   channelMax_suffix: String
   channel_null: Boolean
+  recipient: String
+  recipientMin: String
+  recipientMax: String
+  recipient_ne: String
+  recipientMin_ne: String
+  recipientMax_ne: String
+  recipient_gt: String
+  recipientMin_gt: String
+  recipientMax_gt: String
+  recipient_lt: String
+  recipientMin_lt: String
+  recipientMax_lt: String
+  recipient_gte: String
+  recipientMin_gte: String
+  recipientMax_gte: String
+  recipient_lte: String
+  recipientMin_lte: String
+  recipientMax_lte: String
+  recipient_in: [String!]
+  recipientMin_in: [String!]
+  recipientMax_in: [String!]
+  recipient_like: String
+  recipientMin_like: String
+  recipientMax_like: String
+  recipient_prefix: String
+  recipientMin_prefix: String
+  recipientMax_prefix: String
+  recipient_suffix: String
+  recipientMin_suffix: String
+  recipientMax_suffix: String
+  recipient_null: Boolean
   principal: String
   principalMin: String
   principalMax: String
@@ -1339,6 +1420,40 @@ func (ec *executionContext) _Notification_id(ctx context.Context, field graphql.
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Notification_groupID(ctx context.Context, field graphql.CollectedField, obj *Notification) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Notification",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.GroupID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Notification_message(ctx context.Context, field graphql.CollectedField, obj *Notification) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
@@ -1433,6 +1548,40 @@ func (ec *executionContext) _Notification_channel(ctx context.Context, field gra
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Channel, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Notification_recipient(ctx context.Context, field graphql.CollectedField, obj *Notification) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Notification",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Recipient, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3328,6 +3477,138 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "groupID":
+			var err error
+			it.GroupID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMin":
+			var err error
+			it.GroupIDMin, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMax":
+			var err error
+			it.GroupIDMax, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupID_ne":
+			var err error
+			it.GroupIDNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMin_ne":
+			var err error
+			it.GroupIDMinNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMax_ne":
+			var err error
+			it.GroupIDMaxNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupID_gt":
+			var err error
+			it.GroupIDGt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMin_gt":
+			var err error
+			it.GroupIDMinGt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMax_gt":
+			var err error
+			it.GroupIDMaxGt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupID_lt":
+			var err error
+			it.GroupIDLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMin_lt":
+			var err error
+			it.GroupIDMinLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMax_lt":
+			var err error
+			it.GroupIDMaxLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupID_gte":
+			var err error
+			it.GroupIDGte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMin_gte":
+			var err error
+			it.GroupIDMinGte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMax_gte":
+			var err error
+			it.GroupIDMaxGte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupID_lte":
+			var err error
+			it.GroupIDLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMin_lte":
+			var err error
+			it.GroupIDMinLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMax_lte":
+			var err error
+			it.GroupIDMaxLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupID_in":
+			var err error
+			it.GroupIDIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMin_in":
+			var err error
+			it.GroupIDMinIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMax_in":
+			var err error
+			it.GroupIDMaxIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupID_null":
+			var err error
+			it.GroupIDNull, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "message":
 			var err error
 			it.Message, err = ec.unmarshalOString2ᚖstring(ctx, v)
@@ -3829,6 +4110,192 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 		case "channel_null":
 			var err error
 			it.ChannelNull, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient":
+			var err error
+			it.Recipient, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMin":
+			var err error
+			it.RecipientMin, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMax":
+			var err error
+			it.RecipientMax, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient_ne":
+			var err error
+			it.RecipientNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMin_ne":
+			var err error
+			it.RecipientMinNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMax_ne":
+			var err error
+			it.RecipientMaxNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient_gt":
+			var err error
+			it.RecipientGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMin_gt":
+			var err error
+			it.RecipientMinGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMax_gt":
+			var err error
+			it.RecipientMaxGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient_lt":
+			var err error
+			it.RecipientLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMin_lt":
+			var err error
+			it.RecipientMinLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMax_lt":
+			var err error
+			it.RecipientMaxLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient_gte":
+			var err error
+			it.RecipientGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMin_gte":
+			var err error
+			it.RecipientMinGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMax_gte":
+			var err error
+			it.RecipientMaxGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient_lte":
+			var err error
+			it.RecipientLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMin_lte":
+			var err error
+			it.RecipientMinLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMax_lte":
+			var err error
+			it.RecipientMaxLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient_in":
+			var err error
+			it.RecipientIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMin_in":
+			var err error
+			it.RecipientMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMax_in":
+			var err error
+			it.RecipientMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient_like":
+			var err error
+			it.RecipientLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMin_like":
+			var err error
+			it.RecipientMinLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMax_like":
+			var err error
+			it.RecipientMaxLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient_prefix":
+			var err error
+			it.RecipientPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMin_prefix":
+			var err error
+			it.RecipientMinPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMax_prefix":
+			var err error
+			it.RecipientMaxPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient_suffix":
+			var err error
+			it.RecipientSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMin_suffix":
+			var err error
+			it.RecipientMinSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMax_suffix":
+			var err error
+			it.RecipientMaxSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient_null":
+			var err error
+			it.RecipientNull, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5080,6 +5547,24 @@ func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Conte
 			if err != nil {
 				return it, err
 			}
+		case "groupID":
+			var err error
+			it.GroupID, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMin":
+			var err error
+			it.GroupIDMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMax":
+			var err error
+			it.GroupIDMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "message":
 			var err error
 			it.Message, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
@@ -5131,6 +5616,24 @@ func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Conte
 		case "channelMax":
 			var err error
 			it.ChannelMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipient":
+			var err error
+			it.Recipient, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMin":
+			var err error
+			it.RecipientMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "recipientMax":
+			var err error
+			it.RecipientMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5361,6 +5864,8 @@ func (ec *executionContext) _Notification(ctx context.Context, sel ast.Selection
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "groupID":
+			out.Values[i] = ec._Notification_groupID(ctx, field, obj)
 		case "message":
 			out.Values[i] = ec._Notification_message(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -5373,6 +5878,8 @@ func (ec *executionContext) _Notification(ctx context.Context, sel ast.Selection
 			}
 		case "channel":
 			out.Values[i] = ec._Notification_channel(ctx, field, obj)
+		case "recipient":
+			out.Values[i] = ec._Notification_recipient(ctx, field, obj)
 		case "principal":
 			out.Values[i] = ec._Notification_principal(ctx, field, obj)
 		case "reference":
