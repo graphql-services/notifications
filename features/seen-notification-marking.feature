@@ -19,7 +19,7 @@ Feature: User should be able to mark one or more notifications as seen=true
         When I send query:
             """
             query {
-            notifications { items { message reference referenceID seen } }
+            notifications(sort:[{message:ASC}]) { items { message reference referenceID seen } }
             }
             """
         Then the response should be:
@@ -60,7 +60,7 @@ Feature: User should be able to mark one or more notifications as seen=true
         Then I send query:
             """
             query {
-            notifications { items { message reference referenceID seen } }
+            notifications(sort:[{message:ASC}]) { items { message reference referenceID seen } }
             }
             """
         Then the response should be:
@@ -102,7 +102,7 @@ Feature: User should be able to mark one or more notifications as seen=true
         Then I send query:
             """
             query {
-            notifications { items { message reference referenceID seen } }
+            notifications(sort:[{message:ASC}]) { items { message reference referenceID seen } }
             }
             """
         Then the response should be:

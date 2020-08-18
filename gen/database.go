@@ -12,6 +12,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"gopkg.in/gormigrate.v1"
 )
 
 // DB ...
@@ -79,8 +80,14 @@ func NewDBWithString(urlString string) *DB {
 func getConnectionString(u *url.URL) string {
 	if u.Scheme == "postgres" {
 		password, _ := u.User.Password()
-		host := strings.Split(u.Host, ":")[0]
-		return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s", host, u.Port(), u.User.Username(), password, strings.TrimPrefix(u.Path, "/"))
+		params := u.Query()
+		params.Set("host", strings.Split(u.Host, ":")[0])
+		params.Set("port", u.Port())
+		params.Set("user", u.User.Username())
+		params.Set("password", password)
+		params.Set("dbname", strings.TrimPrefix(u.Path, "/"))
+		return strings.Replace(params.Encode(), "&", " ", -1)
+		// return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s", host, u.Port(), u.User.Username(), password, strings.TrimPrefix(u.Path, "/"))
 	}
 	if u.Scheme != "sqlite3" {
 		u.Host = "tcp(" + u.Host + ")"
@@ -98,11 +105,16 @@ func (db *DB) Query() *gorm.DB {
 	return db.db
 }
 
-// AutoMigrate ...
-func (db *DB) AutoMigrate() *gorm.DB {
-	return db.db.AutoMigrate(
-		Notification{},
-	)
+// AutoMigrate run basic gorm automigration
+func (db *DB) AutoMigrate() error {
+	return AutoMigrate(db.db)
+}
+
+// Migrate run migrations using automigrate
+func (db *DB) Migrate(migrations []*gormigrate.Migration) error {
+	options := gormigrate.DefaultOptions
+	options.TableName = TableName("migrations")
+	return Migrate(db.db, options, migrations)
 }
 
 // Close ...

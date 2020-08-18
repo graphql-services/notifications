@@ -10,59 +10,82 @@ import (
 
 func (f *NotificationFilterType) IsEmpty(ctx context.Context, dialect gorm.Dialect) bool {
 	wheres := []string{}
-	values := []interface{}{}
+	havings := []string{}
+	whereValues := []interface{}{}
+	havingValues := []interface{}{}
 	joins := []string{}
-	err := f.ApplyWithAlias(ctx, dialect, "companies", &wheres, &values, &joins)
+	err := f.ApplyWithAlias(ctx, dialect, "companies", &wheres, &whereValues, &havings, &havingValues, &joins)
 	if err != nil {
 		panic(err)
 	}
-	return len(wheres) == 0
+	return len(wheres) == 0 && len(havings) == 0
 }
-func (f *NotificationFilterType) Apply(ctx context.Context, dialect gorm.Dialect, wheres *[]string, values *[]interface{}, joins *[]string) error {
-	return f.ApplyWithAlias(ctx, dialect, TableName("notifications"), wheres, values, joins)
+func (f *NotificationFilterType) Apply(ctx context.Context, dialect gorm.Dialect, wheres *[]string, whereValues *[]interface{}, havings *[]string, havingValues *[]interface{}, joins *[]string) error {
+	return f.ApplyWithAlias(ctx, dialect, TableName("notifications"), wheres, whereValues, havings, havingValues, joins)
 }
-func (f *NotificationFilterType) ApplyWithAlias(ctx context.Context, dialect gorm.Dialect, alias string, wheres *[]string, values *[]interface{}, joins *[]string) error {
+func (f *NotificationFilterType) ApplyWithAlias(ctx context.Context, dialect gorm.Dialect, alias string, wheres *[]string, whereValues *[]interface{}, havings *[]string, havingValues *[]interface{}, joins *[]string) error {
 	if f == nil {
 		return nil
 	}
 	aliasPrefix := dialect.Quote(alias) + "."
 
-	_where, _values := f.WhereContent(dialect, aliasPrefix)
+	_where, _whereValues := f.WhereContent(dialect, aliasPrefix)
+	_having, _havingValues := f.HavingContent(dialect, aliasPrefix)
 	*wheres = append(*wheres, _where...)
-	*values = append(*values, _values...)
+	*havings = append(*havings, _having...)
+	*whereValues = append(*whereValues, _whereValues...)
+	*havingValues = append(*havingValues, _havingValues...)
 
 	if f.Or != nil {
-		cs := []string{}
-		vs := []interface{}{}
+		ws := []string{}
+		hs := []string{}
+		wvs := []interface{}{}
+		hvs := []interface{}{}
 		js := []string{}
 		for _, or := range f.Or {
-			_cs := []string{}
-			err := or.ApplyWithAlias(ctx, dialect, alias, &_cs, &vs, &js)
+			_ws := []string{}
+			_hs := []string{}
+			err := or.ApplyWithAlias(ctx, dialect, alias, &_ws, &wvs, &_hs, &hvs, &js)
 			if err != nil {
 				return err
 			}
-			cs = append(cs, strings.Join(_cs, " AND "))
+			if len(_ws) > 0 {
+				ws = append(ws, strings.Join(_ws, " AND "))
+			}
+			if len(_hs) > 0 {
+				hs = append(hs, strings.Join(_hs, " AND "))
+			}
 		}
-		if len(cs) > 0 {
-			*wheres = append(*wheres, "("+strings.Join(cs, " OR ")+")")
+		if len(ws) > 0 {
+			*wheres = append(*wheres, "("+strings.Join(ws, " OR ")+")")
 		}
-		*values = append(*values, vs...)
+		if len(hs) > 0 {
+			*havings = append(*havings, "("+strings.Join(hs, " OR ")+")")
+		}
+		*whereValues = append(*whereValues, wvs...)
+		*havingValues = append(*havingValues, hvs...)
 		*joins = append(*joins, js...)
 	}
 	if f.And != nil {
-		cs := []string{}
-		vs := []interface{}{}
+		ws := []string{}
+		hs := []string{}
+		wvs := []interface{}{}
+		hvs := []interface{}{}
 		js := []string{}
 		for _, and := range f.And {
-			err := and.ApplyWithAlias(ctx, dialect, alias, &cs, &vs, &js)
+			err := and.ApplyWithAlias(ctx, dialect, alias, &ws, &wvs, &hs, &hvs, &js)
 			if err != nil {
 				return err
 			}
 		}
-		if len(cs) > 0 {
-			*wheres = append(*wheres, strings.Join(cs, " AND "))
+		if len(ws) > 0 {
+			*wheres = append(*wheres, strings.Join(ws, " AND "))
 		}
-		*values = append(*values, vs...)
+		if len(hs) > 0 {
+			*havings = append(*havings, strings.Join(hs, " AND "))
+		}
+		*whereValues = append(*whereValues, wvs...)
+		*havingValues = append(*havingValues, hvs...)
 		*joins = append(*joins, js...)
 	}
 
@@ -662,6 +685,1002 @@ func (f *NotificationFilterType) WhereContent(dialect gorm.Dialect, aliasPrefix 
 		} else {
 			conditions = append(conditions, aliasPrefix+dialect.Quote("createdBy")+" IS NOT NULL")
 		}
+	}
+
+	return
+}
+func (f *NotificationFilterType) HavingContent(dialect gorm.Dialect, aliasPrefix string) (conditions []string, values []interface{}) {
+	conditions = []string{}
+	values = []interface{}{}
+
+	if f.IDMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("id")+") = ?")
+		values = append(values, f.IDMin)
+	}
+
+	if f.IDMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("id")+") = ?")
+		values = append(values, f.IDMax)
+	}
+
+	if f.IDMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("id")+") != ?")
+		values = append(values, f.IDMinNe)
+	}
+
+	if f.IDMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("id")+") != ?")
+		values = append(values, f.IDMaxNe)
+	}
+
+	if f.IDMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("id")+") > ?")
+		values = append(values, f.IDMinGt)
+	}
+
+	if f.IDMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("id")+") > ?")
+		values = append(values, f.IDMaxGt)
+	}
+
+	if f.IDMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("id")+") < ?")
+		values = append(values, f.IDMinLt)
+	}
+
+	if f.IDMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("id")+") < ?")
+		values = append(values, f.IDMaxLt)
+	}
+
+	if f.IDMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("id")+") >= ?")
+		values = append(values, f.IDMinGte)
+	}
+
+	if f.IDMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("id")+") >= ?")
+		values = append(values, f.IDMaxGte)
+	}
+
+	if f.IDMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("id")+") <= ?")
+		values = append(values, f.IDMinLte)
+	}
+
+	if f.IDMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("id")+") <= ?")
+		values = append(values, f.IDMaxLte)
+	}
+
+	if f.IDMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("id")+") IN (?)")
+		values = append(values, f.IDMinIn)
+	}
+
+	if f.IDMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("id")+") IN (?)")
+		values = append(values, f.IDMaxIn)
+	}
+
+	if f.MessageMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("message")+") = ?")
+		values = append(values, f.MessageMin)
+	}
+
+	if f.MessageMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("message")+") = ?")
+		values = append(values, f.MessageMax)
+	}
+
+	if f.MessageMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("message")+") != ?")
+		values = append(values, f.MessageMinNe)
+	}
+
+	if f.MessageMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("message")+") != ?")
+		values = append(values, f.MessageMaxNe)
+	}
+
+	if f.MessageMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("message")+") > ?")
+		values = append(values, f.MessageMinGt)
+	}
+
+	if f.MessageMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("message")+") > ?")
+		values = append(values, f.MessageMaxGt)
+	}
+
+	if f.MessageMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("message")+") < ?")
+		values = append(values, f.MessageMinLt)
+	}
+
+	if f.MessageMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("message")+") < ?")
+		values = append(values, f.MessageMaxLt)
+	}
+
+	if f.MessageMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("message")+") >= ?")
+		values = append(values, f.MessageMinGte)
+	}
+
+	if f.MessageMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("message")+") >= ?")
+		values = append(values, f.MessageMaxGte)
+	}
+
+	if f.MessageMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("message")+") <= ?")
+		values = append(values, f.MessageMinLte)
+	}
+
+	if f.MessageMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("message")+") <= ?")
+		values = append(values, f.MessageMaxLte)
+	}
+
+	if f.MessageMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("message")+") IN (?)")
+		values = append(values, f.MessageMinIn)
+	}
+
+	if f.MessageMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("message")+") IN (?)")
+		values = append(values, f.MessageMaxIn)
+	}
+
+	if f.MessageMinLike != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("message")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.MessageMinLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.MessageMaxLike != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("message")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.MessageMaxLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.MessageMinPrefix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("message")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.MessageMinPrefix))
+	}
+
+	if f.MessageMaxPrefix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("message")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.MessageMaxPrefix))
+	}
+
+	if f.MessageMinSuffix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("message")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.MessageMinSuffix))
+	}
+
+	if f.MessageMaxSuffix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("message")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.MessageMaxSuffix))
+	}
+
+	if f.SeenMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("seen")+") = ?")
+		values = append(values, f.SeenMin)
+	}
+
+	if f.SeenMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("seen")+") = ?")
+		values = append(values, f.SeenMax)
+	}
+
+	if f.SeenMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("seen")+") != ?")
+		values = append(values, f.SeenMinNe)
+	}
+
+	if f.SeenMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("seen")+") != ?")
+		values = append(values, f.SeenMaxNe)
+	}
+
+	if f.SeenMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("seen")+") > ?")
+		values = append(values, f.SeenMinGt)
+	}
+
+	if f.SeenMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("seen")+") > ?")
+		values = append(values, f.SeenMaxGt)
+	}
+
+	if f.SeenMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("seen")+") < ?")
+		values = append(values, f.SeenMinLt)
+	}
+
+	if f.SeenMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("seen")+") < ?")
+		values = append(values, f.SeenMaxLt)
+	}
+
+	if f.SeenMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("seen")+") >= ?")
+		values = append(values, f.SeenMinGte)
+	}
+
+	if f.SeenMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("seen")+") >= ?")
+		values = append(values, f.SeenMaxGte)
+	}
+
+	if f.SeenMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("seen")+") <= ?")
+		values = append(values, f.SeenMinLte)
+	}
+
+	if f.SeenMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("seen")+") <= ?")
+		values = append(values, f.SeenMaxLte)
+	}
+
+	if f.SeenMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("seen")+") IN (?)")
+		values = append(values, f.SeenMinIn)
+	}
+
+	if f.SeenMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("seen")+") IN (?)")
+		values = append(values, f.SeenMaxIn)
+	}
+
+	if f.ChannelMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("channel")+") = ?")
+		values = append(values, f.ChannelMin)
+	}
+
+	if f.ChannelMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("channel")+") = ?")
+		values = append(values, f.ChannelMax)
+	}
+
+	if f.ChannelMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("channel")+") != ?")
+		values = append(values, f.ChannelMinNe)
+	}
+
+	if f.ChannelMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("channel")+") != ?")
+		values = append(values, f.ChannelMaxNe)
+	}
+
+	if f.ChannelMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("channel")+") > ?")
+		values = append(values, f.ChannelMinGt)
+	}
+
+	if f.ChannelMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("channel")+") > ?")
+		values = append(values, f.ChannelMaxGt)
+	}
+
+	if f.ChannelMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("channel")+") < ?")
+		values = append(values, f.ChannelMinLt)
+	}
+
+	if f.ChannelMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("channel")+") < ?")
+		values = append(values, f.ChannelMaxLt)
+	}
+
+	if f.ChannelMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("channel")+") >= ?")
+		values = append(values, f.ChannelMinGte)
+	}
+
+	if f.ChannelMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("channel")+") >= ?")
+		values = append(values, f.ChannelMaxGte)
+	}
+
+	if f.ChannelMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("channel")+") <= ?")
+		values = append(values, f.ChannelMinLte)
+	}
+
+	if f.ChannelMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("channel")+") <= ?")
+		values = append(values, f.ChannelMaxLte)
+	}
+
+	if f.ChannelMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("channel")+") IN (?)")
+		values = append(values, f.ChannelMinIn)
+	}
+
+	if f.ChannelMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("channel")+") IN (?)")
+		values = append(values, f.ChannelMaxIn)
+	}
+
+	if f.ChannelMinLike != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("channel")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.ChannelMinLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.ChannelMaxLike != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("channel")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.ChannelMaxLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.ChannelMinPrefix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("channel")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.ChannelMinPrefix))
+	}
+
+	if f.ChannelMaxPrefix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("channel")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.ChannelMaxPrefix))
+	}
+
+	if f.ChannelMinSuffix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("channel")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.ChannelMinSuffix))
+	}
+
+	if f.ChannelMaxSuffix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("channel")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.ChannelMaxSuffix))
+	}
+
+	if f.PrincipalMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("principal")+") = ?")
+		values = append(values, f.PrincipalMin)
+	}
+
+	if f.PrincipalMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("principal")+") = ?")
+		values = append(values, f.PrincipalMax)
+	}
+
+	if f.PrincipalMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("principal")+") != ?")
+		values = append(values, f.PrincipalMinNe)
+	}
+
+	if f.PrincipalMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("principal")+") != ?")
+		values = append(values, f.PrincipalMaxNe)
+	}
+
+	if f.PrincipalMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("principal")+") > ?")
+		values = append(values, f.PrincipalMinGt)
+	}
+
+	if f.PrincipalMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("principal")+") > ?")
+		values = append(values, f.PrincipalMaxGt)
+	}
+
+	if f.PrincipalMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("principal")+") < ?")
+		values = append(values, f.PrincipalMinLt)
+	}
+
+	if f.PrincipalMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("principal")+") < ?")
+		values = append(values, f.PrincipalMaxLt)
+	}
+
+	if f.PrincipalMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("principal")+") >= ?")
+		values = append(values, f.PrincipalMinGte)
+	}
+
+	if f.PrincipalMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("principal")+") >= ?")
+		values = append(values, f.PrincipalMaxGte)
+	}
+
+	if f.PrincipalMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("principal")+") <= ?")
+		values = append(values, f.PrincipalMinLte)
+	}
+
+	if f.PrincipalMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("principal")+") <= ?")
+		values = append(values, f.PrincipalMaxLte)
+	}
+
+	if f.PrincipalMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("principal")+") IN (?)")
+		values = append(values, f.PrincipalMinIn)
+	}
+
+	if f.PrincipalMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("principal")+") IN (?)")
+		values = append(values, f.PrincipalMaxIn)
+	}
+
+	if f.PrincipalMinLike != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("principal")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.PrincipalMinLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.PrincipalMaxLike != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("principal")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.PrincipalMaxLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.PrincipalMinPrefix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("principal")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.PrincipalMinPrefix))
+	}
+
+	if f.PrincipalMaxPrefix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("principal")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.PrincipalMaxPrefix))
+	}
+
+	if f.PrincipalMinSuffix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("principal")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.PrincipalMinSuffix))
+	}
+
+	if f.PrincipalMaxSuffix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("principal")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.PrincipalMaxSuffix))
+	}
+
+	if f.ReferenceMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("reference")+") = ?")
+		values = append(values, f.ReferenceMin)
+	}
+
+	if f.ReferenceMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("reference")+") = ?")
+		values = append(values, f.ReferenceMax)
+	}
+
+	if f.ReferenceMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("reference")+") != ?")
+		values = append(values, f.ReferenceMinNe)
+	}
+
+	if f.ReferenceMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("reference")+") != ?")
+		values = append(values, f.ReferenceMaxNe)
+	}
+
+	if f.ReferenceMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("reference")+") > ?")
+		values = append(values, f.ReferenceMinGt)
+	}
+
+	if f.ReferenceMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("reference")+") > ?")
+		values = append(values, f.ReferenceMaxGt)
+	}
+
+	if f.ReferenceMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("reference")+") < ?")
+		values = append(values, f.ReferenceMinLt)
+	}
+
+	if f.ReferenceMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("reference")+") < ?")
+		values = append(values, f.ReferenceMaxLt)
+	}
+
+	if f.ReferenceMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("reference")+") >= ?")
+		values = append(values, f.ReferenceMinGte)
+	}
+
+	if f.ReferenceMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("reference")+") >= ?")
+		values = append(values, f.ReferenceMaxGte)
+	}
+
+	if f.ReferenceMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("reference")+") <= ?")
+		values = append(values, f.ReferenceMinLte)
+	}
+
+	if f.ReferenceMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("reference")+") <= ?")
+		values = append(values, f.ReferenceMaxLte)
+	}
+
+	if f.ReferenceMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("reference")+") IN (?)")
+		values = append(values, f.ReferenceMinIn)
+	}
+
+	if f.ReferenceMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("reference")+") IN (?)")
+		values = append(values, f.ReferenceMaxIn)
+	}
+
+	if f.ReferenceMinLike != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("reference")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.ReferenceMinLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.ReferenceMaxLike != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("reference")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.ReferenceMaxLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.ReferenceMinPrefix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("reference")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.ReferenceMinPrefix))
+	}
+
+	if f.ReferenceMaxPrefix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("reference")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.ReferenceMaxPrefix))
+	}
+
+	if f.ReferenceMinSuffix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("reference")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.ReferenceMinSuffix))
+	}
+
+	if f.ReferenceMaxSuffix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("reference")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.ReferenceMaxSuffix))
+	}
+
+	if f.ReferenceIDMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("referenceID")+") = ?")
+		values = append(values, f.ReferenceIDMin)
+	}
+
+	if f.ReferenceIDMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("referenceID")+") = ?")
+		values = append(values, f.ReferenceIDMax)
+	}
+
+	if f.ReferenceIDMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("referenceID")+") != ?")
+		values = append(values, f.ReferenceIDMinNe)
+	}
+
+	if f.ReferenceIDMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("referenceID")+") != ?")
+		values = append(values, f.ReferenceIDMaxNe)
+	}
+
+	if f.ReferenceIDMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("referenceID")+") > ?")
+		values = append(values, f.ReferenceIDMinGt)
+	}
+
+	if f.ReferenceIDMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("referenceID")+") > ?")
+		values = append(values, f.ReferenceIDMaxGt)
+	}
+
+	if f.ReferenceIDMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("referenceID")+") < ?")
+		values = append(values, f.ReferenceIDMinLt)
+	}
+
+	if f.ReferenceIDMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("referenceID")+") < ?")
+		values = append(values, f.ReferenceIDMaxLt)
+	}
+
+	if f.ReferenceIDMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("referenceID")+") >= ?")
+		values = append(values, f.ReferenceIDMinGte)
+	}
+
+	if f.ReferenceIDMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("referenceID")+") >= ?")
+		values = append(values, f.ReferenceIDMaxGte)
+	}
+
+	if f.ReferenceIDMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("referenceID")+") <= ?")
+		values = append(values, f.ReferenceIDMinLte)
+	}
+
+	if f.ReferenceIDMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("referenceID")+") <= ?")
+		values = append(values, f.ReferenceIDMaxLte)
+	}
+
+	if f.ReferenceIDMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("referenceID")+") IN (?)")
+		values = append(values, f.ReferenceIDMinIn)
+	}
+
+	if f.ReferenceIDMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("referenceID")+") IN (?)")
+		values = append(values, f.ReferenceIDMaxIn)
+	}
+
+	if f.ReferenceIDMinLike != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("referenceID")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.ReferenceIDMinLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.ReferenceIDMaxLike != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("referenceID")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.ReferenceIDMaxLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.ReferenceIDMinPrefix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("referenceID")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.ReferenceIDMinPrefix))
+	}
+
+	if f.ReferenceIDMaxPrefix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("referenceID")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.ReferenceIDMaxPrefix))
+	}
+
+	if f.ReferenceIDMinSuffix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("referenceID")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.ReferenceIDMinSuffix))
+	}
+
+	if f.ReferenceIDMaxSuffix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("referenceID")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.ReferenceIDMaxSuffix))
+	}
+
+	if f.DateMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("date")+") = ?")
+		values = append(values, f.DateMin)
+	}
+
+	if f.DateMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("date")+") = ?")
+		values = append(values, f.DateMax)
+	}
+
+	if f.DateMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("date")+") != ?")
+		values = append(values, f.DateMinNe)
+	}
+
+	if f.DateMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("date")+") != ?")
+		values = append(values, f.DateMaxNe)
+	}
+
+	if f.DateMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("date")+") > ?")
+		values = append(values, f.DateMinGt)
+	}
+
+	if f.DateMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("date")+") > ?")
+		values = append(values, f.DateMaxGt)
+	}
+
+	if f.DateMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("date")+") < ?")
+		values = append(values, f.DateMinLt)
+	}
+
+	if f.DateMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("date")+") < ?")
+		values = append(values, f.DateMaxLt)
+	}
+
+	if f.DateMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("date")+") >= ?")
+		values = append(values, f.DateMinGte)
+	}
+
+	if f.DateMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("date")+") >= ?")
+		values = append(values, f.DateMaxGte)
+	}
+
+	if f.DateMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("date")+") <= ?")
+		values = append(values, f.DateMinLte)
+	}
+
+	if f.DateMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("date")+") <= ?")
+		values = append(values, f.DateMaxLte)
+	}
+
+	if f.DateMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("date")+") IN (?)")
+		values = append(values, f.DateMinIn)
+	}
+
+	if f.DateMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("date")+") IN (?)")
+		values = append(values, f.DateMaxIn)
+	}
+
+	if f.UpdatedAtMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedAt")+") = ?")
+		values = append(values, f.UpdatedAtMin)
+	}
+
+	if f.UpdatedAtMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedAt")+") = ?")
+		values = append(values, f.UpdatedAtMax)
+	}
+
+	if f.UpdatedAtMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedAt")+") != ?")
+		values = append(values, f.UpdatedAtMinNe)
+	}
+
+	if f.UpdatedAtMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedAt")+") != ?")
+		values = append(values, f.UpdatedAtMaxNe)
+	}
+
+	if f.UpdatedAtMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedAt")+") > ?")
+		values = append(values, f.UpdatedAtMinGt)
+	}
+
+	if f.UpdatedAtMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedAt")+") > ?")
+		values = append(values, f.UpdatedAtMaxGt)
+	}
+
+	if f.UpdatedAtMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedAt")+") < ?")
+		values = append(values, f.UpdatedAtMinLt)
+	}
+
+	if f.UpdatedAtMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedAt")+") < ?")
+		values = append(values, f.UpdatedAtMaxLt)
+	}
+
+	if f.UpdatedAtMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedAt")+") >= ?")
+		values = append(values, f.UpdatedAtMinGte)
+	}
+
+	if f.UpdatedAtMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedAt")+") >= ?")
+		values = append(values, f.UpdatedAtMaxGte)
+	}
+
+	if f.UpdatedAtMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedAt")+") <= ?")
+		values = append(values, f.UpdatedAtMinLte)
+	}
+
+	if f.UpdatedAtMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedAt")+") <= ?")
+		values = append(values, f.UpdatedAtMaxLte)
+	}
+
+	if f.UpdatedAtMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedAt")+") IN (?)")
+		values = append(values, f.UpdatedAtMinIn)
+	}
+
+	if f.UpdatedAtMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedAt")+") IN (?)")
+		values = append(values, f.UpdatedAtMaxIn)
+	}
+
+	if f.CreatedAtMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdAt")+") = ?")
+		values = append(values, f.CreatedAtMin)
+	}
+
+	if f.CreatedAtMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdAt")+") = ?")
+		values = append(values, f.CreatedAtMax)
+	}
+
+	if f.CreatedAtMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdAt")+") != ?")
+		values = append(values, f.CreatedAtMinNe)
+	}
+
+	if f.CreatedAtMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdAt")+") != ?")
+		values = append(values, f.CreatedAtMaxNe)
+	}
+
+	if f.CreatedAtMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdAt")+") > ?")
+		values = append(values, f.CreatedAtMinGt)
+	}
+
+	if f.CreatedAtMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdAt")+") > ?")
+		values = append(values, f.CreatedAtMaxGt)
+	}
+
+	if f.CreatedAtMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdAt")+") < ?")
+		values = append(values, f.CreatedAtMinLt)
+	}
+
+	if f.CreatedAtMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdAt")+") < ?")
+		values = append(values, f.CreatedAtMaxLt)
+	}
+
+	if f.CreatedAtMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdAt")+") >= ?")
+		values = append(values, f.CreatedAtMinGte)
+	}
+
+	if f.CreatedAtMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdAt")+") >= ?")
+		values = append(values, f.CreatedAtMaxGte)
+	}
+
+	if f.CreatedAtMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdAt")+") <= ?")
+		values = append(values, f.CreatedAtMinLte)
+	}
+
+	if f.CreatedAtMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdAt")+") <= ?")
+		values = append(values, f.CreatedAtMaxLte)
+	}
+
+	if f.CreatedAtMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdAt")+") IN (?)")
+		values = append(values, f.CreatedAtMinIn)
+	}
+
+	if f.CreatedAtMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdAt")+") IN (?)")
+		values = append(values, f.CreatedAtMaxIn)
+	}
+
+	if f.UpdatedByMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedBy")+") = ?")
+		values = append(values, f.UpdatedByMin)
+	}
+
+	if f.UpdatedByMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedBy")+") = ?")
+		values = append(values, f.UpdatedByMax)
+	}
+
+	if f.UpdatedByMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedBy")+") != ?")
+		values = append(values, f.UpdatedByMinNe)
+	}
+
+	if f.UpdatedByMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedBy")+") != ?")
+		values = append(values, f.UpdatedByMaxNe)
+	}
+
+	if f.UpdatedByMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedBy")+") > ?")
+		values = append(values, f.UpdatedByMinGt)
+	}
+
+	if f.UpdatedByMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedBy")+") > ?")
+		values = append(values, f.UpdatedByMaxGt)
+	}
+
+	if f.UpdatedByMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedBy")+") < ?")
+		values = append(values, f.UpdatedByMinLt)
+	}
+
+	if f.UpdatedByMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedBy")+") < ?")
+		values = append(values, f.UpdatedByMaxLt)
+	}
+
+	if f.UpdatedByMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedBy")+") >= ?")
+		values = append(values, f.UpdatedByMinGte)
+	}
+
+	if f.UpdatedByMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedBy")+") >= ?")
+		values = append(values, f.UpdatedByMaxGte)
+	}
+
+	if f.UpdatedByMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedBy")+") <= ?")
+		values = append(values, f.UpdatedByMinLte)
+	}
+
+	if f.UpdatedByMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedBy")+") <= ?")
+		values = append(values, f.UpdatedByMaxLte)
+	}
+
+	if f.UpdatedByMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("updatedBy")+") IN (?)")
+		values = append(values, f.UpdatedByMinIn)
+	}
+
+	if f.UpdatedByMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("updatedBy")+") IN (?)")
+		values = append(values, f.UpdatedByMaxIn)
+	}
+
+	if f.CreatedByMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdBy")+") = ?")
+		values = append(values, f.CreatedByMin)
+	}
+
+	if f.CreatedByMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdBy")+") = ?")
+		values = append(values, f.CreatedByMax)
+	}
+
+	if f.CreatedByMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdBy")+") != ?")
+		values = append(values, f.CreatedByMinNe)
+	}
+
+	if f.CreatedByMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdBy")+") != ?")
+		values = append(values, f.CreatedByMaxNe)
+	}
+
+	if f.CreatedByMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdBy")+") > ?")
+		values = append(values, f.CreatedByMinGt)
+	}
+
+	if f.CreatedByMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdBy")+") > ?")
+		values = append(values, f.CreatedByMaxGt)
+	}
+
+	if f.CreatedByMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdBy")+") < ?")
+		values = append(values, f.CreatedByMinLt)
+	}
+
+	if f.CreatedByMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdBy")+") < ?")
+		values = append(values, f.CreatedByMaxLt)
+	}
+
+	if f.CreatedByMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdBy")+") >= ?")
+		values = append(values, f.CreatedByMinGte)
+	}
+
+	if f.CreatedByMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdBy")+") >= ?")
+		values = append(values, f.CreatedByMaxGte)
+	}
+
+	if f.CreatedByMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdBy")+") <= ?")
+		values = append(values, f.CreatedByMinLte)
+	}
+
+	if f.CreatedByMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdBy")+") <= ?")
+		values = append(values, f.CreatedByMaxLte)
+	}
+
+	if f.CreatedByMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("createdBy")+") IN (?)")
+		values = append(values, f.CreatedByMinIn)
+	}
+
+	if f.CreatedByMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("createdBy")+") IN (?)")
+		values = append(values, f.CreatedByMaxIn)
 	}
 
 	return

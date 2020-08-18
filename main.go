@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"time"
 
 	"github.com/graphql-services/notifications/gen"
 	"github.com/graphql-services/notifications/src"
@@ -22,6 +25,7 @@ func main() {
 	app.Commands = []cli.Command{
 		startCmd,
 		migrateCmd,
+		automigrateCmd,
 	}
 
 	err := app.Run(os.Args)
@@ -57,9 +61,22 @@ var startCmd = cli.Command{
 
 var migrateCmd = cli.Command{
 	Name:  "migrate",
-	Usage: "migrate schema database",
+	Usage: "run migration sequence (using gomigrate)",
 	Action: func(ctx *cli.Context) error {
 		fmt.Println("starting migration")
+		if err := migrate(); err != nil {
+			return cli.NewExitError(err.Error(), 1)
+		}
+		fmt.Println("migration complete")
+		return nil
+	},
+}
+
+var automigrateCmd = cli.Command{
+	Name:  "automigrate",
+	Usage: "migrate schema database using basic gorm migration",
+	Action: func(ctx *cli.Context) error {
+		fmt.Println("starting automigration")
 		if err := automigrate(); err != nil {
 			return cli.NewExitError(err.Error(), 1)
 		}
@@ -71,21 +88,28 @@ var migrateCmd = cli.Command{
 func automigrate() error {
 	db := gen.NewDBFromEnvVars()
 	defer db.Close()
-	return db.AutoMigrate().Error
+	return db.AutoMigrate()
+}
+
+func migrate() error {
+	db := gen.NewDBFromEnvVars()
+	defer db.Close()
+	return db.Migrate(src.GetMigrations(db))
 }
 
 func startServer(enableCors bool, port string) error {
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt)
 
 	db := gen.NewDBFromEnvVars()
 	defer db.Close()
-	db.AutoMigrate()
 
 	eventController, err := events.NewEventController()
 	if err != nil {
 		return err
 	}
 
-	mux := gen.GetHTTPServeMux(src.New(db, &eventController), db)
+	mux := gen.GetHTTPServeMux(src.New(db, &eventController), db, src.GetMigrations(db))
 
 	mux.HandleFunc("/healthcheck", func(res http.ResponseWriter, req *http.Request) {
 		if err := db.Ping(); err != nil {
@@ -104,7 +128,30 @@ func startServer(enableCors bool, port string) error {
 		handler = mux
 	}
 
-	log.Printf("connect to http://localhost:%s/graphql for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, handler))
+	h := &http.Server{Addr: ":" + port, Handler: handler}
+
+	go func() {
+		log.Printf("connect to http://localhost:%s/graphql for GraphQL playground", port)
+		log.Fatal(h.ListenAndServe())
+	}()
+
+	<-stop
+
+	log.Println("\nShutting down the server...")
+
+	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+
+	err = h.Shutdown(ctx)
+	if err != nil {
+		return cli.NewExitError(err, 1)
+	}
+	log.Println("Server gracefully stopped")
+
+	err = db.Close()
+	if err != nil {
+		return cli.NewExitError(err, 1)
+	}
+	log.Println("Database connection closed")
+
 	return nil
 }

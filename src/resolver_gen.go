@@ -1,6 +1,8 @@
 package src
 
 import (
+	"context"
+
 	"github.com/graphql-services/notifications/gen"
 	"github.com/novacloudcz/graphql-orm/events"
 )
@@ -16,6 +18,17 @@ type Resolver struct {
 
 type MutationResolver struct {
 	*gen.GeneratedMutationResolver
+}
+
+func (r *MutationResolver) BeginTransaction(ctx context.Context, fn func(context.Context) error) error {
+	ctx = gen.EnrichContextWithMutations(ctx, r.GeneratedResolver)
+	err := fn(ctx)
+	if err != nil {
+		tx := r.GeneratedResolver.GetDB(ctx)
+		tx.Rollback()
+		return err
+	}
+	return gen.FinishMutationContext(ctx, r.GeneratedResolver)
 }
 
 type QueryResolver struct {

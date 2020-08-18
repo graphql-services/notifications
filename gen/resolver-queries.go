@@ -24,18 +24,28 @@ func (r *GeneratedQueryResolver) Notification(ctx context.Context, id *string, q
 	return r.Handlers.QueryNotification(ctx, r.GeneratedResolver, opts)
 }
 func QueryNotificationHandler(ctx context.Context, r *GeneratedResolver, opts QueryNotificationHandlerOptions) (*Notification, error) {
+	selection := []ast.Selection{}
+	for _, f := range graphql.CollectFieldsCtx(ctx, nil) {
+		selection = append(selection, f.Field)
+	}
+	selectionSet := ast.SelectionSet(selection)
+
 	query := NotificationQueryFilter{opts.Q}
 	offset := 0
 	limit := 1
 	rt := &NotificationResultType{
 		EntityResultType: EntityResultType{
-			Offset: &offset,
-			Limit:  &limit,
-			Query:  &query,
-			Filter: opts.Filter,
+			Offset:       &offset,
+			Limit:        &limit,
+			Query:        &query,
+			Filter:       opts.Filter,
+			SelectionSet: &selectionSet,
 		},
 	}
-	qb := r.DB.Query()
+	qb := r.GetDB(ctx)
+	if qb == nil {
+		qb = r.DB.Query()
+	}
 	if opts.ID != nil {
 		qb = qb.Where(TableName("notifications")+".id = ?", *opts.ID)
 	}
@@ -50,7 +60,7 @@ func QueryNotificationHandler(ctx context.Context, r *GeneratedResolver, opts Qu
 		return nil, err
 	}
 	if len(items) == 0 {
-		return nil, &NotFoundError{Entity: "Notification"}
+		return nil, nil
 	}
 	return items[0], err
 }
@@ -103,15 +113,28 @@ func QueryNotificationsHandler(ctx context.Context, r *GeneratedResolver, opts Q
 type GeneratedNotificationResultTypeResolver struct{ *GeneratedResolver }
 
 func (r *GeneratedNotificationResultTypeResolver) Items(ctx context.Context, obj *NotificationResultType) (items []*Notification, err error) {
-	giOpts := GetItemsOptions{
+	otps := GetItemsOptions{
 		Alias:      TableName("notifications"),
 		Preloaders: []string{},
 	}
-	err = obj.GetItems(ctx, r.DB.db, giOpts, &items)
+	err = obj.GetItems(ctx, r.DB.db, otps, &items)
 
+	uniqueItems := []*Notification{}
+	idMap := map[string]bool{}
+	for _, item := range items {
+		if _, ok := idMap[item.ID]; !ok {
+			idMap[item.ID] = true
+			uniqueItems = append(uniqueItems, item)
+		}
+	}
+	items = uniqueItems
 	return
 }
 
 func (r *GeneratedNotificationResultTypeResolver) Count(ctx context.Context, obj *NotificationResultType) (count int, err error) {
-	return obj.GetCount(ctx, r.DB.db, &Notification{})
+	opts := GetItemsOptions{
+		Alias:      TableName("notifications"),
+		Preloaders: []string{},
+	}
+	return obj.GetCount(ctx, r.DB.db, opts, &Notification{})
 }

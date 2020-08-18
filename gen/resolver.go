@@ -3,10 +3,13 @@ package gen
 import (
 	"context"
 
+	"github.com/jinzhu/gorm"
 	"github.com/novacloudcz/graphql-orm/events"
 )
 
 type ResolutionHandlers struct {
+	OnEvent func(ctx context.Context, r *GeneratedResolver, e *events.Event) error
+
 	CreateNotification     func(ctx context.Context, r *GeneratedResolver, input map[string]interface{}) (item *Notification, err error)
 	UpdateNotification     func(ctx context.Context, r *GeneratedResolver, id string, input map[string]interface{}) (item *Notification, err error)
 	DeleteNotification     func(ctx context.Context, r *GeneratedResolver, id string) (item *Notification, err error)
@@ -17,6 +20,7 @@ type ResolutionHandlers struct {
 
 func DefaultResolutionHandlers() ResolutionHandlers {
 	handlers := ResolutionHandlers{
+		OnEvent: func(ctx context.Context, r *GeneratedResolver, e *events.Event) error { return nil },
 
 		CreateNotification:     CreateNotificationHandler,
 		UpdateNotification:     UpdateNotificationHandler,
@@ -32,4 +36,13 @@ type GeneratedResolver struct {
 	Handlers        ResolutionHandlers
 	DB              *DB
 	EventController *events.EventController
+}
+
+// GetDB returns database connection or transaction for given context (if exists)
+func (r *GeneratedResolver) GetDB(ctx context.Context) *gorm.DB {
+	db, _ := ctx.Value(KeyMutationTransaction).(*gorm.DB)
+	if db == nil {
+		db = r.DB.Query()
+	}
+	return db
 }

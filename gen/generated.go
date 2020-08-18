@@ -454,132 +454,354 @@ input NotificationUpdateInput {
 
 input NotificationSortType {
   id: ObjectSortType
+  idMin: ObjectSortType
+  idMax: ObjectSortType
   message: ObjectSortType
+  messageMin: ObjectSortType
+  messageMax: ObjectSortType
   seen: ObjectSortType
+  seenMin: ObjectSortType
+  seenMax: ObjectSortType
   channel: ObjectSortType
+  channelMin: ObjectSortType
+  channelMax: ObjectSortType
   principal: ObjectSortType
+  principalMin: ObjectSortType
+  principalMax: ObjectSortType
   reference: ObjectSortType
+  referenceMin: ObjectSortType
+  referenceMax: ObjectSortType
   referenceID: ObjectSortType
+  referenceIDMin: ObjectSortType
+  referenceIDMax: ObjectSortType
   date: ObjectSortType
+  dateMin: ObjectSortType
+  dateMax: ObjectSortType
   updatedAt: ObjectSortType
+  updatedAtMin: ObjectSortType
+  updatedAtMax: ObjectSortType
   createdAt: ObjectSortType
+  createdAtMin: ObjectSortType
+  createdAtMax: ObjectSortType
   updatedBy: ObjectSortType
+  updatedByMin: ObjectSortType
+  updatedByMax: ObjectSortType
   createdBy: ObjectSortType
+  createdByMin: ObjectSortType
+  createdByMax: ObjectSortType
 }
 
 input NotificationFilterType {
   AND: [NotificationFilterType!]
   OR: [NotificationFilterType!]
   id: ID
+  idMin: ID
+  idMax: ID
   id_ne: ID
+  idMin_ne: ID
+  idMax_ne: ID
   id_gt: ID
+  idMin_gt: ID
+  idMax_gt: ID
   id_lt: ID
+  idMin_lt: ID
+  idMax_lt: ID
   id_gte: ID
+  idMin_gte: ID
+  idMax_gte: ID
   id_lte: ID
+  idMin_lte: ID
+  idMax_lte: ID
   id_in: [ID!]
+  idMin_in: [ID!]
+  idMax_in: [ID!]
   id_null: Boolean
   message: String
+  messageMin: String
+  messageMax: String
   message_ne: String
+  messageMin_ne: String
+  messageMax_ne: String
   message_gt: String
+  messageMin_gt: String
+  messageMax_gt: String
   message_lt: String
+  messageMin_lt: String
+  messageMax_lt: String
   message_gte: String
+  messageMin_gte: String
+  messageMax_gte: String
   message_lte: String
+  messageMin_lte: String
+  messageMax_lte: String
   message_in: [String!]
+  messageMin_in: [String!]
+  messageMax_in: [String!]
   message_like: String
+  messageMin_like: String
+  messageMax_like: String
   message_prefix: String
+  messageMin_prefix: String
+  messageMax_prefix: String
   message_suffix: String
+  messageMin_suffix: String
+  messageMax_suffix: String
   message_null: Boolean
   seen: Boolean
+  seenMin: Boolean
+  seenMax: Boolean
   seen_ne: Boolean
+  seenMin_ne: Boolean
+  seenMax_ne: Boolean
   seen_gt: Boolean
+  seenMin_gt: Boolean
+  seenMax_gt: Boolean
   seen_lt: Boolean
+  seenMin_lt: Boolean
+  seenMax_lt: Boolean
   seen_gte: Boolean
+  seenMin_gte: Boolean
+  seenMax_gte: Boolean
   seen_lte: Boolean
+  seenMin_lte: Boolean
+  seenMax_lte: Boolean
   seen_in: [Boolean!]
+  seenMin_in: [Boolean!]
+  seenMax_in: [Boolean!]
   seen_null: Boolean
   channel: String
+  channelMin: String
+  channelMax: String
   channel_ne: String
+  channelMin_ne: String
+  channelMax_ne: String
   channel_gt: String
+  channelMin_gt: String
+  channelMax_gt: String
   channel_lt: String
+  channelMin_lt: String
+  channelMax_lt: String
   channel_gte: String
+  channelMin_gte: String
+  channelMax_gte: String
   channel_lte: String
+  channelMin_lte: String
+  channelMax_lte: String
   channel_in: [String!]
+  channelMin_in: [String!]
+  channelMax_in: [String!]
   channel_like: String
+  channelMin_like: String
+  channelMax_like: String
   channel_prefix: String
+  channelMin_prefix: String
+  channelMax_prefix: String
   channel_suffix: String
+  channelMin_suffix: String
+  channelMax_suffix: String
   channel_null: Boolean
   principal: String
+  principalMin: String
+  principalMax: String
   principal_ne: String
+  principalMin_ne: String
+  principalMax_ne: String
   principal_gt: String
+  principalMin_gt: String
+  principalMax_gt: String
   principal_lt: String
+  principalMin_lt: String
+  principalMax_lt: String
   principal_gte: String
+  principalMin_gte: String
+  principalMax_gte: String
   principal_lte: String
+  principalMin_lte: String
+  principalMax_lte: String
   principal_in: [String!]
+  principalMin_in: [String!]
+  principalMax_in: [String!]
   principal_like: String
+  principalMin_like: String
+  principalMax_like: String
   principal_prefix: String
+  principalMin_prefix: String
+  principalMax_prefix: String
   principal_suffix: String
+  principalMin_suffix: String
+  principalMax_suffix: String
   principal_null: Boolean
   reference: String
+  referenceMin: String
+  referenceMax: String
   reference_ne: String
+  referenceMin_ne: String
+  referenceMax_ne: String
   reference_gt: String
+  referenceMin_gt: String
+  referenceMax_gt: String
   reference_lt: String
+  referenceMin_lt: String
+  referenceMax_lt: String
   reference_gte: String
+  referenceMin_gte: String
+  referenceMax_gte: String
   reference_lte: String
+  referenceMin_lte: String
+  referenceMax_lte: String
   reference_in: [String!]
+  referenceMin_in: [String!]
+  referenceMax_in: [String!]
   reference_like: String
+  referenceMin_like: String
+  referenceMax_like: String
   reference_prefix: String
+  referenceMin_prefix: String
+  referenceMax_prefix: String
   reference_suffix: String
+  referenceMin_suffix: String
+  referenceMax_suffix: String
   reference_null: Boolean
   referenceID: String
+  referenceIDMin: String
+  referenceIDMax: String
   referenceID_ne: String
+  referenceIDMin_ne: String
+  referenceIDMax_ne: String
   referenceID_gt: String
+  referenceIDMin_gt: String
+  referenceIDMax_gt: String
   referenceID_lt: String
+  referenceIDMin_lt: String
+  referenceIDMax_lt: String
   referenceID_gte: String
+  referenceIDMin_gte: String
+  referenceIDMax_gte: String
   referenceID_lte: String
+  referenceIDMin_lte: String
+  referenceIDMax_lte: String
   referenceID_in: [String!]
+  referenceIDMin_in: [String!]
+  referenceIDMax_in: [String!]
   referenceID_like: String
+  referenceIDMin_like: String
+  referenceIDMax_like: String
   referenceID_prefix: String
+  referenceIDMin_prefix: String
+  referenceIDMax_prefix: String
   referenceID_suffix: String
+  referenceIDMin_suffix: String
+  referenceIDMax_suffix: String
   referenceID_null: Boolean
   date: Time
+  dateMin: Time
+  dateMax: Time
   date_ne: Time
+  dateMin_ne: Time
+  dateMax_ne: Time
   date_gt: Time
+  dateMin_gt: Time
+  dateMax_gt: Time
   date_lt: Time
+  dateMin_lt: Time
+  dateMax_lt: Time
   date_gte: Time
+  dateMin_gte: Time
+  dateMax_gte: Time
   date_lte: Time
+  dateMin_lte: Time
+  dateMax_lte: Time
   date_in: [Time!]
+  dateMin_in: [Time!]
+  dateMax_in: [Time!]
   date_null: Boolean
   updatedAt: Time
+  updatedAtMin: Time
+  updatedAtMax: Time
   updatedAt_ne: Time
+  updatedAtMin_ne: Time
+  updatedAtMax_ne: Time
   updatedAt_gt: Time
+  updatedAtMin_gt: Time
+  updatedAtMax_gt: Time
   updatedAt_lt: Time
+  updatedAtMin_lt: Time
+  updatedAtMax_lt: Time
   updatedAt_gte: Time
+  updatedAtMin_gte: Time
+  updatedAtMax_gte: Time
   updatedAt_lte: Time
+  updatedAtMin_lte: Time
+  updatedAtMax_lte: Time
   updatedAt_in: [Time!]
+  updatedAtMin_in: [Time!]
+  updatedAtMax_in: [Time!]
   updatedAt_null: Boolean
   createdAt: Time
+  createdAtMin: Time
+  createdAtMax: Time
   createdAt_ne: Time
+  createdAtMin_ne: Time
+  createdAtMax_ne: Time
   createdAt_gt: Time
+  createdAtMin_gt: Time
+  createdAtMax_gt: Time
   createdAt_lt: Time
+  createdAtMin_lt: Time
+  createdAtMax_lt: Time
   createdAt_gte: Time
+  createdAtMin_gte: Time
+  createdAtMax_gte: Time
   createdAt_lte: Time
+  createdAtMin_lte: Time
+  createdAtMax_lte: Time
   createdAt_in: [Time!]
+  createdAtMin_in: [Time!]
+  createdAtMax_in: [Time!]
   createdAt_null: Boolean
   updatedBy: ID
+  updatedByMin: ID
+  updatedByMax: ID
   updatedBy_ne: ID
+  updatedByMin_ne: ID
+  updatedByMax_ne: ID
   updatedBy_gt: ID
+  updatedByMin_gt: ID
+  updatedByMax_gt: ID
   updatedBy_lt: ID
+  updatedByMin_lt: ID
+  updatedByMax_lt: ID
   updatedBy_gte: ID
+  updatedByMin_gte: ID
+  updatedByMax_gte: ID
   updatedBy_lte: ID
+  updatedByMin_lte: ID
+  updatedByMax_lte: ID
   updatedBy_in: [ID!]
+  updatedByMin_in: [ID!]
+  updatedByMax_in: [ID!]
   updatedBy_null: Boolean
   createdBy: ID
+  createdByMin: ID
+  createdByMax: ID
   createdBy_ne: ID
+  createdByMin_ne: ID
+  createdByMax_ne: ID
   createdBy_gt: ID
+  createdByMin_gt: ID
+  createdByMax_gt: ID
   createdBy_lt: ID
+  createdByMin_lt: ID
+  createdByMax_lt: ID
   createdBy_gte: ID
+  createdByMin_gte: ID
+  createdByMax_gte: ID
   createdBy_lte: ID
+  createdByMin_lte: ID
+  createdByMax_lte: ID
   createdBy_in: [ID!]
+  createdByMin_in: [ID!]
+  createdByMax_in: [ID!]
   createdBy_null: Boolean
 }
 
@@ -2980,9 +3202,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "idMin":
+			var err error
+			it.IDMin, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMax":
+			var err error
+			it.IDMax, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "id_ne":
 			var err error
 			it.IDNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMin_ne":
+			var err error
+			it.IDMinNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMax_ne":
+			var err error
+			it.IDMaxNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2992,9 +3238,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "idMin_gt":
+			var err error
+			it.IDMinGt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMax_gt":
+			var err error
+			it.IDMaxGt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "id_lt":
 			var err error
 			it.IDLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMin_lt":
+			var err error
+			it.IDMinLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMax_lt":
+			var err error
+			it.IDMaxLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3004,15 +3274,51 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "idMin_gte":
+			var err error
+			it.IDMinGte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMax_gte":
+			var err error
+			it.IDMaxGte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "id_lte":
 			var err error
 			it.IDLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+		case "idMin_lte":
+			var err error
+			it.IDMinLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMax_lte":
+			var err error
+			it.IDMaxLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "id_in":
 			var err error
 			it.IDIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMin_in":
+			var err error
+			it.IDMinIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMax_in":
+			var err error
+			it.IDMaxIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3028,9 +3334,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "messageMin":
+			var err error
+			it.MessageMin, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax":
+			var err error
+			it.MessageMax, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "message_ne":
 			var err error
 			it.MessageNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMin_ne":
+			var err error
+			it.MessageMinNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax_ne":
+			var err error
+			it.MessageMaxNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3040,9 +3370,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "messageMin_gt":
+			var err error
+			it.MessageMinGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax_gt":
+			var err error
+			it.MessageMaxGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "message_lt":
 			var err error
 			it.MessageLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMin_lt":
+			var err error
+			it.MessageMinLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax_lt":
+			var err error
+			it.MessageMaxLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3052,9 +3406,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "messageMin_gte":
+			var err error
+			it.MessageMinGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax_gte":
+			var err error
+			it.MessageMaxGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "message_lte":
 			var err error
 			it.MessageLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMin_lte":
+			var err error
+			it.MessageMinLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax_lte":
+			var err error
+			it.MessageMaxLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3064,9 +3442,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "messageMin_in":
+			var err error
+			it.MessageMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax_in":
+			var err error
+			it.MessageMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "message_like":
 			var err error
 			it.MessageLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMin_like":
+			var err error
+			it.MessageMinLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax_like":
+			var err error
+			it.MessageMaxLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3076,9 +3478,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "messageMin_prefix":
+			var err error
+			it.MessageMinPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax_prefix":
+			var err error
+			it.MessageMaxPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "message_suffix":
 			var err error
 			it.MessageSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMin_suffix":
+			var err error
+			it.MessageMinSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax_suffix":
+			var err error
+			it.MessageMaxSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3094,9 +3520,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "seenMin":
+			var err error
+			it.SeenMin, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMax":
+			var err error
+			it.SeenMax, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "seen_ne":
 			var err error
 			it.SeenNe, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMin_ne":
+			var err error
+			it.SeenMinNe, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMax_ne":
+			var err error
+			it.SeenMaxNe, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3106,9 +3556,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "seenMin_gt":
+			var err error
+			it.SeenMinGt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMax_gt":
+			var err error
+			it.SeenMaxGt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "seen_lt":
 			var err error
 			it.SeenLt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMin_lt":
+			var err error
+			it.SeenMinLt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMax_lt":
+			var err error
+			it.SeenMaxLt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3118,15 +3592,51 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "seenMin_gte":
+			var err error
+			it.SeenMinGte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMax_gte":
+			var err error
+			it.SeenMaxGte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "seen_lte":
 			var err error
 			it.SeenLte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
+		case "seenMin_lte":
+			var err error
+			it.SeenMinLte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMax_lte":
+			var err error
+			it.SeenMaxLte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "seen_in":
 			var err error
 			it.SeenIn, err = ec.unmarshalOBoolean2ᚕbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMin_in":
+			var err error
+			it.SeenMinIn, err = ec.unmarshalOBoolean2ᚕbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMax_in":
+			var err error
+			it.SeenMaxIn, err = ec.unmarshalOBoolean2ᚕbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3142,9 +3652,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "channelMin":
+			var err error
+			it.ChannelMin, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax":
+			var err error
+			it.ChannelMax, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "channel_ne":
 			var err error
 			it.ChannelNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMin_ne":
+			var err error
+			it.ChannelMinNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax_ne":
+			var err error
+			it.ChannelMaxNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3154,9 +3688,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "channelMin_gt":
+			var err error
+			it.ChannelMinGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax_gt":
+			var err error
+			it.ChannelMaxGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "channel_lt":
 			var err error
 			it.ChannelLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMin_lt":
+			var err error
+			it.ChannelMinLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax_lt":
+			var err error
+			it.ChannelMaxLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3166,9 +3724,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "channelMin_gte":
+			var err error
+			it.ChannelMinGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax_gte":
+			var err error
+			it.ChannelMaxGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "channel_lte":
 			var err error
 			it.ChannelLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMin_lte":
+			var err error
+			it.ChannelMinLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax_lte":
+			var err error
+			it.ChannelMaxLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3178,9 +3760,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "channelMin_in":
+			var err error
+			it.ChannelMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax_in":
+			var err error
+			it.ChannelMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "channel_like":
 			var err error
 			it.ChannelLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMin_like":
+			var err error
+			it.ChannelMinLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax_like":
+			var err error
+			it.ChannelMaxLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3190,9 +3796,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "channelMin_prefix":
+			var err error
+			it.ChannelMinPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax_prefix":
+			var err error
+			it.ChannelMaxPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "channel_suffix":
 			var err error
 			it.ChannelSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMin_suffix":
+			var err error
+			it.ChannelMinSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax_suffix":
+			var err error
+			it.ChannelMaxSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3208,9 +3838,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "principalMin":
+			var err error
+			it.PrincipalMin, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax":
+			var err error
+			it.PrincipalMax, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "principal_ne":
 			var err error
 			it.PrincipalNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMin_ne":
+			var err error
+			it.PrincipalMinNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax_ne":
+			var err error
+			it.PrincipalMaxNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3220,9 +3874,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "principalMin_gt":
+			var err error
+			it.PrincipalMinGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax_gt":
+			var err error
+			it.PrincipalMaxGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "principal_lt":
 			var err error
 			it.PrincipalLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMin_lt":
+			var err error
+			it.PrincipalMinLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax_lt":
+			var err error
+			it.PrincipalMaxLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3232,9 +3910,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "principalMin_gte":
+			var err error
+			it.PrincipalMinGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax_gte":
+			var err error
+			it.PrincipalMaxGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "principal_lte":
 			var err error
 			it.PrincipalLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMin_lte":
+			var err error
+			it.PrincipalMinLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax_lte":
+			var err error
+			it.PrincipalMaxLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3244,9 +3946,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "principalMin_in":
+			var err error
+			it.PrincipalMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax_in":
+			var err error
+			it.PrincipalMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "principal_like":
 			var err error
 			it.PrincipalLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMin_like":
+			var err error
+			it.PrincipalMinLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax_like":
+			var err error
+			it.PrincipalMaxLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3256,9 +3982,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "principalMin_prefix":
+			var err error
+			it.PrincipalMinPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax_prefix":
+			var err error
+			it.PrincipalMaxPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "principal_suffix":
 			var err error
 			it.PrincipalSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMin_suffix":
+			var err error
+			it.PrincipalMinSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax_suffix":
+			var err error
+			it.PrincipalMaxSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3274,9 +4024,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "referenceMin":
+			var err error
+			it.ReferenceMin, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax":
+			var err error
+			it.ReferenceMax, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "reference_ne":
 			var err error
 			it.ReferenceNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMin_ne":
+			var err error
+			it.ReferenceMinNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax_ne":
+			var err error
+			it.ReferenceMaxNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3286,9 +4060,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "referenceMin_gt":
+			var err error
+			it.ReferenceMinGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax_gt":
+			var err error
+			it.ReferenceMaxGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "reference_lt":
 			var err error
 			it.ReferenceLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMin_lt":
+			var err error
+			it.ReferenceMinLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax_lt":
+			var err error
+			it.ReferenceMaxLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3298,9 +4096,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "referenceMin_gte":
+			var err error
+			it.ReferenceMinGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax_gte":
+			var err error
+			it.ReferenceMaxGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "reference_lte":
 			var err error
 			it.ReferenceLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMin_lte":
+			var err error
+			it.ReferenceMinLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax_lte":
+			var err error
+			it.ReferenceMaxLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3310,9 +4132,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "referenceMin_in":
+			var err error
+			it.ReferenceMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax_in":
+			var err error
+			it.ReferenceMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "reference_like":
 			var err error
 			it.ReferenceLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMin_like":
+			var err error
+			it.ReferenceMinLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax_like":
+			var err error
+			it.ReferenceMaxLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3322,9 +4168,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "referenceMin_prefix":
+			var err error
+			it.ReferenceMinPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax_prefix":
+			var err error
+			it.ReferenceMaxPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "reference_suffix":
 			var err error
 			it.ReferenceSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMin_suffix":
+			var err error
+			it.ReferenceMinSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax_suffix":
+			var err error
+			it.ReferenceMaxSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3340,9 +4210,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "referenceIDMin":
+			var err error
+			it.ReferenceIDMin, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax":
+			var err error
+			it.ReferenceIDMax, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "referenceID_ne":
 			var err error
 			it.ReferenceIDNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMin_ne":
+			var err error
+			it.ReferenceIDMinNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax_ne":
+			var err error
+			it.ReferenceIDMaxNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3352,9 +4246,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "referenceIDMin_gt":
+			var err error
+			it.ReferenceIDMinGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax_gt":
+			var err error
+			it.ReferenceIDMaxGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "referenceID_lt":
 			var err error
 			it.ReferenceIDLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMin_lt":
+			var err error
+			it.ReferenceIDMinLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax_lt":
+			var err error
+			it.ReferenceIDMaxLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3364,9 +4282,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "referenceIDMin_gte":
+			var err error
+			it.ReferenceIDMinGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax_gte":
+			var err error
+			it.ReferenceIDMaxGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "referenceID_lte":
 			var err error
 			it.ReferenceIDLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMin_lte":
+			var err error
+			it.ReferenceIDMinLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax_lte":
+			var err error
+			it.ReferenceIDMaxLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3376,9 +4318,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "referenceIDMin_in":
+			var err error
+			it.ReferenceIDMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax_in":
+			var err error
+			it.ReferenceIDMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "referenceID_like":
 			var err error
 			it.ReferenceIDLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMin_like":
+			var err error
+			it.ReferenceIDMinLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax_like":
+			var err error
+			it.ReferenceIDMaxLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3388,9 +4354,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "referenceIDMin_prefix":
+			var err error
+			it.ReferenceIDMinPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax_prefix":
+			var err error
+			it.ReferenceIDMaxPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "referenceID_suffix":
 			var err error
 			it.ReferenceIDSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMin_suffix":
+			var err error
+			it.ReferenceIDMinSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax_suffix":
+			var err error
+			it.ReferenceIDMaxSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3406,9 +4396,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "dateMin":
+			var err error
+			it.DateMin, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMax":
+			var err error
+			it.DateMax, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "date_ne":
 			var err error
 			it.DateNe, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMin_ne":
+			var err error
+			it.DateMinNe, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMax_ne":
+			var err error
+			it.DateMaxNe, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3418,9 +4432,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "dateMin_gt":
+			var err error
+			it.DateMinGt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMax_gt":
+			var err error
+			it.DateMaxGt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "date_lt":
 			var err error
 			it.DateLt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMin_lt":
+			var err error
+			it.DateMinLt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMax_lt":
+			var err error
+			it.DateMaxLt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3430,15 +4468,51 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "dateMin_gte":
+			var err error
+			it.DateMinGte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMax_gte":
+			var err error
+			it.DateMaxGte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "date_lte":
 			var err error
 			it.DateLte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
+		case "dateMin_lte":
+			var err error
+			it.DateMinLte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMax_lte":
+			var err error
+			it.DateMaxLte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "date_in":
 			var err error
 			it.DateIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMin_in":
+			var err error
+			it.DateMinIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMax_in":
+			var err error
+			it.DateMaxIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3454,9 +4528,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "updatedAtMin":
+			var err error
+			it.UpdatedAtMin, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMax":
+			var err error
+			it.UpdatedAtMax, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "updatedAt_ne":
 			var err error
 			it.UpdatedAtNe, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMin_ne":
+			var err error
+			it.UpdatedAtMinNe, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMax_ne":
+			var err error
+			it.UpdatedAtMaxNe, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3466,9 +4564,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "updatedAtMin_gt":
+			var err error
+			it.UpdatedAtMinGt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMax_gt":
+			var err error
+			it.UpdatedAtMaxGt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "updatedAt_lt":
 			var err error
 			it.UpdatedAtLt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMin_lt":
+			var err error
+			it.UpdatedAtMinLt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMax_lt":
+			var err error
+			it.UpdatedAtMaxLt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3478,15 +4600,51 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "updatedAtMin_gte":
+			var err error
+			it.UpdatedAtMinGte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMax_gte":
+			var err error
+			it.UpdatedAtMaxGte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "updatedAt_lte":
 			var err error
 			it.UpdatedAtLte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
+		case "updatedAtMin_lte":
+			var err error
+			it.UpdatedAtMinLte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMax_lte":
+			var err error
+			it.UpdatedAtMaxLte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "updatedAt_in":
 			var err error
 			it.UpdatedAtIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMin_in":
+			var err error
+			it.UpdatedAtMinIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMax_in":
+			var err error
+			it.UpdatedAtMaxIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3502,9 +4660,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "createdAtMin":
+			var err error
+			it.CreatedAtMin, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMax":
+			var err error
+			it.CreatedAtMax, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "createdAt_ne":
 			var err error
 			it.CreatedAtNe, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMin_ne":
+			var err error
+			it.CreatedAtMinNe, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMax_ne":
+			var err error
+			it.CreatedAtMaxNe, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3514,9 +4696,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "createdAtMin_gt":
+			var err error
+			it.CreatedAtMinGt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMax_gt":
+			var err error
+			it.CreatedAtMaxGt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "createdAt_lt":
 			var err error
 			it.CreatedAtLt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMin_lt":
+			var err error
+			it.CreatedAtMinLt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMax_lt":
+			var err error
+			it.CreatedAtMaxLt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3526,15 +4732,51 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "createdAtMin_gte":
+			var err error
+			it.CreatedAtMinGte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMax_gte":
+			var err error
+			it.CreatedAtMaxGte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "createdAt_lte":
 			var err error
 			it.CreatedAtLte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
+		case "createdAtMin_lte":
+			var err error
+			it.CreatedAtMinLte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMax_lte":
+			var err error
+			it.CreatedAtMaxLte, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "createdAt_in":
 			var err error
 			it.CreatedAtIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMin_in":
+			var err error
+			it.CreatedAtMinIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMax_in":
+			var err error
+			it.CreatedAtMaxIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3550,9 +4792,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "updatedByMin":
+			var err error
+			it.UpdatedByMin, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMax":
+			var err error
+			it.UpdatedByMax, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "updatedBy_ne":
 			var err error
 			it.UpdatedByNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMin_ne":
+			var err error
+			it.UpdatedByMinNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMax_ne":
+			var err error
+			it.UpdatedByMaxNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3562,9 +4828,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "updatedByMin_gt":
+			var err error
+			it.UpdatedByMinGt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMax_gt":
+			var err error
+			it.UpdatedByMaxGt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "updatedBy_lt":
 			var err error
 			it.UpdatedByLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMin_lt":
+			var err error
+			it.UpdatedByMinLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMax_lt":
+			var err error
+			it.UpdatedByMaxLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3574,15 +4864,51 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "updatedByMin_gte":
+			var err error
+			it.UpdatedByMinGte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMax_gte":
+			var err error
+			it.UpdatedByMaxGte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "updatedBy_lte":
 			var err error
 			it.UpdatedByLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+		case "updatedByMin_lte":
+			var err error
+			it.UpdatedByMinLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMax_lte":
+			var err error
+			it.UpdatedByMaxLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "updatedBy_in":
 			var err error
 			it.UpdatedByIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMin_in":
+			var err error
+			it.UpdatedByMinIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMax_in":
+			var err error
+			it.UpdatedByMaxIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3598,9 +4924,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "createdByMin":
+			var err error
+			it.CreatedByMin, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMax":
+			var err error
+			it.CreatedByMax, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "createdBy_ne":
 			var err error
 			it.CreatedByNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMin_ne":
+			var err error
+			it.CreatedByMinNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMax_ne":
+			var err error
+			it.CreatedByMaxNe, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3610,9 +4960,33 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "createdByMin_gt":
+			var err error
+			it.CreatedByMinGt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMax_gt":
+			var err error
+			it.CreatedByMaxGt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "createdBy_lt":
 			var err error
 			it.CreatedByLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMin_lt":
+			var err error
+			it.CreatedByMinLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMax_lt":
+			var err error
+			it.CreatedByMaxLt, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3622,15 +4996,51 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "createdByMin_gte":
+			var err error
+			it.CreatedByMinGte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMax_gte":
+			var err error
+			it.CreatedByMaxGte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "createdBy_lte":
 			var err error
 			it.CreatedByLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
+		case "createdByMin_lte":
+			var err error
+			it.CreatedByMinLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMax_lte":
+			var err error
+			it.CreatedByMaxLte, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "createdBy_in":
 			var err error
 			it.CreatedByIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMin_in":
+			var err error
+			it.CreatedByMinIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMax_in":
+			var err error
+			it.CreatedByMaxIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3658,9 +5068,33 @@ func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Conte
 			if err != nil {
 				return it, err
 			}
+		case "idMin":
+			var err error
+			it.IDMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMax":
+			var err error
+			it.IDMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "message":
 			var err error
 			it.Message, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMin":
+			var err error
+			it.MessageMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax":
+			var err error
+			it.MessageMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3670,9 +5104,33 @@ func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Conte
 			if err != nil {
 				return it, err
 			}
+		case "seenMin":
+			var err error
+			it.SeenMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMax":
+			var err error
+			it.SeenMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "channel":
 			var err error
 			it.Channel, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMin":
+			var err error
+			it.ChannelMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax":
+			var err error
+			it.ChannelMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3682,9 +5140,33 @@ func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Conte
 			if err != nil {
 				return it, err
 			}
+		case "principalMin":
+			var err error
+			it.PrincipalMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax":
+			var err error
+			it.PrincipalMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "reference":
 			var err error
 			it.Reference, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMin":
+			var err error
+			it.ReferenceMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax":
+			var err error
+			it.ReferenceMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3694,9 +5176,33 @@ func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Conte
 			if err != nil {
 				return it, err
 			}
+		case "referenceIDMin":
+			var err error
+			it.ReferenceIDMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax":
+			var err error
+			it.ReferenceIDMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "date":
 			var err error
 			it.Date, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMin":
+			var err error
+			it.DateMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMax":
+			var err error
+			it.DateMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3706,9 +5212,33 @@ func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Conte
 			if err != nil {
 				return it, err
 			}
+		case "updatedAtMin":
+			var err error
+			it.UpdatedAtMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMax":
+			var err error
+			it.UpdatedAtMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "createdAt":
 			var err error
 			it.CreatedAt, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMin":
+			var err error
+			it.CreatedAtMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMax":
+			var err error
+			it.CreatedAtMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3718,9 +5248,33 @@ func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Conte
 			if err != nil {
 				return it, err
 			}
+		case "updatedByMin":
+			var err error
+			it.UpdatedByMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMax":
+			var err error
+			it.UpdatedByMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "createdBy":
 			var err error
 			it.CreatedBy, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMin":
+			var err error
+			it.CreatedByMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMax":
+			var err error
+			it.CreatedByMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
 			if err != nil {
 				return it, err
 			}
