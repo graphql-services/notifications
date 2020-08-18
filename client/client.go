@@ -22,6 +22,7 @@ func NewClient(URL string) *Client {
 type Notification gen.Notification
 
 type CreateNotificationInput struct {
+	Subject     string    `json:"message"`
 	Message     string    `json:"message"`
 	Seen        bool      `json:"seen"`
 	Principal   *string   `json:"principal"`

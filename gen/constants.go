@@ -40,7 +40,6 @@ type Notification {
   message: String!
   seen: Boolean!
   channel: String
-  recipient: String
   principal: String
   reference: String
   referenceID: String
@@ -58,7 +57,6 @@ input NotificationCreateInput {
   message: String!
   seen: Boolean!
   channel: String
-  recipient: String
   principal: String
   reference: String
   referenceID: String
@@ -71,7 +69,6 @@ input NotificationUpdateInput {
   message: String
   seen: Boolean
   channel: String
-  recipient: String
   principal: String
   reference: String
   referenceID: String
@@ -97,9 +94,6 @@ input NotificationSortType {
   channel: ObjectSortType
   channelMin: ObjectSortType
   channelMax: ObjectSortType
-  recipient: ObjectSortType
-  recipientMin: ObjectSortType
-  recipientMax: ObjectSortType
   principal: ObjectSortType
   principalMin: ObjectSortType
   principalMax: ObjectSortType
@@ -288,37 +282,6 @@ input NotificationFilterType {
   channelMin_suffix: String
   channelMax_suffix: String
   channel_null: Boolean
-  recipient: String
-  recipientMin: String
-  recipientMax: String
-  recipient_ne: String
-  recipientMin_ne: String
-  recipientMax_ne: String
-  recipient_gt: String
-  recipientMin_gt: String
-  recipientMax_gt: String
-  recipient_lt: String
-  recipientMin_lt: String
-  recipientMax_lt: String
-  recipient_gte: String
-  recipientMin_gte: String
-  recipientMax_gte: String
-  recipient_lte: String
-  recipientMin_lte: String
-  recipientMax_lte: String
-  recipient_in: [String!]
-  recipientMin_in: [String!]
-  recipientMax_in: [String!]
-  recipient_like: String
-  recipientMin_like: String
-  recipientMax_like: String
-  recipient_prefix: String
-  recipientMin_prefix: String
-  recipientMax_prefix: String
-  recipient_suffix: String
-  recipientMin_suffix: String
-  recipientMax_suffix: String
-  recipient_null: Boolean
   principal: String
   principalMin: String
   principalMax: String

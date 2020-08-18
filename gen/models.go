@@ -20,7 +20,6 @@ type Notification struct {
 	Message     string     `json:"message" gorm:"column:message;type:text"`
 	Seen        bool       `json:"seen" gorm:"column:seen"`
 	Channel     *string    `json:"channel" gorm:"column:channel"`
-	Recipient   *string    `json:"recipient" gorm:"column:recipient"`
 	Principal   *string    `json:"principal" gorm:"column:principal;index:basic_fetch"`
 	Reference   *string    `json:"reference" gorm:"column:reference"`
 	ReferenceID *string    `json:"referenceID" gorm:"column:referenceID"`
@@ -40,7 +39,6 @@ type NotificationChanges struct {
 	Message     string
 	Seen        bool
 	Channel     *string
-	Recipient   *string
 	Principal   *string
 	Reference   *string
 	ReferenceID *string

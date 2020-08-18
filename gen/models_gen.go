@@ -171,37 +171,6 @@ type NotificationFilterType struct {
 	ChannelMinSuffix     *string                   `json:"channelMin_suffix"`
 	ChannelMaxSuffix     *string                   `json:"channelMax_suffix"`
 	ChannelNull          *bool                     `json:"channel_null"`
-	Recipient            *string                   `json:"recipient"`
-	RecipientMin         *string                   `json:"recipientMin"`
-	RecipientMax         *string                   `json:"recipientMax"`
-	RecipientNe          *string                   `json:"recipient_ne"`
-	RecipientMinNe       *string                   `json:"recipientMin_ne"`
-	RecipientMaxNe       *string                   `json:"recipientMax_ne"`
-	RecipientGt          *string                   `json:"recipient_gt"`
-	RecipientMinGt       *string                   `json:"recipientMin_gt"`
-	RecipientMaxGt       *string                   `json:"recipientMax_gt"`
-	RecipientLt          *string                   `json:"recipient_lt"`
-	RecipientMinLt       *string                   `json:"recipientMin_lt"`
-	RecipientMaxLt       *string                   `json:"recipientMax_lt"`
-	RecipientGte         *string                   `json:"recipient_gte"`
-	RecipientMinGte      *string                   `json:"recipientMin_gte"`
-	RecipientMaxGte      *string                   `json:"recipientMax_gte"`
-	RecipientLte         *string                   `json:"recipient_lte"`
-	RecipientMinLte      *string                   `json:"recipientMin_lte"`
-	RecipientMaxLte      *string                   `json:"recipientMax_lte"`
-	RecipientIn          []string                  `json:"recipient_in"`
-	RecipientMinIn       []string                  `json:"recipientMin_in"`
-	RecipientMaxIn       []string                  `json:"recipientMax_in"`
-	RecipientLike        *string                   `json:"recipient_like"`
-	RecipientMinLike     *string                   `json:"recipientMin_like"`
-	RecipientMaxLike     *string                   `json:"recipientMax_like"`
-	RecipientPrefix      *string                   `json:"recipient_prefix"`
-	RecipientMinPrefix   *string                   `json:"recipientMin_prefix"`
-	RecipientMaxPrefix   *string                   `json:"recipientMax_prefix"`
-	RecipientSuffix      *string                   `json:"recipient_suffix"`
-	RecipientMinSuffix   *string                   `json:"recipientMin_suffix"`
-	RecipientMaxSuffix   *string                   `json:"recipientMax_suffix"`
-	RecipientNull        *bool                     `json:"recipient_null"`
 	Principal            *string                   `json:"principal"`
 	PrincipalMin         *string                   `json:"principalMin"`
 	PrincipalMax         *string                   `json:"principalMax"`
@@ -426,9 +395,6 @@ type NotificationSortType struct {
 	Channel        *ObjectSortType `json:"channel"`
 	ChannelMin     *ObjectSortType `json:"channelMin"`
 	ChannelMax     *ObjectSortType `json:"channelMax"`
-	Recipient      *ObjectSortType `json:"recipient"`
-	RecipientMin   *ObjectSortType `json:"recipientMin"`
-	RecipientMax   *ObjectSortType `json:"recipientMax"`
 	Principal      *ObjectSortType `json:"principal"`
 	PrincipalMin   *ObjectSortType `json:"principalMin"`
 	PrincipalMax   *ObjectSortType `json:"principalMax"`

@@ -74,14 +74,6 @@ func (qf *NotificationQueryFilter) applyQueryWithFields(dialect gorm.Dialect, fi
 		*values = append(*values, query+"%", "% "+query+"%")
 	}
 
-	if _, ok := fieldsMap["recipient"]; ok {
-
-		column := dialect.Quote(alias) + "." + dialect.Quote("recipient")
-
-		*ors = append(*ors, fmt.Sprintf("%[1]s LIKE ? OR %[1]s LIKE ?", column))
-		*values = append(*values, query+"%", "% "+query+"%")
-	}
-
 	if _, ok := fieldsMap["principal"]; ok {
 
 		column := dialect.Quote(alias) + "." + dialect.Quote("principal")

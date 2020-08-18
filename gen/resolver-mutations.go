@@ -120,12 +120,6 @@ func CreateNotificationHandler(ctx context.Context, r *GeneratedResolver, input 
 		event.AddNewValue("channel", changes.Channel)
 	}
 
-	if _, ok := input["recipient"]; ok && (item.Recipient != changes.Recipient) && (item.Recipient == nil || changes.Recipient == nil || *item.Recipient != *changes.Recipient) {
-		item.Recipient = changes.Recipient
-
-		event.AddNewValue("recipient", changes.Recipient)
-	}
-
 	if _, ok := input["principal"]; ok && (item.Principal != changes.Principal) && (item.Principal == nil || changes.Principal == nil || *item.Principal != *changes.Principal) {
 		item.Principal = changes.Principal
 
@@ -227,12 +221,6 @@ func UpdateNotificationHandler(ctx context.Context, r *GeneratedResolver, id str
 		event.AddOldValue("channel", item.Channel)
 		event.AddNewValue("channel", changes.Channel)
 		item.Channel = changes.Channel
-	}
-
-	if _, ok := input["recipient"]; ok && (item.Recipient != changes.Recipient) && (item.Recipient == nil || changes.Recipient == nil || *item.Recipient != *changes.Recipient) {
-		event.AddOldValue("recipient", item.Recipient)
-		event.AddNewValue("recipient", changes.Recipient)
-		item.Recipient = changes.Recipient
 	}
 
 	if _, ok := input["principal"]; ok && (item.Principal != changes.Principal) && (item.Principal == nil || changes.Principal == nil || *item.Principal != *changes.Principal) {
