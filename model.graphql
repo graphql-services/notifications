@@ -10,6 +10,7 @@ extend type Mutation {
 
 type Notification @entity {
   groupID: ID @column
+  subject: String @column(type: "text")
   message: String! @column(type: "text")
   seen: Boolean! @column
   channel: String @column

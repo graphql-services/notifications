@@ -96,6 +96,12 @@ func CreateNotificationHandler(ctx context.Context, r *GeneratedResolver, input 
 		event.AddNewValue("groupID", changes.GroupID)
 	}
 
+	if _, ok := input["subject"]; ok && (item.Subject != changes.Subject) && (item.Subject == nil || changes.Subject == nil || *item.Subject != *changes.Subject) {
+		item.Subject = changes.Subject
+
+		event.AddNewValue("subject", changes.Subject)
+	}
+
 	if _, ok := input["message"]; ok && (item.Message != changes.Message) {
 		item.Message = changes.Message
 
@@ -197,6 +203,12 @@ func UpdateNotificationHandler(ctx context.Context, r *GeneratedResolver, id str
 		event.AddOldValue("groupID", item.GroupID)
 		event.AddNewValue("groupID", changes.GroupID)
 		item.GroupID = changes.GroupID
+	}
+
+	if _, ok := input["subject"]; ok && (item.Subject != changes.Subject) && (item.Subject == nil || changes.Subject == nil || *item.Subject != *changes.Subject) {
+		event.AddOldValue("subject", item.Subject)
+		event.AddNewValue("subject", changes.Subject)
+		item.Subject = changes.Subject
 	}
 
 	if _, ok := input["message"]; ok && (item.Message != changes.Message) {

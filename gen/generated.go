@@ -66,6 +66,7 @@ type ComplexityRoot struct {
 		Reference   func(childComplexity int) int
 		ReferenceID func(childComplexity int) int
 		Seen        func(childComplexity int) int
+		Subject     func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		UpdatedBy   func(childComplexity int) int
 	}
@@ -270,6 +271,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Notification.Seen(childComplexity), true
 
+	case "Notification.subject":
+		if e.complexity.Notification.Subject == nil {
+			break
+		}
+
+		return e.complexity.Notification.Subject(childComplexity), true
+
 	case "Notification.updatedAt":
 		if e.complexity.Notification.UpdatedAt == nil {
 			break
@@ -435,6 +443,7 @@ extend type Mutation {
 type Notification {
   id: ID!
   groupID: ID
+  subject: String
   message: String!
   seen: Boolean!
   channel: String
@@ -452,6 +461,7 @@ type Notification {
 input NotificationCreateInput {
   id: ID
   groupID: ID
+  subject: String
   message: String!
   seen: Boolean!
   channel: String
@@ -464,6 +474,7 @@ input NotificationCreateInput {
 
 input NotificationUpdateInput {
   groupID: ID
+  subject: String
   message: String
   seen: Boolean
   channel: String
@@ -481,6 +492,9 @@ input NotificationSortType {
   groupID: ObjectSortType
   groupIDMin: ObjectSortType
   groupIDMax: ObjectSortType
+  subject: ObjectSortType
+  subjectMin: ObjectSortType
+  subjectMax: ObjectSortType
   message: ObjectSortType
   messageMin: ObjectSortType
   messageMax: ObjectSortType
@@ -566,6 +580,37 @@ input NotificationFilterType {
   groupIDMin_in: [ID!]
   groupIDMax_in: [ID!]
   groupID_null: Boolean
+  subject: String
+  subjectMin: String
+  subjectMax: String
+  subject_ne: String
+  subjectMin_ne: String
+  subjectMax_ne: String
+  subject_gt: String
+  subjectMin_gt: String
+  subjectMax_gt: String
+  subject_lt: String
+  subjectMin_lt: String
+  subjectMax_lt: String
+  subject_gte: String
+  subjectMin_gte: String
+  subjectMax_gte: String
+  subject_lte: String
+  subjectMin_lte: String
+  subjectMax_lte: String
+  subject_in: [String!]
+  subjectMin_in: [String!]
+  subjectMax_in: [String!]
+  subject_like: String
+  subjectMin_like: String
+  subjectMax_like: String
+  subject_prefix: String
+  subjectMin_prefix: String
+  subjectMax_prefix: String
+  subject_suffix: String
+  subjectMin_suffix: String
+  subjectMax_suffix: String
+  subject_null: Boolean
   message: String
   messageMin: String
   messageMax: String
@@ -1452,6 +1497,40 @@ func (ec *executionContext) _Notification_groupID(ctx context.Context, field gra
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Notification_subject(ctx context.Context, field graphql.CollectedField, obj *Notification) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Notification",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Subject, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Notification_message(ctx context.Context, field graphql.CollectedField, obj *Notification) (ret graphql.Marshaler) {
@@ -3609,6 +3688,192 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "subject":
+			var err error
+			it.Subject, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin":
+			var err error
+			it.SubjectMin, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax":
+			var err error
+			it.SubjectMax, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subject_ne":
+			var err error
+			it.SubjectNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin_ne":
+			var err error
+			it.SubjectMinNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax_ne":
+			var err error
+			it.SubjectMaxNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subject_gt":
+			var err error
+			it.SubjectGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin_gt":
+			var err error
+			it.SubjectMinGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax_gt":
+			var err error
+			it.SubjectMaxGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subject_lt":
+			var err error
+			it.SubjectLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin_lt":
+			var err error
+			it.SubjectMinLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax_lt":
+			var err error
+			it.SubjectMaxLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subject_gte":
+			var err error
+			it.SubjectGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin_gte":
+			var err error
+			it.SubjectMinGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax_gte":
+			var err error
+			it.SubjectMaxGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subject_lte":
+			var err error
+			it.SubjectLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin_lte":
+			var err error
+			it.SubjectMinLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax_lte":
+			var err error
+			it.SubjectMaxLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subject_in":
+			var err error
+			it.SubjectIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin_in":
+			var err error
+			it.SubjectMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax_in":
+			var err error
+			it.SubjectMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subject_like":
+			var err error
+			it.SubjectLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin_like":
+			var err error
+			it.SubjectMinLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax_like":
+			var err error
+			it.SubjectMaxLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subject_prefix":
+			var err error
+			it.SubjectPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin_prefix":
+			var err error
+			it.SubjectMinPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax_prefix":
+			var err error
+			it.SubjectMaxPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subject_suffix":
+			var err error
+			it.SubjectSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin_suffix":
+			var err error
+			it.SubjectMinSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax_suffix":
+			var err error
+			it.SubjectMaxSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subject_null":
+			var err error
+			it.SubjectNull, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "message":
 			var err error
 			it.Message, err = ec.unmarshalOString2ᚖstring(ctx, v)
@@ -5565,6 +5830,24 @@ func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Conte
 			if err != nil {
 				return it, err
 			}
+		case "subject":
+			var err error
+			it.Subject, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin":
+			var err error
+			it.SubjectMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax":
+			var err error
+			it.SubjectMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "message":
 			var err error
 			it.Message, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
@@ -5866,6 +6149,8 @@ func (ec *executionContext) _Notification(ctx context.Context, sel ast.Selection
 			}
 		case "groupID":
 			out.Values[i] = ec._Notification_groupID(ctx, field, obj)
+		case "subject":
+			out.Values[i] = ec._Notification_subject(ctx, field, obj)
 		case "message":
 			out.Values[i] = ec._Notification_message(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

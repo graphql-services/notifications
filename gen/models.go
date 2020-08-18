@@ -16,6 +16,7 @@ type NotificationResultType struct {
 type Notification struct {
 	ID          string     `json:"id" gorm:"column:id;primary_key"`
 	GroupID     *string    `json:"groupID" gorm:"column:groupID"`
+	Subject     *string    `json:"subject" gorm:"column:subject;type:text"`
 	Message     string     `json:"message" gorm:"column:message;type:text"`
 	Seen        bool       `json:"seen" gorm:"column:seen"`
 	Channel     *string    `json:"channel" gorm:"column:channel"`
@@ -35,6 +36,7 @@ func (m *Notification) Is_Entity() {}
 type NotificationChanges struct {
 	ID          string
 	GroupID     *string
+	Subject     *string
 	Message     string
 	Seen        bool
 	Channel     *string

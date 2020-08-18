@@ -56,6 +56,37 @@ type NotificationFilterType struct {
 	GroupIDMinIn         []string                  `json:"groupIDMin_in"`
 	GroupIDMaxIn         []string                  `json:"groupIDMax_in"`
 	GroupIDNull          *bool                     `json:"groupID_null"`
+	Subject              *string                   `json:"subject"`
+	SubjectMin           *string                   `json:"subjectMin"`
+	SubjectMax           *string                   `json:"subjectMax"`
+	SubjectNe            *string                   `json:"subject_ne"`
+	SubjectMinNe         *string                   `json:"subjectMin_ne"`
+	SubjectMaxNe         *string                   `json:"subjectMax_ne"`
+	SubjectGt            *string                   `json:"subject_gt"`
+	SubjectMinGt         *string                   `json:"subjectMin_gt"`
+	SubjectMaxGt         *string                   `json:"subjectMax_gt"`
+	SubjectLt            *string                   `json:"subject_lt"`
+	SubjectMinLt         *string                   `json:"subjectMin_lt"`
+	SubjectMaxLt         *string                   `json:"subjectMax_lt"`
+	SubjectGte           *string                   `json:"subject_gte"`
+	SubjectMinGte        *string                   `json:"subjectMin_gte"`
+	SubjectMaxGte        *string                   `json:"subjectMax_gte"`
+	SubjectLte           *string                   `json:"subject_lte"`
+	SubjectMinLte        *string                   `json:"subjectMin_lte"`
+	SubjectMaxLte        *string                   `json:"subjectMax_lte"`
+	SubjectIn            []string                  `json:"subject_in"`
+	SubjectMinIn         []string                  `json:"subjectMin_in"`
+	SubjectMaxIn         []string                  `json:"subjectMax_in"`
+	SubjectLike          *string                   `json:"subject_like"`
+	SubjectMinLike       *string                   `json:"subjectMin_like"`
+	SubjectMaxLike       *string                   `json:"subjectMax_like"`
+	SubjectPrefix        *string                   `json:"subject_prefix"`
+	SubjectMinPrefix     *string                   `json:"subjectMin_prefix"`
+	SubjectMaxPrefix     *string                   `json:"subjectMax_prefix"`
+	SubjectSuffix        *string                   `json:"subject_suffix"`
+	SubjectMinSuffix     *string                   `json:"subjectMin_suffix"`
+	SubjectMaxSuffix     *string                   `json:"subjectMax_suffix"`
+	SubjectNull          *bool                     `json:"subject_null"`
 	Message              *string                   `json:"message"`
 	MessageMin           *string                   `json:"messageMin"`
 	MessageMax           *string                   `json:"messageMax"`
@@ -383,6 +414,9 @@ type NotificationSortType struct {
 	GroupID        *ObjectSortType `json:"groupID"`
 	GroupIDMin     *ObjectSortType `json:"groupIDMin"`
 	GroupIDMax     *ObjectSortType `json:"groupIDMax"`
+	Subject        *ObjectSortType `json:"subject"`
+	SubjectMin     *ObjectSortType `json:"subjectMin"`
+	SubjectMax     *ObjectSortType `json:"subjectMax"`
 	Message        *ObjectSortType `json:"message"`
 	MessageMin     *ObjectSortType `json:"messageMin"`
 	MessageMax     *ObjectSortType `json:"messageMax"`

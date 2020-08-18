@@ -36,6 +36,7 @@ extend type Mutation {
 type Notification {
   id: ID!
   groupID: ID
+  subject: String
   message: String!
   seen: Boolean!
   channel: String
@@ -53,6 +54,7 @@ type Notification {
 input NotificationCreateInput {
   id: ID
   groupID: ID
+  subject: String
   message: String!
   seen: Boolean!
   channel: String
@@ -65,6 +67,7 @@ input NotificationCreateInput {
 
 input NotificationUpdateInput {
   groupID: ID
+  subject: String
   message: String
   seen: Boolean
   channel: String
@@ -82,6 +85,9 @@ input NotificationSortType {
   groupID: ObjectSortType
   groupIDMin: ObjectSortType
   groupIDMax: ObjectSortType
+  subject: ObjectSortType
+  subjectMin: ObjectSortType
+  subjectMax: ObjectSortType
   message: ObjectSortType
   messageMin: ObjectSortType
   messageMax: ObjectSortType
@@ -167,6 +173,37 @@ input NotificationFilterType {
   groupIDMin_in: [ID!]
   groupIDMax_in: [ID!]
   groupID_null: Boolean
+  subject: String
+  subjectMin: String
+  subjectMax: String
+  subject_ne: String
+  subjectMin_ne: String
+  subjectMax_ne: String
+  subject_gt: String
+  subjectMin_gt: String
+  subjectMax_gt: String
+  subject_lt: String
+  subjectMin_lt: String
+  subjectMax_lt: String
+  subject_gte: String
+  subjectMin_gte: String
+  subjectMax_gte: String
+  subject_lte: String
+  subjectMin_lte: String
+  subjectMax_lte: String
+  subject_in: [String!]
+  subjectMin_in: [String!]
+  subjectMax_in: [String!]
+  subject_like: String
+  subjectMin_like: String
+  subjectMax_like: String
+  subject_prefix: String
+  subjectMin_prefix: String
+  subjectMax_prefix: String
+  subject_suffix: String
+  subjectMin_suffix: String
+  subjectMax_suffix: String
+  subject_null: Boolean
   message: String
   messageMin: String
   messageMax: String

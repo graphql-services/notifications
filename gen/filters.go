@@ -182,6 +182,64 @@ func (f *NotificationFilterType) WhereContent(dialect gorm.Dialect, aliasPrefix 
 		}
 	}
 
+	if f.Subject != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" = ?")
+		values = append(values, f.Subject)
+	}
+
+	if f.SubjectNe != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" != ?")
+		values = append(values, f.SubjectNe)
+	}
+
+	if f.SubjectGt != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" > ?")
+		values = append(values, f.SubjectGt)
+	}
+
+	if f.SubjectLt != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" < ?")
+		values = append(values, f.SubjectLt)
+	}
+
+	if f.SubjectGte != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" >= ?")
+		values = append(values, f.SubjectGte)
+	}
+
+	if f.SubjectLte != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" <= ?")
+		values = append(values, f.SubjectLte)
+	}
+
+	if f.SubjectIn != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" IN (?)")
+		values = append(values, f.SubjectIn)
+	}
+
+	if f.SubjectLike != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.SubjectLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.SubjectPrefix != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.SubjectPrefix))
+	}
+
+	if f.SubjectSuffix != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.SubjectSuffix))
+	}
+
+	if f.SubjectNull != nil {
+		if *f.SubjectNull {
+			conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" IS NULL")
+		} else {
+			conditions = append(conditions, aliasPrefix+dialect.Quote("subject")+" IS NOT NULL")
+		}
+	}
+
 	if f.Message != nil {
 		conditions = append(conditions, aliasPrefix+dialect.Quote("message")+" = ?")
 		values = append(values, f.Message)
@@ -932,6 +990,106 @@ func (f *NotificationFilterType) HavingContent(dialect gorm.Dialect, aliasPrefix
 	if f.GroupIDMaxIn != nil {
 		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("groupID")+") IN (?)")
 		values = append(values, f.GroupIDMaxIn)
+	}
+
+	if f.SubjectMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("subject")+") = ?")
+		values = append(values, f.SubjectMin)
+	}
+
+	if f.SubjectMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("subject")+") = ?")
+		values = append(values, f.SubjectMax)
+	}
+
+	if f.SubjectMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("subject")+") != ?")
+		values = append(values, f.SubjectMinNe)
+	}
+
+	if f.SubjectMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("subject")+") != ?")
+		values = append(values, f.SubjectMaxNe)
+	}
+
+	if f.SubjectMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("subject")+") > ?")
+		values = append(values, f.SubjectMinGt)
+	}
+
+	if f.SubjectMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("subject")+") > ?")
+		values = append(values, f.SubjectMaxGt)
+	}
+
+	if f.SubjectMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("subject")+") < ?")
+		values = append(values, f.SubjectMinLt)
+	}
+
+	if f.SubjectMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("subject")+") < ?")
+		values = append(values, f.SubjectMaxLt)
+	}
+
+	if f.SubjectMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("subject")+") >= ?")
+		values = append(values, f.SubjectMinGte)
+	}
+
+	if f.SubjectMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("subject")+") >= ?")
+		values = append(values, f.SubjectMaxGte)
+	}
+
+	if f.SubjectMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("subject")+") <= ?")
+		values = append(values, f.SubjectMinLte)
+	}
+
+	if f.SubjectMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("subject")+") <= ?")
+		values = append(values, f.SubjectMaxLte)
+	}
+
+	if f.SubjectMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("subject")+") IN (?)")
+		values = append(values, f.SubjectMinIn)
+	}
+
+	if f.SubjectMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("subject")+") IN (?)")
+		values = append(values, f.SubjectMaxIn)
+	}
+
+	if f.SubjectMinLike != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("subject")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.SubjectMinLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.SubjectMaxLike != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("subject")+") LIKE ?")
+		values = append(values, strings.Replace(strings.Replace(*f.SubjectMaxLike, "?", "_", -1), "*", "%", -1))
+	}
+
+	if f.SubjectMinPrefix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("subject")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.SubjectMinPrefix))
+	}
+
+	if f.SubjectMaxPrefix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("subject")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%s%%", *f.SubjectMaxPrefix))
+	}
+
+	if f.SubjectMinSuffix != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("subject")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.SubjectMinSuffix))
+	}
+
+	if f.SubjectMaxSuffix != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("subject")+") LIKE ?")
+		values = append(values, fmt.Sprintf("%%%s", *f.SubjectMaxSuffix))
 	}
 
 	if f.MessageMin != nil {
