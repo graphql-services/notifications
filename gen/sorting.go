@@ -87,6 +87,21 @@ func (s NotificationSortType) ApplyWithAlias(ctx context.Context, dialect gorm.D
 		*sorts = append(*sorts, sort)
 	}
 
+	if s.URL != nil {
+		sort := SortInfo{Field: aliasPrefix + dialect.Quote("url"), Direction: s.URL.String()}
+		*sorts = append(*sorts, sort)
+	}
+
+	if s.URLMin != nil {
+		sort := SortInfo{Field: "Min(" + aliasPrefix + dialect.Quote("url") + ")", Direction: s.URLMin.String(), IsAggregation: true}
+		*sorts = append(*sorts, sort)
+	}
+
+	if s.URLMax != nil {
+		sort := SortInfo{Field: "Max(" + aliasPrefix + dialect.Quote("url") + ")", Direction: s.URLMax.String(), IsAggregation: true}
+		*sorts = append(*sorts, sort)
+	}
+
 	if s.Channel != nil {
 		sort := SortInfo{Field: aliasPrefix + dialect.Quote("channel"), Direction: s.Channel.String()}
 		*sorts = append(*sorts, sort)

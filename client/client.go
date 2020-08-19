@@ -24,6 +24,7 @@ type Notification gen.Notification
 type CreateNotificationInput struct {
 	Subject     string    `json:"subject"`
 	Message     string    `json:"message"`
+	Recipient   string    `json:"recipient"`
 	Seen        bool      `json:"seen"`
 	Principal   *string   `json:"principal"`
 	Channel     *string   `json:"channel"`

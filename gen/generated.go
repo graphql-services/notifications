@@ -66,6 +66,7 @@ type ComplexityRoot struct {
 		ReferenceID func(childComplexity int) int
 		Seen        func(childComplexity int) int
 		Subject     func(childComplexity int) int
+		URL         func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		UpdatedBy   func(childComplexity int) int
 	}
@@ -270,6 +271,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Notification.Subject(childComplexity), true
 
+	case "Notification.url":
+		if e.complexity.Notification.URL == nil {
+			break
+		}
+
+		return e.complexity.Notification.URL(childComplexity), true
+
 	case "Notification.updatedAt":
 		if e.complexity.Notification.UpdatedAt == nil {
 			break
@@ -438,6 +446,7 @@ type Notification {
   subject: String
   message: String!
   seen: Boolean!
+  url: String
   channel: String
   principal: String
   reference: String
@@ -455,6 +464,7 @@ input NotificationCreateInput {
   subject: String
   message: String!
   seen: Boolean!
+  url: String
   channel: String
   principal: String
   reference: String
@@ -467,6 +477,7 @@ input NotificationUpdateInput {
   subject: String
   message: String
   seen: Boolean
+  url: String
   channel: String
   principal: String
   reference: String
@@ -490,6 +501,9 @@ input NotificationSortType {
   seen: ObjectSortType
   seenMin: ObjectSortType
   seenMax: ObjectSortType
+  url: ObjectSortType
+  urlMin: ObjectSortType
+  urlMax: ObjectSortType
   channel: ObjectSortType
   channelMin: ObjectSortType
   channelMax: ObjectSortType
@@ -650,6 +664,37 @@ input NotificationFilterType {
   seenMin_in: [Boolean!]
   seenMax_in: [Boolean!]
   seen_null: Boolean
+  url: String
+  urlMin: String
+  urlMax: String
+  url_ne: String
+  urlMin_ne: String
+  urlMax_ne: String
+  url_gt: String
+  urlMin_gt: String
+  urlMax_gt: String
+  url_lt: String
+  urlMin_lt: String
+  urlMax_lt: String
+  url_gte: String
+  urlMin_gte: String
+  urlMax_gte: String
+  url_lte: String
+  urlMin_lte: String
+  urlMax_lte: String
+  url_in: [String!]
+  urlMin_in: [String!]
+  urlMax_in: [String!]
+  url_like: String
+  urlMin_like: String
+  urlMax_like: String
+  url_prefix: String
+  urlMin_prefix: String
+  urlMax_prefix: String
+  url_suffix: String
+  urlMin_suffix: String
+  urlMax_suffix: String
+  url_null: Boolean
   channel: String
   channelMin: String
   channelMax: String
@@ -1560,6 +1605,40 @@ func (ec *executionContext) _Notification_seen(ctx context.Context, field graphq
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Notification_url(ctx context.Context, field graphql.CollectedField, obj *Notification) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Notification",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.URL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Notification_channel(ctx context.Context, field graphql.CollectedField, obj *Notification) (ret graphql.Marshaler) {
@@ -4113,6 +4192,192 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "url":
+			var err error
+			it.URL, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin":
+			var err error
+			it.URLMin, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax":
+			var err error
+			it.URLMax, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "url_ne":
+			var err error
+			it.URLNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin_ne":
+			var err error
+			it.URLMinNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax_ne":
+			var err error
+			it.URLMaxNe, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "url_gt":
+			var err error
+			it.URLGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin_gt":
+			var err error
+			it.URLMinGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax_gt":
+			var err error
+			it.URLMaxGt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "url_lt":
+			var err error
+			it.URLLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin_lt":
+			var err error
+			it.URLMinLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax_lt":
+			var err error
+			it.URLMaxLt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "url_gte":
+			var err error
+			it.URLGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin_gte":
+			var err error
+			it.URLMinGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax_gte":
+			var err error
+			it.URLMaxGte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "url_lte":
+			var err error
+			it.URLLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin_lte":
+			var err error
+			it.URLMinLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax_lte":
+			var err error
+			it.URLMaxLte, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "url_in":
+			var err error
+			it.URLIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin_in":
+			var err error
+			it.URLMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax_in":
+			var err error
+			it.URLMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "url_like":
+			var err error
+			it.URLLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin_like":
+			var err error
+			it.URLMinLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax_like":
+			var err error
+			it.URLMaxLike, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "url_prefix":
+			var err error
+			it.URLPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin_prefix":
+			var err error
+			it.URLMinPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax_prefix":
+			var err error
+			it.URLMaxPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "url_suffix":
+			var err error
+			it.URLSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin_suffix":
+			var err error
+			it.URLMinSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax_suffix":
+			var err error
+			it.URLMaxSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "url_null":
+			var err error
+			it.URLNull, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "channel":
 			var err error
 			it.Channel, err = ec.unmarshalOString2ᚖstring(ctx, v)
@@ -5619,6 +5884,24 @@ func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Conte
 			if err != nil {
 				return it, err
 			}
+		case "url":
+			var err error
+			it.URL, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin":
+			var err error
+			it.URLMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax":
+			var err error
+			it.URLMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "channel":
 			var err error
 			it.Channel, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
@@ -5878,6 +6161,8 @@ func (ec *executionContext) _Notification(ctx context.Context, sel ast.Selection
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "url":
+			out.Values[i] = ec._Notification_url(ctx, field, obj)
 		case "channel":
 			out.Values[i] = ec._Notification_channel(ctx, field, obj)
 		case "principal":
