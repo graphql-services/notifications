@@ -83,6 +83,28 @@ func (r *GeneratedQueryResolver) Notifications(ctx context.Context, offset *int,
 	}
 	return r.Handlers.QueryNotifications(ctx, r.GeneratedResolver, opts)
 }
+func (r *GeneratedResolver) NotificationsItems(ctx context.Context, opts QueryNotificationsHandlerOptions) (res []*Notification, err error) {
+	resultType, err := r.Handlers.QueryNotifications(ctx, r, opts)
+	if err != nil {
+		return
+	}
+	err = resultType.GetItems(ctx, r.GetDB(ctx), GetItemsOptions{
+		Alias: TableName("notifications"),
+	}, &res)
+	if err != nil {
+		return
+	}
+	return
+}
+func (r *GeneratedResolver) NotificationsCount(ctx context.Context, opts QueryNotificationsHandlerOptions) (count int, err error) {
+	resultType, err := r.Handlers.QueryNotifications(ctx, r, opts)
+	if err != nil {
+		return
+	}
+	return resultType.GetCount(ctx, r.GetDB(ctx), GetItemsOptions{
+		Alias: TableName("notifications"),
+	}, &Notification{})
+}
 func QueryNotificationsHandler(ctx context.Context, r *GeneratedResolver, opts QueryNotificationsHandlerOptions) (*NotificationResultType, error) {
 	query := NotificationQueryFilter{opts.Q}
 

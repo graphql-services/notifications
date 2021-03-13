@@ -4,10 +4,9 @@ import (
 	"context"
 
 	"github.com/graphql-services/notifications/gen"
-	"github.com/novacloudcz/graphql-orm/events"
 )
 
-func New(db *gen.DB, ec *events.EventController) *Resolver {
+func New(db *gen.DB, ec *gen.EventController) *Resolver {
 	resolver := NewResolver(db, ec)
 
 	// resolver.Handlers.CreateUser = func(ctx context.Context, r *gen.GeneratedMutationResolver, input map[string]interface{}) (item *gen.Company, err error) {
@@ -37,5 +36,39 @@ func (r *MutationResolver) SeenNotifications(ctx context.Context, principal stri
 	err = r.DB.Query().Model(where).Where(where).Updates(input).Error
 
 	ok = true
+	return
+}
+
+func (r *MutationResolver) CreateNotificationBatchUpdate(ctx context.Context, input gen.CreateNotificationBatchUpdateInput) (res bool, err error) {
+
+	filter := &gen.NotificationFilterType{
+		Principal: &input.Principal,
+	}
+
+	if input.Channel != nil {
+		filter.Channel = input.Channel
+	}
+	if input.Reference != nil {
+		filter.Reference = input.Reference
+	}
+	if input.ReferenceID != nil {
+		filter.ReferenceID = input.ReferenceID
+	}
+
+	limit := 500
+	items, err := r.GeneratedResolver.NotificationsItems(ctx, gen.QueryNotificationsHandlerOptions{
+		Limit:  &limit,
+		Filter: filter,
+	})
+
+	db := r.GetDB(ctx)
+	for _, item := range items {
+		item.Seen = input.Seen
+		err = db.Save(item).Error
+		if err != nil {
+			return
+		}
+	}
+	res = true
 	return
 }

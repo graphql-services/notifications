@@ -4,10 +4,9 @@ import (
 	"context"
 
 	"github.com/graphql-services/notifications/gen"
-	"github.com/novacloudcz/graphql-orm/events"
 )
 
-func NewResolver(db *gen.DB, ec *events.EventController) *Resolver {
+func NewResolver(db *gen.DB, ec *gen.EventController) *Resolver {
 	handlers := gen.DefaultResolutionHandlers()
 	return &Resolver{&gen.GeneratedResolver{Handlers: handlers, DB: db, EventController: ec}}
 }

@@ -16,7 +16,7 @@ func Migrate(db *gorm.DB, options *gormigrate.Options, migrations []*gormigrate.
 	return m.Migrate()
 }
 
-func AutoMigrate(db *gorm.DB) error {
+func AutoMigrate(db *gorm.DB) (err error) {
 	_db := db.AutoMigrate(
 		Notification{},
 	)

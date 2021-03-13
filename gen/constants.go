@@ -13,7 +13,7 @@ const (
 
 type Query {
   notification(id: ID, q: String, filter: NotificationFilterType): Notification
-  notifications(offset: Int, limit: Int = 30, q: String, sort: [NotificationSortType!], filter: NotificationFilterType): NotificationResultType
+  notifications(offset: Int, limit: Int = 30, q: String, sort: [NotificationSortType!], filter: NotificationFilterType): NotificationResultType!
 }
 
 type Mutation {
@@ -28,9 +28,18 @@ enum ObjectSortType {
   DESC
 }
 
+input CreateNotificationBatchUpdateInput {
+  seen: Boolean!
+  principal: String!
+  channel: String
+  reference: String
+  referenceID: String
+}
+
 extend type Mutation {
   seenNotification(id: ID!): Notification
   seenNotifications(principal: String!, channel: String, reference: String, referenceID: String): Boolean!
+  createNotificationBatchUpdate(input: CreateNotificationBatchUpdateInput!): Boolean!
 }
 
 type Notification {
@@ -150,6 +159,9 @@ input NotificationFilterType {
   id_in: [ID!]
   idMin_in: [ID!]
   idMax_in: [ID!]
+  id_not_in: [ID!]
+  idMin_not_in: [ID!]
+  idMax_not_in: [ID!]
   id_null: Boolean
   groupID: ID
   groupIDMin: ID
@@ -172,6 +184,9 @@ input NotificationFilterType {
   groupID_in: [ID!]
   groupIDMin_in: [ID!]
   groupIDMax_in: [ID!]
+  groupID_not_in: [ID!]
+  groupIDMin_not_in: [ID!]
+  groupIDMax_not_in: [ID!]
   groupID_null: Boolean
   subject: String
   subjectMin: String
@@ -194,6 +209,9 @@ input NotificationFilterType {
   subject_in: [String!]
   subjectMin_in: [String!]
   subjectMax_in: [String!]
+  subject_not_in: [String!]
+  subjectMin_not_in: [String!]
+  subjectMax_not_in: [String!]
   subject_like: String
   subjectMin_like: String
   subjectMax_like: String
@@ -225,6 +243,9 @@ input NotificationFilterType {
   message_in: [String!]
   messageMin_in: [String!]
   messageMax_in: [String!]
+  message_not_in: [String!]
+  messageMin_not_in: [String!]
+  messageMax_not_in: [String!]
   message_like: String
   messageMin_like: String
   messageMax_like: String
@@ -256,6 +277,9 @@ input NotificationFilterType {
   seen_in: [Boolean!]
   seenMin_in: [Boolean!]
   seenMax_in: [Boolean!]
+  seen_not_in: [Boolean!]
+  seenMin_not_in: [Boolean!]
+  seenMax_not_in: [Boolean!]
   seen_null: Boolean
   url: String
   urlMin: String
@@ -278,6 +302,9 @@ input NotificationFilterType {
   url_in: [String!]
   urlMin_in: [String!]
   urlMax_in: [String!]
+  url_not_in: [String!]
+  urlMin_not_in: [String!]
+  urlMax_not_in: [String!]
   url_like: String
   urlMin_like: String
   urlMax_like: String
@@ -309,6 +336,9 @@ input NotificationFilterType {
   channel_in: [String!]
   channelMin_in: [String!]
   channelMax_in: [String!]
+  channel_not_in: [String!]
+  channelMin_not_in: [String!]
+  channelMax_not_in: [String!]
   channel_like: String
   channelMin_like: String
   channelMax_like: String
@@ -340,6 +370,9 @@ input NotificationFilterType {
   principal_in: [String!]
   principalMin_in: [String!]
   principalMax_in: [String!]
+  principal_not_in: [String!]
+  principalMin_not_in: [String!]
+  principalMax_not_in: [String!]
   principal_like: String
   principalMin_like: String
   principalMax_like: String
@@ -371,6 +404,9 @@ input NotificationFilterType {
   reference_in: [String!]
   referenceMin_in: [String!]
   referenceMax_in: [String!]
+  reference_not_in: [String!]
+  referenceMin_not_in: [String!]
+  referenceMax_not_in: [String!]
   reference_like: String
   referenceMin_like: String
   referenceMax_like: String
@@ -402,6 +438,9 @@ input NotificationFilterType {
   referenceID_in: [String!]
   referenceIDMin_in: [String!]
   referenceIDMax_in: [String!]
+  referenceID_not_in: [String!]
+  referenceIDMin_not_in: [String!]
+  referenceIDMax_not_in: [String!]
   referenceID_like: String
   referenceIDMin_like: String
   referenceIDMax_like: String
@@ -433,6 +472,9 @@ input NotificationFilterType {
   date_in: [Time!]
   dateMin_in: [Time!]
   dateMax_in: [Time!]
+  date_not_in: [Time!]
+  dateMin_not_in: [Time!]
+  dateMax_not_in: [Time!]
   date_null: Boolean
   updatedAt: Time
   updatedAtMin: Time
@@ -455,6 +497,9 @@ input NotificationFilterType {
   updatedAt_in: [Time!]
   updatedAtMin_in: [Time!]
   updatedAtMax_in: [Time!]
+  updatedAt_not_in: [Time!]
+  updatedAtMin_not_in: [Time!]
+  updatedAtMax_not_in: [Time!]
   updatedAt_null: Boolean
   createdAt: Time
   createdAtMin: Time
@@ -477,6 +522,9 @@ input NotificationFilterType {
   createdAt_in: [Time!]
   createdAtMin_in: [Time!]
   createdAtMax_in: [Time!]
+  createdAt_not_in: [Time!]
+  createdAtMin_not_in: [Time!]
+  createdAtMax_not_in: [Time!]
   createdAt_null: Boolean
   updatedBy: ID
   updatedByMin: ID
@@ -499,6 +547,9 @@ input NotificationFilterType {
   updatedBy_in: [ID!]
   updatedByMin_in: [ID!]
   updatedByMax_in: [ID!]
+  updatedBy_not_in: [ID!]
+  updatedByMin_not_in: [ID!]
+  updatedByMax_not_in: [ID!]
   updatedBy_null: Boolean
   createdBy: ID
   createdByMin: ID
@@ -521,6 +572,9 @@ input NotificationFilterType {
   createdBy_in: [ID!]
   createdByMin_in: [ID!]
   createdByMax_in: [ID!]
+  createdBy_not_in: [ID!]
+  createdByMin_not_in: [ID!]
+  createdByMax_not_in: [ID!]
   createdBy_null: Boolean
 }
 

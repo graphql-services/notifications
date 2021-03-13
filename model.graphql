@@ -1,3 +1,11 @@
+input CreateNotificationBatchUpdateInput {
+  seen: Boolean!
+  principal: String!
+  channel: String
+  reference: String
+  referenceID: String
+}
+
 extend type Mutation {
   seenNotification(id: ID!): Notification
   seenNotifications(
@@ -5,6 +13,9 @@ extend type Mutation {
     channel: String
     reference: String
     referenceID: String
+  ): Boolean!
+  createNotificationBatchUpdate(
+    input: CreateNotificationBatchUpdateInput!
   ): Boolean!
 }
 

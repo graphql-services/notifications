@@ -45,12 +45,13 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Mutation struct {
-		CreateNotification     func(childComplexity int, input map[string]interface{}) int
-		DeleteAllNotifications func(childComplexity int) int
-		DeleteNotification     func(childComplexity int, id string) int
-		SeenNotification       func(childComplexity int, id string) int
-		SeenNotifications      func(childComplexity int, principal string, channel *string, reference *string, referenceID *string) int
-		UpdateNotification     func(childComplexity int, id string, input map[string]interface{}) int
+		CreateNotification            func(childComplexity int, input map[string]interface{}) int
+		CreateNotificationBatchUpdate func(childComplexity int, input CreateNotificationBatchUpdateInput) int
+		DeleteAllNotifications        func(childComplexity int) int
+		DeleteNotification            func(childComplexity int, id string) int
+		SeenNotification              func(childComplexity int, id string) int
+		SeenNotifications             func(childComplexity int, principal string, channel *string, reference *string, referenceID *string) int
+		UpdateNotification            func(childComplexity int, id string, input map[string]interface{}) int
 	}
 
 	Notification struct {
@@ -94,6 +95,7 @@ type MutationResolver interface {
 	DeleteAllNotifications(ctx context.Context) (bool, error)
 	SeenNotification(ctx context.Context, id string) (*Notification, error)
 	SeenNotifications(ctx context.Context, principal string, channel *string, reference *string, referenceID *string) (bool, error)
+	CreateNotificationBatchUpdate(ctx context.Context, input CreateNotificationBatchUpdateInput) (bool, error)
 }
 type NotificationResultTypeResolver interface {
 	Items(ctx context.Context, obj *NotificationResultType) ([]*Notification, error)
@@ -131,6 +133,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateNotification(childComplexity, args["input"].(map[string]interface{})), true
+
+	case "Mutation.createNotificationBatchUpdate":
+		if e.complexity.Mutation.CreateNotificationBatchUpdate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createNotificationBatchUpdate_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateNotificationBatchUpdate(childComplexity, args["input"].(CreateNotificationBatchUpdateInput)), true
 
 	case "Mutation.deleteAllNotifications":
 		if e.complexity.Mutation.DeleteAllNotifications == nil {
@@ -420,7 +434,7 @@ schema {
 type Query {
   _service: _Service!
   notification(id: ID, q: String, filter: NotificationFilterType): Notification
-  notifications(offset: Int, limit: Int = 30, q: String, sort: [NotificationSortType!], filter: NotificationFilterType): NotificationResultType
+  notifications(offset: Int, limit: Int = 30, q: String, sort: [NotificationSortType!], filter: NotificationFilterType): NotificationResultType!
 }
 
 type Mutation {
@@ -435,9 +449,18 @@ enum ObjectSortType {
   DESC
 }
 
+input CreateNotificationBatchUpdateInput {
+  seen: Boolean!
+  principal: String!
+  channel: String
+  reference: String
+  referenceID: String
+}
+
 extend type Mutation {
   seenNotification(id: ID!): Notification
   seenNotifications(principal: String!, channel: String, reference: String, referenceID: String): Boolean!
+  createNotificationBatchUpdate(input: CreateNotificationBatchUpdateInput!): Boolean!
 }
 
 type Notification {
@@ -557,6 +580,9 @@ input NotificationFilterType {
   id_in: [ID!]
   idMin_in: [ID!]
   idMax_in: [ID!]
+  id_not_in: [ID!]
+  idMin_not_in: [ID!]
+  idMax_not_in: [ID!]
   id_null: Boolean
   groupID: ID
   groupIDMin: ID
@@ -579,6 +605,9 @@ input NotificationFilterType {
   groupID_in: [ID!]
   groupIDMin_in: [ID!]
   groupIDMax_in: [ID!]
+  groupID_not_in: [ID!]
+  groupIDMin_not_in: [ID!]
+  groupIDMax_not_in: [ID!]
   groupID_null: Boolean
   subject: String
   subjectMin: String
@@ -601,6 +630,9 @@ input NotificationFilterType {
   subject_in: [String!]
   subjectMin_in: [String!]
   subjectMax_in: [String!]
+  subject_not_in: [String!]
+  subjectMin_not_in: [String!]
+  subjectMax_not_in: [String!]
   subject_like: String
   subjectMin_like: String
   subjectMax_like: String
@@ -632,6 +664,9 @@ input NotificationFilterType {
   message_in: [String!]
   messageMin_in: [String!]
   messageMax_in: [String!]
+  message_not_in: [String!]
+  messageMin_not_in: [String!]
+  messageMax_not_in: [String!]
   message_like: String
   messageMin_like: String
   messageMax_like: String
@@ -663,6 +698,9 @@ input NotificationFilterType {
   seen_in: [Boolean!]
   seenMin_in: [Boolean!]
   seenMax_in: [Boolean!]
+  seen_not_in: [Boolean!]
+  seenMin_not_in: [Boolean!]
+  seenMax_not_in: [Boolean!]
   seen_null: Boolean
   url: String
   urlMin: String
@@ -685,6 +723,9 @@ input NotificationFilterType {
   url_in: [String!]
   urlMin_in: [String!]
   urlMax_in: [String!]
+  url_not_in: [String!]
+  urlMin_not_in: [String!]
+  urlMax_not_in: [String!]
   url_like: String
   urlMin_like: String
   urlMax_like: String
@@ -716,6 +757,9 @@ input NotificationFilterType {
   channel_in: [String!]
   channelMin_in: [String!]
   channelMax_in: [String!]
+  channel_not_in: [String!]
+  channelMin_not_in: [String!]
+  channelMax_not_in: [String!]
   channel_like: String
   channelMin_like: String
   channelMax_like: String
@@ -747,6 +791,9 @@ input NotificationFilterType {
   principal_in: [String!]
   principalMin_in: [String!]
   principalMax_in: [String!]
+  principal_not_in: [String!]
+  principalMin_not_in: [String!]
+  principalMax_not_in: [String!]
   principal_like: String
   principalMin_like: String
   principalMax_like: String
@@ -778,6 +825,9 @@ input NotificationFilterType {
   reference_in: [String!]
   referenceMin_in: [String!]
   referenceMax_in: [String!]
+  reference_not_in: [String!]
+  referenceMin_not_in: [String!]
+  referenceMax_not_in: [String!]
   reference_like: String
   referenceMin_like: String
   referenceMax_like: String
@@ -809,6 +859,9 @@ input NotificationFilterType {
   referenceID_in: [String!]
   referenceIDMin_in: [String!]
   referenceIDMax_in: [String!]
+  referenceID_not_in: [String!]
+  referenceIDMin_not_in: [String!]
+  referenceIDMax_not_in: [String!]
   referenceID_like: String
   referenceIDMin_like: String
   referenceIDMax_like: String
@@ -840,6 +893,9 @@ input NotificationFilterType {
   date_in: [Time!]
   dateMin_in: [Time!]
   dateMax_in: [Time!]
+  date_not_in: [Time!]
+  dateMin_not_in: [Time!]
+  dateMax_not_in: [Time!]
   date_null: Boolean
   updatedAt: Time
   updatedAtMin: Time
@@ -862,6 +918,9 @@ input NotificationFilterType {
   updatedAt_in: [Time!]
   updatedAtMin_in: [Time!]
   updatedAtMax_in: [Time!]
+  updatedAt_not_in: [Time!]
+  updatedAtMin_not_in: [Time!]
+  updatedAtMax_not_in: [Time!]
   updatedAt_null: Boolean
   createdAt: Time
   createdAtMin: Time
@@ -884,6 +943,9 @@ input NotificationFilterType {
   createdAt_in: [Time!]
   createdAtMin_in: [Time!]
   createdAtMax_in: [Time!]
+  createdAt_not_in: [Time!]
+  createdAtMin_not_in: [Time!]
+  createdAtMax_not_in: [Time!]
   createdAt_null: Boolean
   updatedBy: ID
   updatedByMin: ID
@@ -906,6 +968,9 @@ input NotificationFilterType {
   updatedBy_in: [ID!]
   updatedByMin_in: [ID!]
   updatedByMax_in: [ID!]
+  updatedBy_not_in: [ID!]
+  updatedByMin_not_in: [ID!]
+  updatedByMax_not_in: [ID!]
   updatedBy_null: Boolean
   createdBy: ID
   createdByMin: ID
@@ -928,6 +993,9 @@ input NotificationFilterType {
   createdBy_in: [ID!]
   createdByMin_in: [ID!]
   createdByMax_in: [ID!]
+  createdBy_not_in: [ID!]
+  createdByMin_not_in: [ID!]
+  createdByMax_not_in: [ID!]
   createdBy_null: Boolean
 }
 
@@ -945,6 +1013,20 @@ type _Service {
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) field_Mutation_createNotificationBatchUpdate_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 CreateNotificationBatchUpdateInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNCreateNotificationBatchUpdateInput2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐCreateNotificationBatchUpdateInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
 
 func (ec *executionContext) field_Mutation_createNotification_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -1121,7 +1203,7 @@ func (ec *executionContext) field_Query_notifications_args(ctx context.Context, 
 	args["q"] = arg2
 	var arg3 []*NotificationSortType
 	if tmp, ok := rawArgs["sort"]; ok {
-		arg3, err = ec.unmarshalONotificationSortType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx, tmp)
+		arg3, err = ec.unmarshalONotificationSortType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortTypeᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1411,6 +1493,50 @@ func (ec *executionContext) _Mutation_seenNotifications(ctx context.Context, fie
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().SeenNotifications(rctx, args["principal"].(string), args["channel"].(*string), args["reference"].(*string), args["referenceID"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_createNotificationBatchUpdate(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_createNotificationBatchUpdate_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateNotificationBatchUpdate(rctx, args["input"].(CreateNotificationBatchUpdateInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1987,7 +2113,7 @@ func (ec *executionContext) _NotificationResultType_items(ctx context.Context, f
 	res := resTmp.([]*Notification)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNNotification2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotification(ctx, field.Selections, res)
+	return ec.marshalNNotification2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _NotificationResultType_count(ctx context.Context, field graphql.CollectedField, obj *NotificationResultType) (ret graphql.Marshaler) {
@@ -2138,12 +2264,15 @@ func (ec *executionContext) _Query_notifications(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*NotificationResultType)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONotificationResultType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationResultType(ctx, field.Selections, res)
+	return ec.marshalNNotificationResultType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationResultType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2360,7 +2489,7 @@ func (ec *executionContext) ___Directive_locations(ctx context.Context, field gr
 	res := resTmp.([]string)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalN__DirectiveLocation2ᚕstring(ctx, field.Selections, res)
+	return ec.marshalN__DirectiveLocation2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_args(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -2397,7 +2526,7 @@ func (ec *executionContext) ___Directive_args(ctx context.Context, field graphql
 	res := resTmp.([]introspection.InputValue)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalN__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValue(ctx, field.Selections, res)
+	return ec.marshalN__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValueᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___EnumValue_name(ctx context.Context, field graphql.CollectedField, obj *introspection.EnumValue) (ret graphql.Marshaler) {
@@ -2647,7 +2776,7 @@ func (ec *executionContext) ___Field_args(ctx context.Context, field graphql.Col
 	res := resTmp.([]introspection.InputValue)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalN__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValue(ctx, field.Selections, res)
+	return ec.marshalN__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValueᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Field_type(ctx context.Context, field graphql.CollectedField, obj *introspection.Field) (ret graphql.Marshaler) {
@@ -2934,7 +3063,7 @@ func (ec *executionContext) ___Schema_types(ctx context.Context, field graphql.C
 	res := resTmp.([]introspection.Type)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalN__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐType(ctx, field.Selections, res)
+	return ec.marshalN__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐTypeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Schema_queryType(ctx context.Context, field graphql.CollectedField, obj *introspection.Schema) (ret graphql.Marshaler) {
@@ -3076,7 +3205,7 @@ func (ec *executionContext) ___Schema_directives(ctx context.Context, field grap
 	res := resTmp.([]introspection.Directive)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalN__Directive2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx, field.Selections, res)
+	return ec.marshalN__Directive2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirectiveᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Type_kind(ctx context.Context, field graphql.CollectedField, obj *introspection.Type) (ret graphql.Marshaler) {
@@ -3222,7 +3351,7 @@ func (ec *executionContext) ___Type_fields(ctx context.Context, field graphql.Co
 	res := resTmp.([]introspection.Field)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalO__Field2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐField(ctx, field.Selections, res)
+	return ec.marshalO__Field2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐFieldᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Type_interfaces(ctx context.Context, field graphql.CollectedField, obj *introspection.Type) (ret graphql.Marshaler) {
@@ -3256,7 +3385,7 @@ func (ec *executionContext) ___Type_interfaces(ctx context.Context, field graphq
 	res := resTmp.([]introspection.Type)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalO__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐType(ctx, field.Selections, res)
+	return ec.marshalO__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐTypeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Type_possibleTypes(ctx context.Context, field graphql.CollectedField, obj *introspection.Type) (ret graphql.Marshaler) {
@@ -3290,7 +3419,7 @@ func (ec *executionContext) ___Type_possibleTypes(ctx context.Context, field gra
 	res := resTmp.([]introspection.Type)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalO__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐType(ctx, field.Selections, res)
+	return ec.marshalO__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐTypeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Type_enumValues(ctx context.Context, field graphql.CollectedField, obj *introspection.Type) (ret graphql.Marshaler) {
@@ -3331,7 +3460,7 @@ func (ec *executionContext) ___Type_enumValues(ctx context.Context, field graphq
 	res := resTmp.([]introspection.EnumValue)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValue(ctx, field.Selections, res)
+	return ec.marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Type_inputFields(ctx context.Context, field graphql.CollectedField, obj *introspection.Type) (ret graphql.Marshaler) {
@@ -3365,7 +3494,7 @@ func (ec *executionContext) ___Type_inputFields(ctx context.Context, field graph
 	res := resTmp.([]introspection.InputValue)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalO__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValue(ctx, field.Selections, res)
+	return ec.marshalO__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValueᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.CollectedField, obj *introspection.Type) (ret graphql.Marshaler) {
@@ -3406,6 +3535,48 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputCreateNotificationBatchUpdateInput(ctx context.Context, obj interface{}) (CreateNotificationBatchUpdateInput, error) {
+	var it CreateNotificationBatchUpdateInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "seen":
+			var err error
+			it.Seen, err = ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principal":
+			var err error
+			it.Principal, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channel":
+			var err error
+			it.Channel, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "reference":
+			var err error
+			it.Reference, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceID":
+			var err error
+			it.ReferenceID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Context, obj interface{}) (NotificationFilterType, error) {
 	var it NotificationFilterType
 	var asMap = obj.(map[string]interface{})
@@ -3414,13 +3585,13 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 		switch k {
 		case "AND":
 			var err error
-			it.And, err = ec.unmarshalONotificationFilterType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationFilterType(ctx, v)
+			it.And, err = ec.unmarshalONotificationFilterType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationFilterTypeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "OR":
 			var err error
-			it.Or, err = ec.unmarshalONotificationFilterType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationFilterType(ctx, v)
+			it.Or, err = ec.unmarshalONotificationFilterType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationFilterTypeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3534,19 +3705,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "id_in":
 			var err error
-			it.IDIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.IDIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "idMin_in":
 			var err error
-			it.IDMinIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.IDMinIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "idMax_in":
 			var err error
-			it.IDMaxIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.IDMaxIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "id_not_in":
+			var err error
+			it.IDNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMin_not_in":
+			var err error
+			it.IDMinNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idMax_not_in":
+			var err error
+			it.IDMaxNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3666,19 +3855,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "groupID_in":
 			var err error
-			it.GroupIDIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.GroupIDIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "groupIDMin_in":
 			var err error
-			it.GroupIDMinIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.GroupIDMinIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "groupIDMax_in":
 			var err error
-			it.GroupIDMaxIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.GroupIDMaxIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupID_not_in":
+			var err error
+			it.GroupIDNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMin_not_in":
+			var err error
+			it.GroupIDMinNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupIDMax_not_in":
+			var err error
+			it.GroupIDMaxNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3798,19 +4005,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "subject_in":
 			var err error
-			it.SubjectIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.SubjectIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "subjectMin_in":
 			var err error
-			it.SubjectMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.SubjectMinIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "subjectMax_in":
 			var err error
-			it.SubjectMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.SubjectMaxIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subject_not_in":
+			var err error
+			it.SubjectNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMin_not_in":
+			var err error
+			it.SubjectMinNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "subjectMax_not_in":
+			var err error
+			it.SubjectMaxNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3984,19 +4209,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "message_in":
 			var err error
-			it.MessageIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.MessageIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "messageMin_in":
 			var err error
-			it.MessageMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.MessageMinIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "messageMax_in":
 			var err error
-			it.MessageMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.MessageMaxIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "message_not_in":
+			var err error
+			it.MessageNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMin_not_in":
+			var err error
+			it.MessageMinNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "messageMax_not_in":
+			var err error
+			it.MessageMaxNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4170,19 +4413,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "seen_in":
 			var err error
-			it.SeenIn, err = ec.unmarshalOBoolean2ᚕbool(ctx, v)
+			it.SeenIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "seenMin_in":
 			var err error
-			it.SeenMinIn, err = ec.unmarshalOBoolean2ᚕbool(ctx, v)
+			it.SeenMinIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "seenMax_in":
 			var err error
-			it.SeenMaxIn, err = ec.unmarshalOBoolean2ᚕbool(ctx, v)
+			it.SeenMaxIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seen_not_in":
+			var err error
+			it.SeenNotIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMin_not_in":
+			var err error
+			it.SeenMinNotIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "seenMax_not_in":
+			var err error
+			it.SeenMaxNotIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4302,19 +4563,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "url_in":
 			var err error
-			it.URLIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.URLIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "urlMin_in":
 			var err error
-			it.URLMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.URLMinIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "urlMax_in":
 			var err error
-			it.URLMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.URLMaxIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "url_not_in":
+			var err error
+			it.URLNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMin_not_in":
+			var err error
+			it.URLMinNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "urlMax_not_in":
+			var err error
+			it.URLMaxNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4488,19 +4767,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "channel_in":
 			var err error
-			it.ChannelIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.ChannelIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "channelMin_in":
 			var err error
-			it.ChannelMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.ChannelMinIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "channelMax_in":
 			var err error
-			it.ChannelMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.ChannelMaxIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channel_not_in":
+			var err error
+			it.ChannelNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMin_not_in":
+			var err error
+			it.ChannelMinNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "channelMax_not_in":
+			var err error
+			it.ChannelMaxNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4674,19 +4971,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "principal_in":
 			var err error
-			it.PrincipalIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.PrincipalIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "principalMin_in":
 			var err error
-			it.PrincipalMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.PrincipalMinIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "principalMax_in":
 			var err error
-			it.PrincipalMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.PrincipalMaxIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principal_not_in":
+			var err error
+			it.PrincipalNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMin_not_in":
+			var err error
+			it.PrincipalMinNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "principalMax_not_in":
+			var err error
+			it.PrincipalMaxNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4860,19 +5175,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "reference_in":
 			var err error
-			it.ReferenceIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.ReferenceIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "referenceMin_in":
 			var err error
-			it.ReferenceMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.ReferenceMinIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "referenceMax_in":
 			var err error
-			it.ReferenceMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.ReferenceMaxIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "reference_not_in":
+			var err error
+			it.ReferenceNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMin_not_in":
+			var err error
+			it.ReferenceMinNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceMax_not_in":
+			var err error
+			it.ReferenceMaxNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5046,19 +5379,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "referenceID_in":
 			var err error
-			it.ReferenceIDIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.ReferenceIDIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "referenceIDMin_in":
 			var err error
-			it.ReferenceIDMinIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.ReferenceIDMinIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "referenceIDMax_in":
 			var err error
-			it.ReferenceIDMaxIn, err = ec.unmarshalOString2ᚕstring(ctx, v)
+			it.ReferenceIDMaxIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceID_not_in":
+			var err error
+			it.ReferenceIDNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMin_not_in":
+			var err error
+			it.ReferenceIDMinNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceIDMax_not_in":
+			var err error
+			it.ReferenceIDMaxNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5232,19 +5583,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "date_in":
 			var err error
-			it.DateIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			it.DateIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "dateMin_in":
 			var err error
-			it.DateMinIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			it.DateMinIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "dateMax_in":
 			var err error
-			it.DateMaxIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			it.DateMaxIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "date_not_in":
+			var err error
+			it.DateNotIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMin_not_in":
+			var err error
+			it.DateMinNotIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dateMax_not_in":
+			var err error
+			it.DateMaxNotIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5364,19 +5733,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "updatedAt_in":
 			var err error
-			it.UpdatedAtIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			it.UpdatedAtIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "updatedAtMin_in":
 			var err error
-			it.UpdatedAtMinIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			it.UpdatedAtMinIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "updatedAtMax_in":
 			var err error
-			it.UpdatedAtMaxIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			it.UpdatedAtMaxIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAt_not_in":
+			var err error
+			it.UpdatedAtNotIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMin_not_in":
+			var err error
+			it.UpdatedAtMinNotIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedAtMax_not_in":
+			var err error
+			it.UpdatedAtMaxNotIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5496,19 +5883,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "createdAt_in":
 			var err error
-			it.CreatedAtIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			it.CreatedAtIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "createdAtMin_in":
 			var err error
-			it.CreatedAtMinIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			it.CreatedAtMinIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "createdAtMax_in":
 			var err error
-			it.CreatedAtMaxIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTime(ctx, v)
+			it.CreatedAtMaxIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAt_not_in":
+			var err error
+			it.CreatedAtNotIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMin_not_in":
+			var err error
+			it.CreatedAtMinNotIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAtMax_not_in":
+			var err error
+			it.CreatedAtMaxNotIn, err = ec.unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5628,19 +6033,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "updatedBy_in":
 			var err error
-			it.UpdatedByIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.UpdatedByIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "updatedByMin_in":
 			var err error
-			it.UpdatedByMinIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.UpdatedByMinIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "updatedByMax_in":
 			var err error
-			it.UpdatedByMaxIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.UpdatedByMaxIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedBy_not_in":
+			var err error
+			it.UpdatedByNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMin_not_in":
+			var err error
+			it.UpdatedByMinNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "updatedByMax_not_in":
+			var err error
+			it.UpdatedByMaxNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5760,19 +6183,37 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			}
 		case "createdBy_in":
 			var err error
-			it.CreatedByIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.CreatedByIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "createdByMin_in":
 			var err error
-			it.CreatedByMinIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.CreatedByMinIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "createdByMax_in":
 			var err error
-			it.CreatedByMaxIn, err = ec.unmarshalOID2ᚕstring(ctx, v)
+			it.CreatedByMaxIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdBy_not_in":
+			var err error
+			it.CreatedByNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMin_not_in":
+			var err error
+			it.CreatedByMinNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdByMax_not_in":
+			var err error
+			it.CreatedByMaxNotIn, err = ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6120,6 +6561,11 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "createNotificationBatchUpdate":
+			out.Values[i] = ec._Mutation_createNotificationBatchUpdate(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6297,6 +6743,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_notifications(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			})
 		case "__type":
@@ -6597,6 +7046,10 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) unmarshalNCreateNotificationBatchUpdateInput2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐCreateNotificationBatchUpdateInput(ctx context.Context, v interface{}) (CreateNotificationBatchUpdateInput, error) {
+	return ec.unmarshalInputCreateNotificationBatchUpdateInput(ctx, v)
+}
+
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
 	return graphql.UnmarshalID(v)
 }
@@ -6629,7 +7082,7 @@ func (ec *executionContext) marshalNNotification2githubᚗcomᚋgraphqlᚑservic
 	return ec._Notification(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNNotification2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotification(ctx context.Context, sel ast.SelectionSet, v []*Notification) graphql.Marshaler {
+func (ec *executionContext) marshalNNotification2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationᚄ(ctx context.Context, sel ast.SelectionSet, v []*Notification) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -6693,6 +7146,20 @@ func (ec *executionContext) unmarshalNNotificationFilterType2ᚖgithubᚗcomᚋg
 	}
 	res, err := ec.unmarshalNNotificationFilterType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationFilterType(ctx, v)
 	return &res, err
+}
+
+func (ec *executionContext) marshalNNotificationResultType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationResultType(ctx context.Context, sel ast.SelectionSet, v NotificationResultType) graphql.Marshaler {
+	return ec._NotificationResultType(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNNotificationResultType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationResultType(ctx context.Context, sel ast.SelectionSet, v *NotificationResultType) graphql.Marshaler {
+	if v == nil {
+		if !ec.HasError(graphql.GetResolverContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._NotificationResultType(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNNotificationSortType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx context.Context, v interface{}) (NotificationSortType, error) {
@@ -6778,7 +7245,7 @@ func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlge
 	return ec.___Directive(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalN__Directive2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v []introspection.Directive) graphql.Marshaler {
+func (ec *executionContext) marshalN__Directive2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirectiveᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.Directive) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -6829,7 +7296,7 @@ func (ec *executionContext) marshalN__DirectiveLocation2string(ctx context.Conte
 	return res
 }
 
-func (ec *executionContext) unmarshalN__DirectiveLocation2ᚕstring(ctx context.Context, v interface{}) ([]string, error) {
+func (ec *executionContext) unmarshalN__DirectiveLocation2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -6849,7 +7316,7 @@ func (ec *executionContext) unmarshalN__DirectiveLocation2ᚕstring(ctx context.
 	return res, nil
 }
 
-func (ec *executionContext) marshalN__DirectiveLocation2ᚕstring(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+func (ec *executionContext) marshalN__DirectiveLocation2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -6898,7 +7365,7 @@ func (ec *executionContext) marshalN__InputValue2githubᚗcomᚋ99designsᚋgqlg
 	return ec.___InputValue(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalN__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValue(ctx context.Context, sel ast.SelectionSet, v []introspection.InputValue) graphql.Marshaler {
+func (ec *executionContext) marshalN__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.InputValue) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -6939,7 +7406,7 @@ func (ec *executionContext) marshalN__Type2githubᚗcomᚋ99designsᚋgqlgenᚋg
 	return ec.___Type(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalN__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐType(ctx context.Context, sel ast.SelectionSet, v []introspection.Type) graphql.Marshaler {
+func (ec *executionContext) marshalN__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.Type) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -7008,7 +7475,7 @@ func (ec *executionContext) marshalOBoolean2bool(ctx context.Context, sel ast.Se
 	return graphql.MarshalBoolean(v)
 }
 
-func (ec *executionContext) unmarshalOBoolean2ᚕbool(ctx context.Context, v interface{}) ([]bool, error) {
+func (ec *executionContext) unmarshalOBoolean2ᚕboolᚄ(ctx context.Context, v interface{}) ([]bool, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -7028,7 +7495,7 @@ func (ec *executionContext) unmarshalOBoolean2ᚕbool(ctx context.Context, v int
 	return res, nil
 }
 
-func (ec *executionContext) marshalOBoolean2ᚕbool(ctx context.Context, sel ast.SelectionSet, v []bool) graphql.Marshaler {
+func (ec *executionContext) marshalOBoolean2ᚕboolᚄ(ctx context.Context, sel ast.SelectionSet, v []bool) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7063,7 +7530,7 @@ func (ec *executionContext) marshalOID2string(ctx context.Context, sel ast.Selec
 	return graphql.MarshalID(v)
 }
 
-func (ec *executionContext) unmarshalOID2ᚕstring(ctx context.Context, v interface{}) ([]string, error) {
+func (ec *executionContext) unmarshalOID2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -7083,7 +7550,7 @@ func (ec *executionContext) unmarshalOID2ᚕstring(ctx context.Context, v interf
 	return res, nil
 }
 
-func (ec *executionContext) marshalOID2ᚕstring(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+func (ec *executionContext) marshalOID2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7148,7 +7615,7 @@ func (ec *executionContext) unmarshalONotificationFilterType2githubᚗcomᚋgrap
 	return ec.unmarshalInputNotificationFilterType(ctx, v)
 }
 
-func (ec *executionContext) unmarshalONotificationFilterType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationFilterType(ctx context.Context, v interface{}) ([]*NotificationFilterType, error) {
+func (ec *executionContext) unmarshalONotificationFilterType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationFilterTypeᚄ(ctx context.Context, v interface{}) ([]*NotificationFilterType, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -7176,18 +7643,7 @@ func (ec *executionContext) unmarshalONotificationFilterType2ᚖgithubᚗcomᚋg
 	return &res, err
 }
 
-func (ec *executionContext) marshalONotificationResultType2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationResultType(ctx context.Context, sel ast.SelectionSet, v NotificationResultType) graphql.Marshaler {
-	return ec._NotificationResultType(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalONotificationResultType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationResultType(ctx context.Context, sel ast.SelectionSet, v *NotificationResultType) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._NotificationResultType(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalONotificationSortType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortType(ctx context.Context, v interface{}) ([]*NotificationSortType, error) {
+func (ec *executionContext) unmarshalONotificationSortType2ᚕᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationSortTypeᚄ(ctx context.Context, v interface{}) ([]*NotificationSortType, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -7239,7 +7695,7 @@ func (ec *executionContext) marshalOString2string(ctx context.Context, sel ast.S
 	return graphql.MarshalString(v)
 }
 
-func (ec *executionContext) unmarshalOString2ᚕstring(ctx context.Context, v interface{}) ([]string, error) {
+func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -7259,7 +7715,7 @@ func (ec *executionContext) unmarshalOString2ᚕstring(ctx context.Context, v in
 	return res, nil
 }
 
-func (ec *executionContext) marshalOString2ᚕstring(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+func (ec *executionContext) marshalOString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7294,7 +7750,7 @@ func (ec *executionContext) marshalOTime2timeᚐTime(ctx context.Context, sel as
 	return graphql.MarshalTime(v)
 }
 
-func (ec *executionContext) unmarshalOTime2ᚕᚖtimeᚐTime(ctx context.Context, v interface{}) ([]*time.Time, error) {
+func (ec *executionContext) unmarshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx context.Context, v interface{}) ([]*time.Time, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -7314,7 +7770,7 @@ func (ec *executionContext) unmarshalOTime2ᚕᚖtimeᚐTime(ctx context.Context
 	return res, nil
 }
 
-func (ec *executionContext) marshalOTime2ᚕᚖtimeᚐTime(ctx context.Context, sel ast.SelectionSet, v []*time.Time) graphql.Marshaler {
+func (ec *executionContext) marshalOTime2ᚕᚖtimeᚐTimeᚄ(ctx context.Context, sel ast.SelectionSet, v []*time.Time) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7341,7 +7797,7 @@ func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel
 	return ec.marshalOTime2timeᚐTime(ctx, sel, *v)
 }
 
-func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValue(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {
+func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7381,7 +7837,7 @@ func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgq
 	return ret
 }
 
-func (ec *executionContext) marshalO__Field2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐField(ctx context.Context, sel ast.SelectionSet, v []introspection.Field) graphql.Marshaler {
+func (ec *executionContext) marshalO__Field2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐFieldᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.Field) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7421,7 +7877,7 @@ func (ec *executionContext) marshalO__Field2ᚕgithubᚗcomᚋ99designsᚋgqlgen
 	return ret
 }
 
-func (ec *executionContext) marshalO__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValue(ctx context.Context, sel ast.SelectionSet, v []introspection.InputValue) graphql.Marshaler {
+func (ec *executionContext) marshalO__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.InputValue) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7476,7 +7932,7 @@ func (ec *executionContext) marshalO__Type2githubᚗcomᚋ99designsᚋgqlgenᚋg
 	return ec.___Type(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalO__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐType(ctx context.Context, sel ast.SelectionSet, v []introspection.Type) graphql.Marshaler {
+func (ec *executionContext) marshalO__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.Type) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

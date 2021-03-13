@@ -35,7 +35,7 @@ func DefaultResolutionHandlers() ResolutionHandlers {
 type GeneratedResolver struct {
 	Handlers        ResolutionHandlers
 	DB              *DB
-	EventController *events.EventController
+	EventController *EventController
 }
 
 // GetDB returns database connection or transaction for given context (if exists)

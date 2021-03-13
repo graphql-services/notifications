@@ -11,7 +11,6 @@ import (
 
 	"github.com/graphql-services/notifications/gen"
 	"github.com/graphql-services/notifications/src"
-	"github.com/novacloudcz/graphql-orm/events"
 	"github.com/rs/cors"
 	"github.com/urfave/cli"
 )
@@ -104,7 +103,7 @@ func startServer(enableCors bool, port string) error {
 	db := gen.NewDBFromEnvVars()
 	defer db.Close()
 
-	eventController, err := events.NewEventController()
+	eventController, err := gen.NewEventController()
 	if err != nil {
 		return err
 	}

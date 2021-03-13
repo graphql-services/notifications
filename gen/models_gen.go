@@ -9,6 +9,14 @@ import (
 	"time"
 )
 
+type CreateNotificationBatchUpdateInput struct {
+	Seen        bool    `json:"seen"`
+	Principal   string  `json:"principal"`
+	Channel     *string `json:"channel"`
+	Reference   *string `json:"reference"`
+	ReferenceID *string `json:"referenceID"`
+}
+
 type NotificationFilterType struct {
 	And                  []*NotificationFilterType `json:"AND"`
 	Or                   []*NotificationFilterType `json:"OR"`
@@ -33,6 +41,9 @@ type NotificationFilterType struct {
 	IDIn                 []string                  `json:"id_in"`
 	IDMinIn              []string                  `json:"idMin_in"`
 	IDMaxIn              []string                  `json:"idMax_in"`
+	IDNotIn              []string                  `json:"id_not_in"`
+	IDMinNotIn           []string                  `json:"idMin_not_in"`
+	IDMaxNotIn           []string                  `json:"idMax_not_in"`
 	IDNull               *bool                     `json:"id_null"`
 	GroupID              *string                   `json:"groupID"`
 	GroupIDMin           *string                   `json:"groupIDMin"`
@@ -55,6 +66,9 @@ type NotificationFilterType struct {
 	GroupIDIn            []string                  `json:"groupID_in"`
 	GroupIDMinIn         []string                  `json:"groupIDMin_in"`
 	GroupIDMaxIn         []string                  `json:"groupIDMax_in"`
+	GroupIDNotIn         []string                  `json:"groupID_not_in"`
+	GroupIDMinNotIn      []string                  `json:"groupIDMin_not_in"`
+	GroupIDMaxNotIn      []string                  `json:"groupIDMax_not_in"`
 	GroupIDNull          *bool                     `json:"groupID_null"`
 	Subject              *string                   `json:"subject"`
 	SubjectMin           *string                   `json:"subjectMin"`
@@ -77,6 +91,9 @@ type NotificationFilterType struct {
 	SubjectIn            []string                  `json:"subject_in"`
 	SubjectMinIn         []string                  `json:"subjectMin_in"`
 	SubjectMaxIn         []string                  `json:"subjectMax_in"`
+	SubjectNotIn         []string                  `json:"subject_not_in"`
+	SubjectMinNotIn      []string                  `json:"subjectMin_not_in"`
+	SubjectMaxNotIn      []string                  `json:"subjectMax_not_in"`
 	SubjectLike          *string                   `json:"subject_like"`
 	SubjectMinLike       *string                   `json:"subjectMin_like"`
 	SubjectMaxLike       *string                   `json:"subjectMax_like"`
@@ -108,6 +125,9 @@ type NotificationFilterType struct {
 	MessageIn            []string                  `json:"message_in"`
 	MessageMinIn         []string                  `json:"messageMin_in"`
 	MessageMaxIn         []string                  `json:"messageMax_in"`
+	MessageNotIn         []string                  `json:"message_not_in"`
+	MessageMinNotIn      []string                  `json:"messageMin_not_in"`
+	MessageMaxNotIn      []string                  `json:"messageMax_not_in"`
 	MessageLike          *string                   `json:"message_like"`
 	MessageMinLike       *string                   `json:"messageMin_like"`
 	MessageMaxLike       *string                   `json:"messageMax_like"`
@@ -139,6 +159,9 @@ type NotificationFilterType struct {
 	SeenIn               []bool                    `json:"seen_in"`
 	SeenMinIn            []bool                    `json:"seenMin_in"`
 	SeenMaxIn            []bool                    `json:"seenMax_in"`
+	SeenNotIn            []bool                    `json:"seen_not_in"`
+	SeenMinNotIn         []bool                    `json:"seenMin_not_in"`
+	SeenMaxNotIn         []bool                    `json:"seenMax_not_in"`
 	SeenNull             *bool                     `json:"seen_null"`
 	URL                  *string                   `json:"url"`
 	URLMin               *string                   `json:"urlMin"`
@@ -161,6 +184,9 @@ type NotificationFilterType struct {
 	URLIn                []string                  `json:"url_in"`
 	URLMinIn             []string                  `json:"urlMin_in"`
 	URLMaxIn             []string                  `json:"urlMax_in"`
+	URLNotIn             []string                  `json:"url_not_in"`
+	URLMinNotIn          []string                  `json:"urlMin_not_in"`
+	URLMaxNotIn          []string                  `json:"urlMax_not_in"`
 	URLLike              *string                   `json:"url_like"`
 	URLMinLike           *string                   `json:"urlMin_like"`
 	URLMaxLike           *string                   `json:"urlMax_like"`
@@ -192,6 +218,9 @@ type NotificationFilterType struct {
 	ChannelIn            []string                  `json:"channel_in"`
 	ChannelMinIn         []string                  `json:"channelMin_in"`
 	ChannelMaxIn         []string                  `json:"channelMax_in"`
+	ChannelNotIn         []string                  `json:"channel_not_in"`
+	ChannelMinNotIn      []string                  `json:"channelMin_not_in"`
+	ChannelMaxNotIn      []string                  `json:"channelMax_not_in"`
 	ChannelLike          *string                   `json:"channel_like"`
 	ChannelMinLike       *string                   `json:"channelMin_like"`
 	ChannelMaxLike       *string                   `json:"channelMax_like"`
@@ -223,6 +252,9 @@ type NotificationFilterType struct {
 	PrincipalIn          []string                  `json:"principal_in"`
 	PrincipalMinIn       []string                  `json:"principalMin_in"`
 	PrincipalMaxIn       []string                  `json:"principalMax_in"`
+	PrincipalNotIn       []string                  `json:"principal_not_in"`
+	PrincipalMinNotIn    []string                  `json:"principalMin_not_in"`
+	PrincipalMaxNotIn    []string                  `json:"principalMax_not_in"`
 	PrincipalLike        *string                   `json:"principal_like"`
 	PrincipalMinLike     *string                   `json:"principalMin_like"`
 	PrincipalMaxLike     *string                   `json:"principalMax_like"`
@@ -254,6 +286,9 @@ type NotificationFilterType struct {
 	ReferenceIn          []string                  `json:"reference_in"`
 	ReferenceMinIn       []string                  `json:"referenceMin_in"`
 	ReferenceMaxIn       []string                  `json:"referenceMax_in"`
+	ReferenceNotIn       []string                  `json:"reference_not_in"`
+	ReferenceMinNotIn    []string                  `json:"referenceMin_not_in"`
+	ReferenceMaxNotIn    []string                  `json:"referenceMax_not_in"`
 	ReferenceLike        *string                   `json:"reference_like"`
 	ReferenceMinLike     *string                   `json:"referenceMin_like"`
 	ReferenceMaxLike     *string                   `json:"referenceMax_like"`
@@ -285,6 +320,9 @@ type NotificationFilterType struct {
 	ReferenceIDIn        []string                  `json:"referenceID_in"`
 	ReferenceIDMinIn     []string                  `json:"referenceIDMin_in"`
 	ReferenceIDMaxIn     []string                  `json:"referenceIDMax_in"`
+	ReferenceIDNotIn     []string                  `json:"referenceID_not_in"`
+	ReferenceIDMinNotIn  []string                  `json:"referenceIDMin_not_in"`
+	ReferenceIDMaxNotIn  []string                  `json:"referenceIDMax_not_in"`
 	ReferenceIDLike      *string                   `json:"referenceID_like"`
 	ReferenceIDMinLike   *string                   `json:"referenceIDMin_like"`
 	ReferenceIDMaxLike   *string                   `json:"referenceIDMax_like"`
@@ -316,6 +354,9 @@ type NotificationFilterType struct {
 	DateIn               []*time.Time              `json:"date_in"`
 	DateMinIn            []*time.Time              `json:"dateMin_in"`
 	DateMaxIn            []*time.Time              `json:"dateMax_in"`
+	DateNotIn            []*time.Time              `json:"date_not_in"`
+	DateMinNotIn         []*time.Time              `json:"dateMin_not_in"`
+	DateMaxNotIn         []*time.Time              `json:"dateMax_not_in"`
 	DateNull             *bool                     `json:"date_null"`
 	UpdatedAt            *time.Time                `json:"updatedAt"`
 	UpdatedAtMin         *time.Time                `json:"updatedAtMin"`
@@ -338,6 +379,9 @@ type NotificationFilterType struct {
 	UpdatedAtIn          []*time.Time              `json:"updatedAt_in"`
 	UpdatedAtMinIn       []*time.Time              `json:"updatedAtMin_in"`
 	UpdatedAtMaxIn       []*time.Time              `json:"updatedAtMax_in"`
+	UpdatedAtNotIn       []*time.Time              `json:"updatedAt_not_in"`
+	UpdatedAtMinNotIn    []*time.Time              `json:"updatedAtMin_not_in"`
+	UpdatedAtMaxNotIn    []*time.Time              `json:"updatedAtMax_not_in"`
 	UpdatedAtNull        *bool                     `json:"updatedAt_null"`
 	CreatedAt            *time.Time                `json:"createdAt"`
 	CreatedAtMin         *time.Time                `json:"createdAtMin"`
@@ -360,6 +404,9 @@ type NotificationFilterType struct {
 	CreatedAtIn          []*time.Time              `json:"createdAt_in"`
 	CreatedAtMinIn       []*time.Time              `json:"createdAtMin_in"`
 	CreatedAtMaxIn       []*time.Time              `json:"createdAtMax_in"`
+	CreatedAtNotIn       []*time.Time              `json:"createdAt_not_in"`
+	CreatedAtMinNotIn    []*time.Time              `json:"createdAtMin_not_in"`
+	CreatedAtMaxNotIn    []*time.Time              `json:"createdAtMax_not_in"`
 	CreatedAtNull        *bool                     `json:"createdAt_null"`
 	UpdatedBy            *string                   `json:"updatedBy"`
 	UpdatedByMin         *string                   `json:"updatedByMin"`
@@ -382,6 +429,9 @@ type NotificationFilterType struct {
 	UpdatedByIn          []string                  `json:"updatedBy_in"`
 	UpdatedByMinIn       []string                  `json:"updatedByMin_in"`
 	UpdatedByMaxIn       []string                  `json:"updatedByMax_in"`
+	UpdatedByNotIn       []string                  `json:"updatedBy_not_in"`
+	UpdatedByMinNotIn    []string                  `json:"updatedByMin_not_in"`
+	UpdatedByMaxNotIn    []string                  `json:"updatedByMax_not_in"`
 	UpdatedByNull        *bool                     `json:"updatedBy_null"`
 	CreatedBy            *string                   `json:"createdBy"`
 	CreatedByMin         *string                   `json:"createdByMin"`
@@ -404,6 +454,9 @@ type NotificationFilterType struct {
 	CreatedByIn          []string                  `json:"createdBy_in"`
 	CreatedByMinIn       []string                  `json:"createdByMin_in"`
 	CreatedByMaxIn       []string                  `json:"createdByMax_in"`
+	CreatedByNotIn       []string                  `json:"createdBy_not_in"`
+	CreatedByMinNotIn    []string                  `json:"createdByMin_not_in"`
+	CreatedByMaxNotIn    []string                  `json:"createdByMax_not_in"`
 	CreatedByNull        *bool                     `json:"createdBy_null"`
 }
 
