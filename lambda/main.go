@@ -4,13 +4,12 @@ import (
 	"github.com/akrylysov/algnhsa"
 	"github.com/graphql-services/notifications/gen"
 	"github.com/graphql-services/notifications/src"
-	"github.com/novacloudcz/graphql-orm/events"
 )
 
 func main() {
 	db := gen.NewDBFromEnvVars()
 
-	eventController, err := events.NewEventController()
+	eventController, err := gen.NewEventController()
 	if err != nil {
 		panic(err)
 	}
