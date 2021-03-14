@@ -39,7 +39,7 @@ func (r *MutationResolver) SeenNotifications(ctx context.Context, principal stri
 	return
 }
 
-func (r *MutationResolver) CreateNotificationBatchUpdate(ctx context.Context, input gen.CreateNotificationBatchUpdateInput) (res bool, err error) {
+func (r *MutationResolver) CreateNotificationBatchUpdate(ctx context.Context, input gen.NotificationBatchUpdateCreateInput) (res bool, err error) {
 
 	filter := &gen.NotificationFilterType{
 		Principal: &input.Principal,

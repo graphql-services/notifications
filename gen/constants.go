@@ -28,7 +28,7 @@ enum ObjectSortType {
   DESC
 }
 
-input CreateNotificationBatchUpdateInput {
+input NotificationBatchUpdateCreateInput {
   seen: Boolean!
   principal: String!
   channel: String
@@ -39,7 +39,7 @@ input CreateNotificationBatchUpdateInput {
 extend type Mutation {
   seenNotification(id: ID!): Notification
   seenNotifications(principal: String!, channel: String, reference: String, referenceID: String): Boolean!
-  createNotificationBatchUpdate(input: CreateNotificationBatchUpdateInput!): Boolean!
+  createNotificationBatchUpdate(input: NotificationBatchUpdateCreateInput!): Boolean!
 }
 
 type Notification {

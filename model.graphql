@@ -1,4 +1,4 @@
-input CreateNotificationBatchUpdateInput {
+input NotificationBatchUpdateCreateInput {
   seen: Boolean!
   principal: String!
   channel: String
@@ -15,7 +15,7 @@ extend type Mutation {
     referenceID: String
   ): Boolean!
   createNotificationBatchUpdate(
-    input: CreateNotificationBatchUpdateInput!
+    input: NotificationBatchUpdateCreateInput!
   ): Boolean!
 }
 

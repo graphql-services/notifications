@@ -46,7 +46,7 @@ type DirectiveRoot struct {
 type ComplexityRoot struct {
 	Mutation struct {
 		CreateNotification            func(childComplexity int, input map[string]interface{}) int
-		CreateNotificationBatchUpdate func(childComplexity int, input CreateNotificationBatchUpdateInput) int
+		CreateNotificationBatchUpdate func(childComplexity int, input NotificationBatchUpdateCreateInput) int
 		DeleteAllNotifications        func(childComplexity int) int
 		DeleteNotification            func(childComplexity int, id string) int
 		SeenNotification              func(childComplexity int, id string) int
@@ -95,7 +95,7 @@ type MutationResolver interface {
 	DeleteAllNotifications(ctx context.Context) (bool, error)
 	SeenNotification(ctx context.Context, id string) (*Notification, error)
 	SeenNotifications(ctx context.Context, principal string, channel *string, reference *string, referenceID *string) (bool, error)
-	CreateNotificationBatchUpdate(ctx context.Context, input CreateNotificationBatchUpdateInput) (bool, error)
+	CreateNotificationBatchUpdate(ctx context.Context, input NotificationBatchUpdateCreateInput) (bool, error)
 }
 type NotificationResultTypeResolver interface {
 	Items(ctx context.Context, obj *NotificationResultType) ([]*Notification, error)
@@ -144,7 +144,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateNotificationBatchUpdate(childComplexity, args["input"].(CreateNotificationBatchUpdateInput)), true
+		return e.complexity.Mutation.CreateNotificationBatchUpdate(childComplexity, args["input"].(NotificationBatchUpdateCreateInput)), true
 
 	case "Mutation.deleteAllNotifications":
 		if e.complexity.Mutation.DeleteAllNotifications == nil {
@@ -449,7 +449,7 @@ enum ObjectSortType {
   DESC
 }
 
-input CreateNotificationBatchUpdateInput {
+input NotificationBatchUpdateCreateInput {
   seen: Boolean!
   principal: String!
   channel: String
@@ -460,7 +460,7 @@ input CreateNotificationBatchUpdateInput {
 extend type Mutation {
   seenNotification(id: ID!): Notification
   seenNotifications(principal: String!, channel: String, reference: String, referenceID: String): Boolean!
-  createNotificationBatchUpdate(input: CreateNotificationBatchUpdateInput!): Boolean!
+  createNotificationBatchUpdate(input: NotificationBatchUpdateCreateInput!): Boolean!
 }
 
 type Notification {
@@ -1017,9 +1017,9 @@ type _Service {
 func (ec *executionContext) field_Mutation_createNotificationBatchUpdate_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 CreateNotificationBatchUpdateInput
+	var arg0 NotificationBatchUpdateCreateInput
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNCreateNotificationBatchUpdateInput2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐCreateNotificationBatchUpdateInput(ctx, tmp)
+		arg0, err = ec.unmarshalNNotificationBatchUpdateCreateInput2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationBatchUpdateCreateInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1536,7 +1536,7 @@ func (ec *executionContext) _Mutation_createNotificationBatchUpdate(ctx context.
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateNotificationBatchUpdate(rctx, args["input"].(CreateNotificationBatchUpdateInput))
+		return ec.resolvers.Mutation().CreateNotificationBatchUpdate(rctx, args["input"].(NotificationBatchUpdateCreateInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3535,8 +3535,8 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputCreateNotificationBatchUpdateInput(ctx context.Context, obj interface{}) (CreateNotificationBatchUpdateInput, error) {
-	var it CreateNotificationBatchUpdateInput
+func (ec *executionContext) unmarshalInputNotificationBatchUpdateCreateInput(ctx context.Context, obj interface{}) (NotificationBatchUpdateCreateInput, error) {
+	var it NotificationBatchUpdateCreateInput
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -7046,10 +7046,6 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNCreateNotificationBatchUpdateInput2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐCreateNotificationBatchUpdateInput(ctx context.Context, v interface{}) (CreateNotificationBatchUpdateInput, error) {
-	return ec.unmarshalInputCreateNotificationBatchUpdateInput(ctx, v)
-}
-
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
 	return graphql.UnmarshalID(v)
 }
@@ -7127,6 +7123,10 @@ func (ec *executionContext) marshalNNotification2ᚖgithubᚗcomᚋgraphqlᚑser
 		return graphql.Null
 	}
 	return ec._Notification(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNNotificationBatchUpdateCreateInput2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationBatchUpdateCreateInput(ctx context.Context, v interface{}) (NotificationBatchUpdateCreateInput, error) {
+	return ec.unmarshalInputNotificationBatchUpdateCreateInput(ctx, v)
 }
 
 func (ec *executionContext) unmarshalNNotificationCreateInput2map(ctx context.Context, v interface{}) (map[string]interface{}, error) {

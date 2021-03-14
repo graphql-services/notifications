@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-type CreateNotificationBatchUpdateInput struct {
+type NotificationBatchUpdateCreateInput struct {
 	Seen        bool    `json:"seen"`
 	Principal   string  `json:"principal"`
 	Channel     *string `json:"channel"`
