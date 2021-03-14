@@ -5,6 +5,9 @@ input NotificationBatchUpdateCreateInput {
   reference: String
   referenceID: String
 }
+type NotificationBatchUpdate {
+  id: ID!
+}
 
 extend type Mutation {
   seenNotification(id: ID!): Notification
@@ -16,7 +19,7 @@ extend type Mutation {
   ): Boolean!
   createNotificationBatchUpdate(
     input: NotificationBatchUpdateCreateInput!
-  ): Boolean!
+  ): NotificationBatchUpdate!
 }
 
 type Notification @entity {

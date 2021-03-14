@@ -72,6 +72,10 @@ type ComplexityRoot struct {
 		UpdatedBy   func(childComplexity int) int
 	}
 
+	NotificationBatchUpdate struct {
+		ID func(childComplexity int) int
+	}
+
 	NotificationResultType struct {
 		Count func(childComplexity int) int
 		Items func(childComplexity int) int
@@ -95,7 +99,7 @@ type MutationResolver interface {
 	DeleteAllNotifications(ctx context.Context) (bool, error)
 	SeenNotification(ctx context.Context, id string) (*Notification, error)
 	SeenNotifications(ctx context.Context, principal string, channel *string, reference *string, referenceID *string) (bool, error)
-	CreateNotificationBatchUpdate(ctx context.Context, input NotificationBatchUpdateCreateInput) (bool, error)
+	CreateNotificationBatchUpdate(ctx context.Context, input NotificationBatchUpdateCreateInput) (*NotificationBatchUpdate, error)
 }
 type NotificationResultTypeResolver interface {
 	Items(ctx context.Context, obj *NotificationResultType) ([]*Notification, error)
@@ -306,6 +310,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Notification.UpdatedBy(childComplexity), true
 
+	case "NotificationBatchUpdate.id":
+		if e.complexity.NotificationBatchUpdate.ID == nil {
+			break
+		}
+
+		return e.complexity.NotificationBatchUpdate.ID(childComplexity), true
+
 	case "NotificationResultType.count":
 		if e.complexity.NotificationResultType.Count == nil {
 			break
@@ -457,10 +468,14 @@ input NotificationBatchUpdateCreateInput {
   referenceID: String
 }
 
+type NotificationBatchUpdate {
+  id: ID!
+}
+
 extend type Mutation {
   seenNotification(id: ID!): Notification
   seenNotifications(principal: String!, channel: String, reference: String, referenceID: String): Boolean!
-  createNotificationBatchUpdate(input: NotificationBatchUpdateCreateInput!): Boolean!
+  createNotificationBatchUpdate(input: NotificationBatchUpdateCreateInput!): NotificationBatchUpdate!
 }
 
 type Notification {
@@ -1548,10 +1563,10 @@ func (ec *executionContext) _Mutation_createNotificationBatchUpdate(ctx context.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*NotificationBatchUpdate)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalNNotificationBatchUpdate2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationBatchUpdate(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Notification_id(ctx context.Context, field graphql.CollectedField, obj *Notification) (ret graphql.Marshaler) {
@@ -2077,6 +2092,43 @@ func (ec *executionContext) _Notification_createdBy(ctx context.Context, field g
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _NotificationBatchUpdate_id(ctx context.Context, field graphql.CollectedField, obj *NotificationBatchUpdate) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "NotificationBatchUpdate",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _NotificationResultType_items(ctx context.Context, field graphql.CollectedField, obj *NotificationResultType) (ret graphql.Marshaler) {
@@ -6644,6 +6696,33 @@ func (ec *executionContext) _Notification(ctx context.Context, sel ast.Selection
 	return out
 }
 
+var notificationBatchUpdateImplementors = []string{"NotificationBatchUpdate"}
+
+func (ec *executionContext) _NotificationBatchUpdate(ctx context.Context, sel ast.SelectionSet, obj *NotificationBatchUpdate) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.RequestContext, sel, notificationBatchUpdateImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("NotificationBatchUpdate")
+		case "id":
+			out.Values[i] = ec._NotificationBatchUpdate_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var notificationResultTypeImplementors = []string{"NotificationResultType"}
 
 func (ec *executionContext) _NotificationResultType(ctx context.Context, sel ast.SelectionSet, obj *NotificationResultType) graphql.Marshaler {
@@ -7123,6 +7202,20 @@ func (ec *executionContext) marshalNNotification2ᚖgithubᚗcomᚋgraphqlᚑser
 		return graphql.Null
 	}
 	return ec._Notification(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNNotificationBatchUpdate2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationBatchUpdate(ctx context.Context, sel ast.SelectionSet, v NotificationBatchUpdate) graphql.Marshaler {
+	return ec._NotificationBatchUpdate(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNNotificationBatchUpdate2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationBatchUpdate(ctx context.Context, sel ast.SelectionSet, v *NotificationBatchUpdate) graphql.Marshaler {
+	if v == nil {
+		if !ec.HasError(graphql.GetResolverContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._NotificationBatchUpdate(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNNotificationBatchUpdateCreateInput2githubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐNotificationBatchUpdateCreateInput(ctx context.Context, v interface{}) (NotificationBatchUpdateCreateInput, error) {

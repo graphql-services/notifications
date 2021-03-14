@@ -36,10 +36,14 @@ input NotificationBatchUpdateCreateInput {
   referenceID: String
 }
 
+type NotificationBatchUpdate {
+  id: ID!
+}
+
 extend type Mutation {
   seenNotification(id: ID!): Notification
   seenNotifications(principal: String!, channel: String, reference: String, referenceID: String): Boolean!
-  createNotificationBatchUpdate(input: NotificationBatchUpdateCreateInput!): Boolean!
+  createNotificationBatchUpdate(input: NotificationBatchUpdateCreateInput!): NotificationBatchUpdate!
 }
 
 type Notification {

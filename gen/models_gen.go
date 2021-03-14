@@ -9,6 +9,10 @@ import (
 	"time"
 )
 
+type NotificationBatchUpdate struct {
+	ID string `json:"id"`
+}
+
 type NotificationBatchUpdateCreateInput struct {
 	Seen        bool    `json:"seen"`
 	Principal   string  `json:"principal"`
