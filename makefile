@@ -4,7 +4,7 @@ QNAME=$(OWNER)/$(IMAGE_NAME)
 
 GIT_TAG=$(QNAME):$(GITHUB_SHA)
 BUILD_TAG=$(QNAME):$(GITHUB_RUN_ID).$(GITHUB_SHA)
-TAG=$(QNAME):`echo $(GITHUB_REF) | sed 's/refs\/heads\///' | sed 's/master/latest/;s/develop/unstable/'`
+TAG=$(QNAME):`echo $(GITHUB_REF) | sed 's/refs\/heads\///' | sed 's/refs\/tags\///' | sed 's/master/latest/;s/develop/unstable/'`
 
 lint:
 	docker run -it --rm -v "$(PWD)/Dockerfile:/Dockerfile:ro" redcoolbeans/dockerlint
