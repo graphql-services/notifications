@@ -40,34 +40,20 @@ func (r *MutationResolver) SeenNotifications(ctx context.Context, principal stri
 }
 
 func (r *MutationResolver) CreateNotificationBatchUpdate(ctx context.Context, input gen.NotificationBatchUpdateCreateInput) (res *gen.NotificationBatchUpdate, err error) {
-
-	filter := &gen.NotificationFilterType{
-		Principal: &input.Principal,
-	}
-
+	q := r.GetDB(ctx).Model(&gen.Notification{}).Where("principal = ?", input.Principal)
 	if input.Channel != nil {
-		filter.Channel = input.Channel
+		q = q.Where("channel = ?", *input.Channel)
 	}
 	if input.Reference != nil {
-		filter.Reference = input.Reference
+		q = q.Where("reference = ?", *input.Reference)
 	}
 	if input.ReferenceID != nil {
-		filter.ReferenceID = input.ReferenceID
+		q = q.Where("referenceID = ?", *input.ReferenceID)
 	}
 
-	limit := 500
-	items, err := r.GeneratedResolver.NotificationsItems(ctx, gen.QueryNotificationsHandlerOptions{
-		Limit:  &limit,
-		Filter: filter,
-	})
-
-	db := r.GetDB(ctx)
-	for _, item := range items {
-		item.Seen = input.Seen
-		err = db.Save(item).Error
-		if err != nil {
-			return
-		}
+	err = q.Update("seen", input.Seen).Error
+	if err != nil {
+		return
 	}
 	res = &gen.NotificationBatchUpdate{ID: "done"}
 	return
