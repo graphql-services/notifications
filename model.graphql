@@ -27,6 +27,7 @@ type Notification @entity {
   subject: String @column(type: "text")
   message: String! @column(type: "text")
   seen: Boolean! @column
+  highlighted: Boolean! @column
   url: String @column
   channel: String @column
   principal: String @column(index: "basic_fetch")

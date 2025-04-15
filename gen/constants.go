@@ -52,6 +52,7 @@ type Notification {
   subject: String
   message: String!
   seen: Boolean!
+  highlighted: Boolean!
   url: String
   channel: String
   principal: String
@@ -70,6 +71,7 @@ input NotificationCreateInput {
   subject: String
   message: String!
   seen: Boolean!
+  highlighted: Boolean!
   url: String
   channel: String
   principal: String
@@ -83,6 +85,7 @@ input NotificationUpdateInput {
   subject: String
   message: String
   seen: Boolean
+  highlighted: Boolean
   url: String
   channel: String
   principal: String
@@ -107,6 +110,9 @@ input NotificationSortType {
   seen: ObjectSortType
   seenMin: ObjectSortType
   seenMax: ObjectSortType
+  highlighted: ObjectSortType
+  highlightedMin: ObjectSortType
+  highlightedMax: ObjectSortType
   url: ObjectSortType
   urlMin: ObjectSortType
   urlMax: ObjectSortType
@@ -285,6 +291,31 @@ input NotificationFilterType {
   seenMin_not_in: [Boolean!]
   seenMax_not_in: [Boolean!]
   seen_null: Boolean
+  highlighted: Boolean
+  highlightedMin: Boolean
+  highlightedMax: Boolean
+  highlighted_ne: Boolean
+  highlightedMin_ne: Boolean
+  highlightedMax_ne: Boolean
+  highlighted_gt: Boolean
+  highlightedMin_gt: Boolean
+  highlightedMax_gt: Boolean
+  highlighted_lt: Boolean
+  highlightedMin_lt: Boolean
+  highlightedMax_lt: Boolean
+  highlighted_gte: Boolean
+  highlightedMin_gte: Boolean
+  highlightedMax_gte: Boolean
+  highlighted_lte: Boolean
+  highlightedMin_lte: Boolean
+  highlightedMax_lte: Boolean
+  highlighted_in: [Boolean!]
+  highlightedMin_in: [Boolean!]
+  highlightedMax_in: [Boolean!]
+  highlighted_not_in: [Boolean!]
+  highlightedMin_not_in: [Boolean!]
+  highlightedMax_not_in: [Boolean!]
+  highlighted_null: Boolean
   url: String
   urlMin: String
   urlMax: String

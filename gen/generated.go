@@ -60,6 +60,7 @@ type ComplexityRoot struct {
 		CreatedBy   func(childComplexity int) int
 		Date        func(childComplexity int) int
 		GroupID     func(childComplexity int) int
+		Highlighted func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Message     func(childComplexity int) int
 		Principal   func(childComplexity int) int
@@ -239,6 +240,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Notification.GroupID(childComplexity), true
+
+	case "Notification.highlighted":
+		if e.complexity.Notification.Highlighted == nil {
+			break
+		}
+
+		return e.complexity.Notification.Highlighted(childComplexity), true
 
 	case "Notification.id":
 		if e.complexity.Notification.ID == nil {
@@ -484,6 +492,7 @@ type Notification {
   subject: String
   message: String!
   seen: Boolean!
+  highlighted: Boolean!
   url: String
   channel: String
   principal: String
@@ -502,6 +511,7 @@ input NotificationCreateInput {
   subject: String
   message: String!
   seen: Boolean!
+  highlighted: Boolean!
   url: String
   channel: String
   principal: String
@@ -515,6 +525,7 @@ input NotificationUpdateInput {
   subject: String
   message: String
   seen: Boolean
+  highlighted: Boolean
   url: String
   channel: String
   principal: String
@@ -539,6 +550,9 @@ input NotificationSortType {
   seen: ObjectSortType
   seenMin: ObjectSortType
   seenMax: ObjectSortType
+  highlighted: ObjectSortType
+  highlightedMin: ObjectSortType
+  highlightedMax: ObjectSortType
   url: ObjectSortType
   urlMin: ObjectSortType
   urlMax: ObjectSortType
@@ -717,6 +731,31 @@ input NotificationFilterType {
   seenMin_not_in: [Boolean!]
   seenMax_not_in: [Boolean!]
   seen_null: Boolean
+  highlighted: Boolean
+  highlightedMin: Boolean
+  highlightedMax: Boolean
+  highlighted_ne: Boolean
+  highlightedMin_ne: Boolean
+  highlightedMax_ne: Boolean
+  highlighted_gt: Boolean
+  highlightedMin_gt: Boolean
+  highlightedMax_gt: Boolean
+  highlighted_lt: Boolean
+  highlightedMin_lt: Boolean
+  highlightedMax_lt: Boolean
+  highlighted_gte: Boolean
+  highlightedMin_gte: Boolean
+  highlightedMax_gte: Boolean
+  highlighted_lte: Boolean
+  highlightedMin_lte: Boolean
+  highlightedMax_lte: Boolean
+  highlighted_in: [Boolean!]
+  highlightedMin_in: [Boolean!]
+  highlightedMax_in: [Boolean!]
+  highlighted_not_in: [Boolean!]
+  highlightedMin_not_in: [Boolean!]
+  highlightedMax_not_in: [Boolean!]
+  highlighted_null: Boolean
   url: String
   urlMin: String
   urlMax: String
@@ -1731,6 +1770,43 @@ func (ec *executionContext) _Notification_seen(ctx context.Context, field graphq
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Seen, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Notification_highlighted(ctx context.Context, field graphql.CollectedField, obj *Notification) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Notification",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Highlighted, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4505,6 +4581,156 @@ func (ec *executionContext) unmarshalInputNotificationFilterType(ctx context.Con
 			if err != nil {
 				return it, err
 			}
+		case "highlighted":
+			var err error
+			it.Highlighted, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMin":
+			var err error
+			it.HighlightedMin, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMax":
+			var err error
+			it.HighlightedMax, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlighted_ne":
+			var err error
+			it.HighlightedNe, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMin_ne":
+			var err error
+			it.HighlightedMinNe, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMax_ne":
+			var err error
+			it.HighlightedMaxNe, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlighted_gt":
+			var err error
+			it.HighlightedGt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMin_gt":
+			var err error
+			it.HighlightedMinGt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMax_gt":
+			var err error
+			it.HighlightedMaxGt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlighted_lt":
+			var err error
+			it.HighlightedLt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMin_lt":
+			var err error
+			it.HighlightedMinLt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMax_lt":
+			var err error
+			it.HighlightedMaxLt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlighted_gte":
+			var err error
+			it.HighlightedGte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMin_gte":
+			var err error
+			it.HighlightedMinGte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMax_gte":
+			var err error
+			it.HighlightedMaxGte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlighted_lte":
+			var err error
+			it.HighlightedLte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMin_lte":
+			var err error
+			it.HighlightedMinLte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMax_lte":
+			var err error
+			it.HighlightedMaxLte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlighted_in":
+			var err error
+			it.HighlightedIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMin_in":
+			var err error
+			it.HighlightedMinIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMax_in":
+			var err error
+			it.HighlightedMaxIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlighted_not_in":
+			var err error
+			it.HighlightedNotIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMin_not_in":
+			var err error
+			it.HighlightedMinNotIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMax_not_in":
+			var err error
+			it.HighlightedMaxNotIn, err = ec.unmarshalOBoolean2ᚕboolᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlighted_null":
+			var err error
+			it.HighlightedNull, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "url":
 			var err error
 			it.URL, err = ec.unmarshalOString2ᚖstring(ctx, v)
@@ -6377,6 +6603,24 @@ func (ec *executionContext) unmarshalInputNotificationSortType(ctx context.Conte
 			if err != nil {
 				return it, err
 			}
+		case "highlighted":
+			var err error
+			it.Highlighted, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMin":
+			var err error
+			it.HighlightedMin, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "highlightedMax":
+			var err error
+			it.HighlightedMax, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "url":
 			var err error
 			it.URL, err = ec.unmarshalOObjectSortType2ᚖgithubᚗcomᚋgraphqlᚑservicesᚋnotificationsᚋgenᚐObjectSortType(ctx, v)
@@ -6656,6 +6900,11 @@ func (ec *executionContext) _Notification(ctx context.Context, sel ast.Selection
 			}
 		case "seen":
 			out.Values[i] = ec._Notification_seen(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "highlighted":
+			out.Values[i] = ec._Notification_highlighted(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

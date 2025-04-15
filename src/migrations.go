@@ -48,5 +48,15 @@ func GetMigrations(db *gen.DB) []*gormigrate.Migration {
 				return nil
 			},
 		},
+		{
+			ID: "0004_ADD_NOTIFICATION_HIGHLIGHTED",
+			Migrate: func(tx *gorm.DB) error {
+				return db.AutoMigrate()
+			},
+			Rollback: func(tx *gorm.DB) error {
+				// there's not much we can do if initialization/automigration failes
+				return nil
+			},
+		},
 	}
 }

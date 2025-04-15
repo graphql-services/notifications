@@ -167,6 +167,31 @@ type NotificationFilterType struct {
 	SeenMinNotIn         []bool                    `json:"seenMin_not_in"`
 	SeenMaxNotIn         []bool                    `json:"seenMax_not_in"`
 	SeenNull             *bool                     `json:"seen_null"`
+	Highlighted          *bool                     `json:"highlighted"`
+	HighlightedMin       *bool                     `json:"highlightedMin"`
+	HighlightedMax       *bool                     `json:"highlightedMax"`
+	HighlightedNe        *bool                     `json:"highlighted_ne"`
+	HighlightedMinNe     *bool                     `json:"highlightedMin_ne"`
+	HighlightedMaxNe     *bool                     `json:"highlightedMax_ne"`
+	HighlightedGt        *bool                     `json:"highlighted_gt"`
+	HighlightedMinGt     *bool                     `json:"highlightedMin_gt"`
+	HighlightedMaxGt     *bool                     `json:"highlightedMax_gt"`
+	HighlightedLt        *bool                     `json:"highlighted_lt"`
+	HighlightedMinLt     *bool                     `json:"highlightedMin_lt"`
+	HighlightedMaxLt     *bool                     `json:"highlightedMax_lt"`
+	HighlightedGte       *bool                     `json:"highlighted_gte"`
+	HighlightedMinGte    *bool                     `json:"highlightedMin_gte"`
+	HighlightedMaxGte    *bool                     `json:"highlightedMax_gte"`
+	HighlightedLte       *bool                     `json:"highlighted_lte"`
+	HighlightedMinLte    *bool                     `json:"highlightedMin_lte"`
+	HighlightedMaxLte    *bool                     `json:"highlightedMax_lte"`
+	HighlightedIn        []bool                    `json:"highlighted_in"`
+	HighlightedMinIn     []bool                    `json:"highlightedMin_in"`
+	HighlightedMaxIn     []bool                    `json:"highlightedMax_in"`
+	HighlightedNotIn     []bool                    `json:"highlighted_not_in"`
+	HighlightedMinNotIn  []bool                    `json:"highlightedMin_not_in"`
+	HighlightedMaxNotIn  []bool                    `json:"highlightedMax_not_in"`
+	HighlightedNull      *bool                     `json:"highlighted_null"`
 	URL                  *string                   `json:"url"`
 	URLMin               *string                   `json:"urlMin"`
 	URLMax               *string                   `json:"urlMax"`
@@ -480,6 +505,9 @@ type NotificationSortType struct {
 	Seen           *ObjectSortType `json:"seen"`
 	SeenMin        *ObjectSortType `json:"seenMin"`
 	SeenMax        *ObjectSortType `json:"seenMax"`
+	Highlighted    *ObjectSortType `json:"highlighted"`
+	HighlightedMin *ObjectSortType `json:"highlightedMin"`
+	HighlightedMax *ObjectSortType `json:"highlightedMax"`
 	URL            *ObjectSortType `json:"url"`
 	URLMin         *ObjectSortType `json:"urlMin"`
 	URLMax         *ObjectSortType `json:"urlMax"`

@@ -366,6 +366,54 @@ func (f *NotificationFilterType) WhereContent(dialect gorm.Dialect, aliasPrefix 
 		}
 	}
 
+	if f.Highlighted != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("highlighted")+" = ?")
+		values = append(values, f.Highlighted)
+	}
+
+	if f.HighlightedNe != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("highlighted")+" != ?")
+		values = append(values, f.HighlightedNe)
+	}
+
+	if f.HighlightedGt != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("highlighted")+" > ?")
+		values = append(values, f.HighlightedGt)
+	}
+
+	if f.HighlightedLt != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("highlighted")+" < ?")
+		values = append(values, f.HighlightedLt)
+	}
+
+	if f.HighlightedGte != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("highlighted")+" >= ?")
+		values = append(values, f.HighlightedGte)
+	}
+
+	if f.HighlightedLte != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("highlighted")+" <= ?")
+		values = append(values, f.HighlightedLte)
+	}
+
+	if f.HighlightedIn != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("highlighted")+" IN (?)")
+		values = append(values, f.HighlightedIn)
+	}
+
+	if f.HighlightedNotIn != nil {
+		conditions = append(conditions, aliasPrefix+dialect.Quote("highlighted")+" NOT IN (?)")
+		values = append(values, f.HighlightedNotIn)
+	}
+
+	if f.HighlightedNull != nil {
+		if *f.HighlightedNull {
+			conditions = append(conditions, aliasPrefix+dialect.Quote("highlighted")+" IS NULL")
+		} else {
+			conditions = append(conditions, aliasPrefix+dialect.Quote("highlighted")+" IS NOT NULL")
+		}
+	}
+
 	if f.URL != nil {
 		conditions = append(conditions, aliasPrefix+dialect.Quote("url")+" = ?")
 		values = append(values, f.URL)
@@ -1385,6 +1433,86 @@ func (f *NotificationFilterType) HavingContent(dialect gorm.Dialect, aliasPrefix
 	if f.SeenMaxNotIn != nil {
 		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("seen")+") NOT IN (?)")
 		values = append(values, f.SeenMaxNotIn)
+	}
+
+	if f.HighlightedMin != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("highlighted")+") = ?")
+		values = append(values, f.HighlightedMin)
+	}
+
+	if f.HighlightedMax != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("highlighted")+") = ?")
+		values = append(values, f.HighlightedMax)
+	}
+
+	if f.HighlightedMinNe != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("highlighted")+") != ?")
+		values = append(values, f.HighlightedMinNe)
+	}
+
+	if f.HighlightedMaxNe != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("highlighted")+") != ?")
+		values = append(values, f.HighlightedMaxNe)
+	}
+
+	if f.HighlightedMinGt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("highlighted")+") > ?")
+		values = append(values, f.HighlightedMinGt)
+	}
+
+	if f.HighlightedMaxGt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("highlighted")+") > ?")
+		values = append(values, f.HighlightedMaxGt)
+	}
+
+	if f.HighlightedMinLt != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("highlighted")+") < ?")
+		values = append(values, f.HighlightedMinLt)
+	}
+
+	if f.HighlightedMaxLt != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("highlighted")+") < ?")
+		values = append(values, f.HighlightedMaxLt)
+	}
+
+	if f.HighlightedMinGte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("highlighted")+") >= ?")
+		values = append(values, f.HighlightedMinGte)
+	}
+
+	if f.HighlightedMaxGte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("highlighted")+") >= ?")
+		values = append(values, f.HighlightedMaxGte)
+	}
+
+	if f.HighlightedMinLte != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("highlighted")+") <= ?")
+		values = append(values, f.HighlightedMinLte)
+	}
+
+	if f.HighlightedMaxLte != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("highlighted")+") <= ?")
+		values = append(values, f.HighlightedMaxLte)
+	}
+
+	if f.HighlightedMinIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("highlighted")+") IN (?)")
+		values = append(values, f.HighlightedMinIn)
+	}
+
+	if f.HighlightedMaxIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("highlighted")+") IN (?)")
+		values = append(values, f.HighlightedMaxIn)
+	}
+
+	if f.HighlightedMinNotIn != nil {
+		conditions = append(conditions, "Min("+aliasPrefix+dialect.Quote("highlighted")+") NOT IN (?)")
+		values = append(values, f.HighlightedMinNotIn)
+	}
+
+	if f.HighlightedMaxNotIn != nil {
+		conditions = append(conditions, "Max("+aliasPrefix+dialect.Quote("highlighted")+") NOT IN (?)")
+		values = append(values, f.HighlightedMaxNotIn)
 	}
 
 	if f.URLMin != nil {

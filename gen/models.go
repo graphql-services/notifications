@@ -19,6 +19,7 @@ type Notification struct {
 	Subject     *string    `json:"subject" gorm:"column:subject;type:text"`
 	Message     string     `json:"message" gorm:"column:message;type:text"`
 	Seen        bool       `json:"seen" gorm:"column:seen"`
+	Highlighted bool       `json:"highlighted" gorm:"column:highlighted"`
 	URL         *string    `json:"url" gorm:"column:url"`
 	Channel     *string    `json:"channel" gorm:"column:channel"`
 	Principal   *string    `json:"principal" gorm:"column:principal;index:basic_fetch"`
@@ -39,6 +40,7 @@ type NotificationChanges struct {
 	Subject     *string
 	Message     string
 	Seen        bool
+	Highlighted bool
 	URL         *string
 	Channel     *string
 	Principal   *string
