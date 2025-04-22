@@ -114,7 +114,7 @@ func CreateNotificationHandler(ctx context.Context, r *GeneratedResolver, input 
 		event.AddNewValue("seen", changes.Seen)
 	}
 
-	if _, ok := input["highlighted"]; ok && (item.Highlighted != changes.Highlighted) {
+	if _, ok := input["highlighted"]; ok && (item.Highlighted != changes.Highlighted) && (item.Highlighted == nil || changes.Highlighted == nil || *item.Highlighted != *changes.Highlighted) {
 		item.Highlighted = changes.Highlighted
 
 		event.AddNewValue("highlighted", changes.Highlighted)
@@ -229,7 +229,7 @@ func UpdateNotificationHandler(ctx context.Context, r *GeneratedResolver, id str
 		item.Seen = changes.Seen
 	}
 
-	if _, ok := input["highlighted"]; ok && (item.Highlighted != changes.Highlighted) {
+	if _, ok := input["highlighted"]; ok && (item.Highlighted != changes.Highlighted) && (item.Highlighted == nil || changes.Highlighted == nil || *item.Highlighted != *changes.Highlighted) {
 		event.AddOldValue("highlighted", item.Highlighted)
 		event.AddNewValue("highlighted", changes.Highlighted)
 		item.Highlighted = changes.Highlighted

@@ -52,7 +52,7 @@ type Notification {
   subject: String
   message: String!
   seen: Boolean!
-  highlighted: Boolean!
+  highlighted: Boolean
   url: String
   channel: String
   principal: String
@@ -71,7 +71,7 @@ input NotificationCreateInput {
   subject: String
   message: String!
   seen: Boolean!
-  highlighted: Boolean!
+  highlighted: Boolean
   url: String
   channel: String
   principal: String

@@ -492,7 +492,7 @@ type Notification {
   subject: String
   message: String!
   seen: Boolean!
-  highlighted: Boolean!
+  highlighted: Boolean
   url: String
   channel: String
   principal: String
@@ -511,7 +511,7 @@ input NotificationCreateInput {
   subject: String
   message: String!
   seen: Boolean!
-  highlighted: Boolean!
+  highlighted: Boolean
   url: String
   channel: String
   principal: String
@@ -1813,15 +1813,12 @@ func (ec *executionContext) _Notification_highlighted(ctx context.Context, field
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !ec.HasError(rctx) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*bool)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Notification_url(ctx context.Context, field graphql.CollectedField, obj *Notification) (ret graphql.Marshaler) {
@@ -6905,9 +6902,6 @@ func (ec *executionContext) _Notification(ctx context.Context, sel ast.Selection
 			}
 		case "highlighted":
 			out.Values[i] = ec._Notification_highlighted(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "url":
 			out.Values[i] = ec._Notification_url(ctx, field, obj)
 		case "channel":
