@@ -26,6 +26,7 @@ type CreateNotificationInput struct {
 	Message     string    `json:"message"`
 	URL         string    `json:"url"`
 	Seen        bool      `json:"seen"`
+	Highlighted bool      `json:"highlighted"`
 	Principal   *string   `json:"principal"`
 	Channel     *string   `json:"channel"`
 	Reference   *string   `json:"reference"`

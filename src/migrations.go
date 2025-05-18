@@ -58,5 +58,15 @@ func GetMigrations(db *gen.DB) []*gormigrate.Migration {
 				return nil
 			},
 		},
+		{
+			ID: "0005_UPDATE_HIGHLIGHTED_DEFAULT",
+			Migrate: func(tx *gorm.DB) error {
+				return tx.Exec("UPDATE `" + gen.TableName("notifications") + "` SET `highlighted` = FALSE;").Error
+			},
+			Rollback: func(tx *gorm.DB) error {
+				// there's not much we can do if initialization/automigration failes
+				return nil
+			},
+		},
 	}
 }
